@@ -3,11 +3,12 @@ package br.com.springboot.controleorcamento.controleorcamento.model;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Categoria extends AbstractEntity {
 
-    @NotEmpty
+    @NotNull
     private String descricao;
 
     public String getDescricao() {
