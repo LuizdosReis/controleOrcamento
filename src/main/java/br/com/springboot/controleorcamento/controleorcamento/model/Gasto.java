@@ -2,9 +2,12 @@ package br.com.springboot.controleorcamento.controleorcamento.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
@@ -29,9 +32,9 @@ public class Gasto extends AbstractEntity {
 	@Digits(fraction=2,message="O valor so pode conter dois digitos após a virgula",integer = 9)
 	@DecimalMin(value="0.00", inclusive=false)
 	private BigDecimal valor;
-	
-	@NotEmpty
-	private String tipo;
+
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<GastoCategorizado> gastosCategorizados;
 
 	public String getDescricao() {
 		return descricao;
@@ -57,12 +60,11 @@ public class Gasto extends AbstractEntity {
 		this.valor = valor;
 	}
 
-	public String getTipo() {
-		return tipo;
+	public List<GastoCategorizado> getGastosCategorizados() {
+		return gastosCategorizados;
 	}
 
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setGastosCategorizados(List<GastoCategorizado> gastosCategorizados) {
+		this.gastosCategorizados = gastosCategorizados;
 	}
-
 }

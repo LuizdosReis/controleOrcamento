@@ -2,12 +2,14 @@ package br.com.springboot.controleorcamento.controleorcamento.endpoint;
 
 import javax.validation.Valid;
 
+import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.controleorcamento.repository.CategoriaRepository;
+import com.fasterxml.jackson.core.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,16 +27,18 @@ import br.com.springboot.controleorcamento.controleorcamento.repository.GastoRep
 @RequestMapping("v1")
 public class GastoEndpoint {
 	
-	private final GastoRepository repository;
+	private final GastoRepository gastoRepository;
+	private final CategoriaRepository categoriaRepository;
 	
 	@Autowired
-	public GastoEndpoint(GastoRepository repository) {
-		this.repository = repository;
+	public GastoEndpoint(GastoRepository repository, CategoriaRepository categoriaRepository) {
+		this.gastoRepository = repository;
+		this.categoriaRepository = categoriaRepository;
 	}
 
 	@GetMapping(path = "protected/gastos")
 	public ResponseEntity<?> listaTodos(Pageable pageable) {
-		return new ResponseEntity<>(repository.findAll(pageable),HttpStatus.OK);
+		return new ResponseEntity<>(gastoRepository.findAll(pageable),HttpStatus.OK);
 	}
 	
 	@GetMapping(path = "protected/gastos/{id}")
@@ -44,21 +48,26 @@ public class GastoEndpoint {
 	}
 
 	
-	@GetMapping(path = "protected/gastos/findbytipo/{tipo}")
-	public ResponseEntity<?> getByTipo(@PathVariable("tipo") String tipo){
-		return new ResponseEntity<>(repository.findByTipo(tipo),HttpStatus.OK);
-	}
+//	@GetMapping(path = "protected/gastos/findbycategoria/{idCategoria}")
+//	public ResponseEntity<?> getByTipo(@PathVariable("idCategoria") long idCategoria){
+//		Categoria categoria = categoriaRepository.findById(idCategoria);
+//		return new ResponseEntity<>(gastoRepository.findByCategorias(categoria),HttpStatus.OK);
+//	}
 	
-	@PostMapping(path = "admin/gastos")
+	@PostMapping(path = "protected/gastos")
 	@Transactional
-	public ResponseEntity<?> save(@Valid @RequestBody Gasto gasto){
-		return new ResponseEntity<>(repository.save(gasto),HttpStatus.CREATED);
+	public ResponseEntity<?> save(@RequestBody Gasto gasto){
+		System.out.println(gasto);
+
+		gastoRepository.save(gasto);
+
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping(path = "admin/gastos/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long id){
 		verificaSeGastoExiste(id);
-		repository.delete(id);
+		gastoRepository.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -67,13 +76,13 @@ public class GastoEndpoint {
 	@Transactional
 	public ResponseEntity<?> update(@Valid @RequestBody Gasto gasto){
 		verificaSeGastoExiste(gasto.getId());
-		repository.save(gasto);
+		gastoRepository.save(gasto);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	
 	private Gasto verificaSeGastoExiste(Long id) {
-		Gasto gasto = repository.findOne(id);
+		Gasto gasto = gastoRepository.findOne(id);
 
 		if (gasto == null)
 			throw new ResourceNotFoundException("Nenhum gasto encontrado no id", null);
