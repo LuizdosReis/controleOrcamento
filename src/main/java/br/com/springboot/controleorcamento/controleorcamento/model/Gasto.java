@@ -33,6 +33,16 @@ public class Gasto extends AbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<GastoCategorizado> gastosCategorizados;
 
+	public Gasto(String descricao, LocalDate data, BigDecimal valor, List<GastoCategorizado> gastosCategorizados) {
+		this.descricao = descricao;
+		this.data = data;
+		this.valor = valor;
+		this.gastosCategorizados = gastosCategorizados;
+	}
+
+	public Gasto() {
+	}
+
 	public String getDescricao() {
 		return descricao;
 	}

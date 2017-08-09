@@ -11,6 +11,13 @@ public class Categoria extends AbstractEntity {
     @NotNull
     private String descricao;
 
+    public Categoria(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Categoria() {
+    }
+
     public String getDescricao() {
         return descricao;
     }

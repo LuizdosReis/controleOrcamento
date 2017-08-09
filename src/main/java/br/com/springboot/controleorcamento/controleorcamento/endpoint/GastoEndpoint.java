@@ -48,20 +48,17 @@ public class GastoEndpoint {
 	}
 
 	
-//	@GetMapping(path = "protected/gastos/findbycategoria/{idCategoria}")
-//	public ResponseEntity<?> getByTipo(@PathVariable("idCategoria") long idCategoria){
-//		Categoria categoria = categoriaRepository.findById(idCategoria);
-//		return new ResponseEntity<>(gastoRepository.findByCategorias(categoria),HttpStatus.OK);
-//	}
+	@GetMapping(path = "protected/gastos/findbycategoria/{idCategoria}")
+	public ResponseEntity<?> getByTipo(@PathVariable("idCategoria") long idCategoria){
+		Categoria categoria = categoriaRepository.findById(idCategoria);
+		// gastoRepository.findByCategoria(categoria),
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 	
 	@PostMapping(path = "protected/gastos")
 	@Transactional
 	public ResponseEntity<?> save(@RequestBody Gasto gasto){
-		System.out.println(gasto);
-
-		gastoRepository.save(gasto);
-
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		return new ResponseEntity<>(gastoRepository.save(gasto),HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping(path = "admin/gastos/{id}")

@@ -15,12 +15,20 @@ import java.math.BigDecimal;
 @Entity
 public class GastoCategorizado extends AbstractEntity {
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Categoria categoria;
 
     @Digits(fraction=2,message="O valor so pode conter dois digitos após a virgula",integer = 9)
     @DecimalMin(value="0.00", inclusive=false)
     private BigDecimal valor;
+
+    public GastoCategorizado(Categoria categoria, BigDecimal valor) {
+        this.categoria = categoria;
+        this.valor = valor;
+    }
+
+    public GastoCategorizado() {
+    }
 
     public Categoria getCategoria() {
         return categoria;
