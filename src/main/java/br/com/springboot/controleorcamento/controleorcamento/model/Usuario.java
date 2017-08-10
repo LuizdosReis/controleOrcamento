@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class User extends AbstractEntity {
+public class Usuario extends AbstractEntity {
 
 	@NotEmpty
 	@Column(unique = true)

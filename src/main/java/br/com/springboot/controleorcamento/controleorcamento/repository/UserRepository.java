@@ -2,9 +2,9 @@ package br.com.springboot.controleorcamento.controleorcamento.repository;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import br.com.springboot.controleorcamento.controleorcamento.model.User;
+import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
 
-public interface UserRepository extends PagingAndSortingRepository<User, Long>{
+public interface UserRepository extends PagingAndSortingRepository<Usuario, Long>{
 
-	User findByUsername(String username);
+	Usuario findByUsername(String username);
 }
