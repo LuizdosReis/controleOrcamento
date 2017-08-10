@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface GastoRepository extends PagingAndSortingRepository<Gasto, Long> {
 }

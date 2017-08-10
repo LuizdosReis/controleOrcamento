@@ -1,9 +1,8 @@
-package br.com.springboot.controleorcamento.repository;
+package br.com.springboot.controleorcamento.controleorcamento.repository;
 
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.controleorcamento.model.Gasto;
 import br.com.springboot.controleorcamento.controleorcamento.model.GastoCategorizado;
-import br.com.springboot.controleorcamento.controleorcamento.repository.GastoRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
