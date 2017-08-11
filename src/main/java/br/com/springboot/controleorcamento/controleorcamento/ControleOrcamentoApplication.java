@@ -1,30 +1,33 @@
 package br.com.springboot.controleorcamento.controleorcamento;
 
 
+import br.com.springboot.controleorcamento.controleorcamento.converter.LocalDateConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Controller
 @SpringBootApplication
-public class ControleOrcamentoApplication{
+public class ControleOrcamentoApplication extends WebMvcConfigurerAdapter{
 	public static void main(String[] args) {
-		SpringApplication.run(ControleOrcamentoApplication.class, args);
+        //new SpringApplicationBuilder(ControleOrcamentoApplication.class).profiles("dev").run(args);
+	    SpringApplication.run(ControleOrcamentoApplication.class, args);
 	}
 	
-	public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	
+
 	@Bean
     @Primary
     public ObjectMapper serializingObjectMapper() {
@@ -35,6 +38,12 @@ public class ControleOrcamentoApplication{
         objectMapper.registerModule(javaTimeModule);
         return objectMapper;
     }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new LocalDateConverter("dd/MM/yyyy"));
+    }
+
 
     @GetMapping("/home")
     public String index(){

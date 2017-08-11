@@ -17,6 +17,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
+
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class GastosRepositoryTest {
@@ -33,14 +35,45 @@ public class GastosRepositoryTest {
 
         gastosCategorizado.add(new GastoCategorizado(new Categoria("Carro"),new BigDecimal("32.50")));
 
-        Gasto gasto = new Gasto("Gasolina", LocalDate.now(),new BigDecimal("32.50"),gastosCategorizado);
+        Gasto gasto = new Gasto("Gasolina", LocalDate.now(),gastosCategorizado);
 
         this.gastoRepository.save(gasto);
 
-        Assertions.assertThat(gasto.getId()).isNotNull();
+        assertThat(gasto.getId()).isNotNull();
+        assertThat(gasto.getValor()).isEqualTo(new BigDecimal("32.50"));
+    }
 
+    @Test
+    public void deveCriarGastoSetandoCategoriaPosteriormente(){
+        List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
+        gastosCategorizado.add(new GastoCategorizado(new Categoria("Carro"),new BigDecimal("32.50")));
 
+        Gasto gasto = new Gasto();
+
+        gasto.setDescricao("Gasolina");
+        gasto.setData(LocalDate.now());
+        gasto.setGastosCategorizados(gastosCategorizado);
+
+        this.gastoRepository.save(gasto);
+
+        assertThat(gasto.getId()).isNotNull();
+        assertThat(gasto.getValor()).isEqualTo(new BigDecimal("32.50"));
+    }
+
+    @Test
+    public void deveExcluirGasto(){
+        List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
+
+        gastosCategorizado.add(new GastoCategorizado(new Categoria("Carro"),new BigDecimal("32.50")));
+
+        Gasto gasto = new Gasto("Gasolina", LocalDate.now(),gastosCategorizado);
+
+        this.gastoRepository.save(gasto);
+
+        this.gastoRepository.delete(gasto);
+
+        assertThat(gastoRepository.findOne(gasto.getId())).isNull();
     }
 }
 

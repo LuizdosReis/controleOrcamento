@@ -1,27 +1,19 @@
 package br.com.springboot.controleorcamento.controleorcamento.endpoint;
 
-import javax.validation.Valid;
-
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.controleorcamento.model.Gasto;
 import br.com.springboot.controleorcamento.controleorcamento.repository.CategoriaRepository;
-import com.fasterxml.jackson.core.JsonParser;
+import br.com.springboot.controleorcamento.controleorcamento.repository.GastoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import br.com.springboot.controleorcamento.controleorcamento.model.Gasto;
-import br.com.springboot.controleorcamento.controleorcamento.repository.GastoRepository;
+import javax.validation.Valid;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("v1")
@@ -52,6 +44,12 @@ public class GastoEndpoint {
 	public ResponseEntity<?> getByTipo(@PathVariable("idCategoria") long idCategoria,Pageable pageable){
 		Categoria categoria = categoriaRepository.findById(idCategoria);
 		return new ResponseEntity<>(gastoRepository.findByCategoria(categoria,pageable),HttpStatus.OK);
+	}
+
+	@GetMapping(path = "protected/gastos/findbydatas")
+	public ResponseEntity<?> getByDatas(@RequestParam("dataInicial")LocalDate dataInicial,
+										@RequestParam("dataFinal") LocalDate dataFinal,Pageable pageable){
+		return  new ResponseEntity<>(gastoRepository.findByDataBetween(dataInicial,dataFinal,pageable),HttpStatus.OK);
 	}
 	
 	@PostMapping(path = "protected/gastos")

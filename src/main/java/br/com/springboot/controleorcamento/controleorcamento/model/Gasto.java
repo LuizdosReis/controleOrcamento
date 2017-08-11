@@ -27,16 +27,16 @@ public class Gasto extends AbstractEntity {
 	private LocalDate data;
 	
 	@Digits(fraction=2,message="O valor so pode conter dois digitos após a virgula",integer = 9)
-	@DecimalMin(value="0.00", inclusive=false)
 	private BigDecimal valor;
 
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<GastoCategorizado> gastosCategorizados;
 
-	public Gasto(String descricao, LocalDate data, BigDecimal valor, List<GastoCategorizado> gastosCategorizados) {
+	public Gasto(String descricao, LocalDate data, List<GastoCategorizado> gastosCategorizados) {
+		this.valor = new BigDecimal("0.00");
+		gastosCategorizados.forEach(gastos -> this.valor = this.valor.add(gastos.getValor()));
 		this.descricao = descricao;
 		this.data = data;
-		this.valor = valor;
 		this.gastosCategorizados = gastosCategorizados;
 	}
 
@@ -60,11 +60,7 @@ public class Gasto extends AbstractEntity {
 	}
 
 	public BigDecimal getValor() {
-		return valor;
-	}
-
-	public void setValor(BigDecimal valor) {
-		this.valor = valor;
+		return new BigDecimal("0.00").add(valor);
 	}
 
 	public List<GastoCategorizado> getGastosCategorizados() {
@@ -73,5 +69,8 @@ public class Gasto extends AbstractEntity {
 
 	public void setGastosCategorizados(List<GastoCategorizado> gastosCategorizados) {
 		this.gastosCategorizados = gastosCategorizados;
+		this.valor = new BigDecimal("0.00");
+		gastosCategorizados.forEach(gastos -> this.valor = this.valor.add(gastos.getValor()));
+
 	}
 }
