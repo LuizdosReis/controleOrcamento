@@ -17,7 +17,7 @@ import java.util.List;
 public interface GastoRepository extends PagingAndSortingRepository<Gasto, Long> {
 
     @Query("select g from Gasto g join g.gastosCategorizados gc join gc.categoria c where c = :categoria")
-    Page<List<Gasto>> findByCategoria(@Param("categoria") Categoria categoria, Pageable pageable);
+    Page<Gasto> findByCategoria(@Param("categoria") Categoria categoria, Pageable pageable);
 
     Page<List<Gasto>> findByDataBetween(LocalDate dataInicial, LocalDate dataFinal, Pageable pageable);
 }

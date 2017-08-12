@@ -2,6 +2,7 @@ package br.com.springboot.controleorcamento.controleorcamento.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class Gasto extends AbstractEntity {
 	@Digits(fraction=2,message="O valor so pode conter dois digitos após a virgula",integer = 9)
 	private BigDecimal valor;
 
+	@NotEmpty
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<GastoCategorizado> gastosCategorizados;
 
@@ -37,7 +39,7 @@ public class Gasto extends AbstractEntity {
 		gastosCategorizados.forEach(gastos -> this.valor = this.valor.add(gastos.getValor()));
 		this.descricao = descricao;
 		this.data = data;
-		this.gastosCategorizados = gastosCategorizados;
+		this.gastosCategorizados = new ArrayList<>(gastosCategorizados);
 	}
 
 	public Gasto() {
@@ -64,13 +66,18 @@ public class Gasto extends AbstractEntity {
 	}
 
 	public List<GastoCategorizado> getGastosCategorizados() {
-		return gastosCategorizados;
+		return new ArrayList<>(gastosCategorizados);
 	}
 
 	public void setGastosCategorizados(List<GastoCategorizado> gastosCategorizados) {
-		this.gastosCategorizados = gastosCategorizados;
+		this.gastosCategorizados = new ArrayList<>(gastosCategorizados);
 		this.valor = new BigDecimal("0.00");
 		gastosCategorizados.forEach(gastos -> this.valor = this.valor.add(gastos.getValor()));
 
+	}
+
+	public void adicionaGastoCategorizado(GastoCategorizado gastoCategorizado) {
+		this.valor = this.valor.add(gastoCategorizado.getValor());
+		gastosCategorizados.add(gastoCategorizado);
 	}
 }
