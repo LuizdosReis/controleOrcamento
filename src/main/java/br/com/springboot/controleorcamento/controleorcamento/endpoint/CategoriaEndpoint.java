@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("v1")
+@RequestMapping("v1/categorias/")
 public class CategoriaEndpoint {
 
     private final CategoriaRepository categoriaRepository;
@@ -22,13 +22,13 @@ public class CategoriaEndpoint {
         this.categoriaRepository = categoriaRepository;
     }
 
-    @PostMapping(path = "protected/categoria")
+    @PostMapping(path = "protected")
     @Transactional
     public ResponseEntity<?> save(@Valid @RequestBody Categoria categoria){
         return new ResponseEntity<>(categoriaRepository.save(categoria), HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "protected/categoria")
+    @GetMapping(path = "protected")
     public ResponseEntity<?> listaTodos(Pageable pageable){
         return new ResponseEntity<>(categoriaRepository.findAll(pageable),HttpStatus.OK);
     }

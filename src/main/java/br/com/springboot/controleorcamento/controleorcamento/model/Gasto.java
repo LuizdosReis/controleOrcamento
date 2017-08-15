@@ -1,20 +1,16 @@
 package br.com.springboot.controleorcamento.controleorcamento.model;
 
+import br.com.springboot.controleorcamento.controleorcamento.converter.LocalDateAttributeConverter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.*;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import br.com.springboot.controleorcamento.controleorcamento.converter.LocalDateAttributeConverter;
 
 @Entity
 public class Gasto extends AbstractEntity {
@@ -45,7 +41,12 @@ public class Gasto extends AbstractEntity {
 	public Gasto() {
 	}
 
-	public String getDescricao() {
+    public Gasto(Long id, String descricao, LocalDate data, List<GastoCategorizado> gastosCategorizado) {
+	    this(descricao,data,gastosCategorizado);
+        this.id = id;
+    }
+
+    public String getDescricao() {
 		return descricao;
 	}
 
