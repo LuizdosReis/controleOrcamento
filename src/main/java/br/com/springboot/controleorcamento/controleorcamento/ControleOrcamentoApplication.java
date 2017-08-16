@@ -23,7 +23,6 @@ import java.time.LocalDate;
 @SpringBootApplication
 public class ControleOrcamentoApplication extends WebMvcConfigurerAdapter{
 	public static void main(String[] args) {
-        //new SpringApplicationBuilder(ControleOrcamentoApplication.class).profiles("dev").run(args);
 	    SpringApplication.run(ControleOrcamentoApplication.class, args);
 	}
 	
