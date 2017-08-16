@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("v1")
+@RequestMapping("v1/gastos/")
 public class GastoEndpoint {
 	
 	private final GastoRepository gastoRepository;
@@ -28,31 +28,31 @@ public class GastoEndpoint {
 		this.categoriaRepository = categoriaRepository;
 	}
 
-	@GetMapping(path = "protected/gastos")
+	@GetMapping(path = "protected")
 	public ResponseEntity<?> listaTodos(Pageable pageable) {
 		return new ResponseEntity<>(gastoRepository.findAll(pageable),HttpStatus.OK);
 	}
 	
-	@GetMapping(path = "protected/gastos/{id}")
+	@GetMapping(path = "protected/{id}")
 	public ResponseEntity<?> getGastoById(@PathVariable("id") Long id){
 		Gasto gasto = verificaSeGastoExiste(id);
 		return new ResponseEntity<>(gasto,HttpStatus.OK);
 	}
 
 	
-	@GetMapping(path = "protected/gastos/findbycategoria/{idCategoria}")
+	@GetMapping(path = "protected/findbycategoria/{idCategoria}")
 	public ResponseEntity<?> getByTipo(@PathVariable("idCategoria") long idCategoria,Pageable pageable){
 		Categoria categoria = categoriaRepository.findById(idCategoria);
 		return new ResponseEntity<>(gastoRepository.findByCategoria(categoria,pageable),HttpStatus.OK);
 	}
 
-	@GetMapping(path = "protected/gastos/findbydatas")
+	@GetMapping(path = "protected/findbydatas")
 	public ResponseEntity<?> getByDatas(@RequestParam("dataInicial")LocalDate dataInicial,
 										@RequestParam("dataFinal") LocalDate dataFinal,Pageable pageable){
 		return  new ResponseEntity<>(gastoRepository.findByDataBetween(dataInicial,dataFinal,pageable),HttpStatus.OK);
 	}
 	
-	@PostMapping(path = "protected/gastos")
+	@PostMapping(path = "protected")
 	@Transactional
 	public ResponseEntity<?> save(@RequestBody Gasto gasto){
 		return new ResponseEntity<>(gastoRepository.save(gasto),HttpStatus.CREATED);

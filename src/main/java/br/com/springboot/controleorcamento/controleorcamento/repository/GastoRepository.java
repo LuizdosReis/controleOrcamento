@@ -9,15 +9,17 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import br.com.springboot.controleorcamento.controleorcamento.model.Gasto;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Repository
+@Transactional
 public interface GastoRepository extends PagingAndSortingRepository<Gasto, Long> {
 
     @Query("select g from Gasto g join g.gastosCategorizados gc join gc.categoria c where c = :categoria")
-    Page<List<Gasto>> findByCategoria(@Param("categoria") Categoria categoria, Pageable pageable);
+    Page<Gasto> findByCategoria(@Param("categoria") Categoria categoria, Pageable pageable);
 
     Page<List<Gasto>> findByDataBetween(LocalDate dataInicial, LocalDate dataFinal, Pageable pageable);
 }

@@ -12,7 +12,7 @@ public abstract class AbstractEntity implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+    protected Long id;
 
 	public Long getId() {
 		return id;
