@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.TransactionSystemException;
 
 import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
@@ -122,7 +123,7 @@ public class GastosRepositoryTest {
     }
 
 
-   // @Test
+    //@Test
     public void deveTrazerGastosPelaCategoria() {
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
@@ -172,11 +173,13 @@ public class GastosRepositoryTest {
     @Test
     public void quandoCriaUmGastoComValorZeradoDeveRetornaThrowConstrainViolationException(){
         thrown.expect(ConstraintViolationException.class);
-        //thrown.expectMessage("Não pode estar vazio");
+        thrown.expectMessage("deve ser maior ou igual a 0.00");
 
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
         Categoria carro = new Categoria("Carro");
+
+        categoriaRepository.save(carro);
 
         gastosCategorizado.add(new GastoCategorizado(carro, new BigDecimal("0.00")));
 
