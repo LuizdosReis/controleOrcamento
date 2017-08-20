@@ -3,6 +3,7 @@ package br.com.springboot.controleorcamento.controleorcamento.service;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.springboot.controleorcamento.controleorcamento.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -17,11 +18,11 @@ import br.com.springboot.controleorcamento.controleorcamento.repository.UserRepo
 @Service
 public class CustomUserDetailService implements UserDetailsService{
 
-	private final UserRepository repository;
+	private final UsuarioRepository repository;
 	
 
 	@Autowired
-	public CustomUserDetailService(UserRepository repository) {
+	public CustomUserDetailService(UsuarioRepository repository) {
 		this.repository = repository;
 	}
 

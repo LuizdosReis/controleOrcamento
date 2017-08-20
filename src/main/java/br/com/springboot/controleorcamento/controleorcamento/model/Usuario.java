@@ -1,24 +1,25 @@
 package br.com.springboot.controleorcamento.controleorcamento.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 @Entity
-public class Usuario extends AbstractEntity {
+public class Usuario extends AbstractEntity{
 
 	@NotEmpty
 	@Column(unique = true)
 	private String username;
 
 	@NotEmpty
-	@JsonIgnore
 	private String password;
 
-	@NotEmpty
+	@Transient
+	private String ConfirmPassword;
+
 	private boolean admin;
 
 	public String getUsername() {

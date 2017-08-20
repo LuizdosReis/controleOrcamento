@@ -1,17 +1,20 @@
 package br.com.springboot.controleorcamento.controleorcamento.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 @Entity
 public class Categoria extends AbstractEntity {
 
-    @NotNull
+    @Null(message = "A descrição não pode estar em branco")
     private String descricao;
 
-    public Categoria(String descricao) {
+    public Categoria(Long id, String descricao) {
+        this.id = id;
+        this.descricao = descricao;
+    }
+
+    public Categoria(String descricao){
         this.descricao = descricao;
     }
 
@@ -25,4 +28,5 @@ public class Categoria extends AbstractEntity {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
 }
