@@ -42,7 +42,7 @@ public class GastoEndpoint {
 	
 	@GetMapping(path = "protected/findbycategoria/{idCategoria}")
 	public ResponseEntity<?> getByTipo(@PathVariable("idCategoria") long idCategoria,Pageable pageable){
-		Categoria categoria = categoriaRepository.findById(idCategoria);
+		Categoria categoria = categoriaRepository.findOne(idCategoria);
 		return new ResponseEntity<>(gastoRepository.findByCategoria(categoria,pageable),HttpStatus.OK);
 	}
 

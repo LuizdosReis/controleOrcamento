@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.TransactionSystemException;
 
 import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
@@ -38,7 +37,7 @@ public class GastosRepositoryTest {
     public void deveCriarGasto() {
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
-        gastosCategorizado.add(new GastoCategorizado(new Categoria("Carro"), new BigDecimal("32.50")));
+        gastosCategorizado.add(new GastoCategorizado(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
 
         Gasto gasto = new Gasto("Gasolina", LocalDate.now(), gastosCategorizado);
 
@@ -52,7 +51,7 @@ public class GastosRepositoryTest {
     public void deveCriarGastoSetandoCategoriaPosteriormente() {
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
-        gastosCategorizado.add(new GastoCategorizado(new Categoria("Carro"), new BigDecimal("32.50")));
+        gastosCategorizado.add(new GastoCategorizado(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
 
         Gasto gasto = new Gasto();
 
@@ -70,7 +69,7 @@ public class GastosRepositoryTest {
     public void deveExcluirGasto() {
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
-        gastosCategorizado.add(new GastoCategorizado(new Categoria("Carro"), new BigDecimal("32.50")));
+        gastosCategorizado.add(new GastoCategorizado(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
 
         Gasto gasto = new Gasto("Gasolina", LocalDate.now(), gastosCategorizado);
 
@@ -85,12 +84,12 @@ public class GastosRepositoryTest {
     public void naoDeveInserirGastoCategorizadoAdicionadoPosteriormenteALista() {
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
-        gastosCategorizado.add(new GastoCategorizado(new Categoria("Carro"), new BigDecimal("32.50")));
+        gastosCategorizado.add(new GastoCategorizado(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
 
         Gasto gasto = new Gasto("Gasolina", LocalDate.now(), gastosCategorizado);
 
         //Adiciona um gasto categorizado posteriormente que deve ser ignorado
-        gastosCategorizado.add(new GastoCategorizado(new Categoria("Moto"), new BigDecimal("11.50")));
+        gastosCategorizado.add(new GastoCategorizado(new Categoria(1L,"Moto"), new BigDecimal("11.50")));
 
         this.gastoRepository.save(gasto);
 
@@ -105,13 +104,13 @@ public class GastosRepositoryTest {
     public void deveAdicionarGastoCategorizado() {
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
-        gastosCategorizado.add(new GastoCategorizado(new Categoria("Carro"), new BigDecimal("32.50")));
+        gastosCategorizado.add(new GastoCategorizado(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
 
         Gasto gasto = new Gasto("Gasolina", LocalDate.now(), gastosCategorizado);
 
         this.gastoRepository.save(gasto);
 
-        gasto.adicionaGastoCategorizado(new GastoCategorizado(new Categoria("Moto"), new BigDecimal("11.50")));
+        gasto.adicionaGastoCategorizado(new GastoCategorizado(new Categoria(1L,"Moto"), new BigDecimal("11.50")));
 
         gasto.setDescricao("Gasolina 2");
 
@@ -127,7 +126,7 @@ public class GastosRepositoryTest {
     public void deveTrazerGastosPelaCategoria() {
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
-        Categoria carro = new Categoria("Carro");
+        Categoria carro = new Categoria(1L,"Carro");
 
         this.categoriaRepository.save(carro);
 
@@ -135,7 +134,7 @@ public class GastosRepositoryTest {
 
         Gasto gasto = new Gasto("Gasolina", LocalDate.now(), gastosCategorizado);
 
-        Categoria moto = new Categoria("Moto");
+        Categoria moto = new Categoria(1L,"Moto");
 
         this.categoriaRepository.save(moto);
 
@@ -159,7 +158,7 @@ public class GastosRepositoryTest {
 
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
-        Categoria carro = new Categoria("Carro");
+        Categoria carro = new Categoria(1L,"Carro");
 
         this.categoriaRepository.save(carro);
 
@@ -177,7 +176,7 @@ public class GastosRepositoryTest {
 
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
-        Categoria carro = new Categoria("Carro");
+        Categoria carro = new Categoria(1L,"Carro");
 
         categoriaRepository.save(carro);
 

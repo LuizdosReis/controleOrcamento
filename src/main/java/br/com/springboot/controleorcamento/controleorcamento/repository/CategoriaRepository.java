@@ -8,6 +8,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public interface CategoriaRepository extends PagingAndSortingRepository<Categoria, Long> {
-    public Categoria findById(Long id);
-
 }
