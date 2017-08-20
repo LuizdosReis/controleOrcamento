@@ -2,6 +2,7 @@ package br.com.springboot.controleorcamento.controleorcamento.config;
 
 import br.com.springboot.controleorcamento.controleorcamento.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +17,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	private CustomUserDetailService customUserDetailService;
+
+	@Bean
+	public BCryptPasswordEncoder bcyrpt() {
+		return new BCryptPasswordEncoder();
+	}
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception{
