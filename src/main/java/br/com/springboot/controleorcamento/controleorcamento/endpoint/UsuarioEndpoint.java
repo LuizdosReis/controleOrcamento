@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("v1/user")
+@RequestMapping("v1/user/")
 public class UsuarioEndpoint {
 
     private final UsuarioRepository usuarioRepository;

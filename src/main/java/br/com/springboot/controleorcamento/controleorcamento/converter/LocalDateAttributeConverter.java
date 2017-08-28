@@ -10,6 +10,7 @@ import javax.persistence.Converter;
 public class LocalDateAttributeConverter implements AttributeConverter<LocalDate, Date> {
 
 	public Date convertToDatabaseColumn(LocalDate locDate) {
+
 		return (locDate == null ? null : Date.valueOf(locDate));
 	}
 
