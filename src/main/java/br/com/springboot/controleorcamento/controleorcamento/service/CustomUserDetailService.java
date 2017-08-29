@@ -19,7 +19,6 @@ import br.com.springboot.controleorcamento.controleorcamento.repository.UserRepo
 public class CustomUserDetailService implements UserDetailsService{
 
 	private final UsuarioRepository repository;
-	
 
 	@Autowired
 	public CustomUserDetailService(UsuarioRepository repository) {

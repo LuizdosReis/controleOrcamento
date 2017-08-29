@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,7 +18,7 @@ import java.util.List;
 @Entity
 public class Gasto extends AbstractEntity {
 
-	@NotEmpty
+	@NotEmpty(message = "A descrição não pode ser vazia")
 	private String descricao;
 	
 	@NotNull
@@ -23,7 +26,8 @@ public class Gasto extends AbstractEntity {
 	@Convert(converter = LocalDateAttributeConverter.class)
 	private LocalDate data;
 	
-	@Digits(fraction=2,message="O valor so pode conter dois digitos após a virgula",integer = 9)
+	@Digits(fraction=2,message="O valor só pode conter dois digitos após a virgula",integer = 9)
+    @DecimalMin(message = "O Valor não pode ser negativo", value = "0.00", inclusive = false)
 	private BigDecimal valor;
 
 	@NotEmpty
@@ -63,7 +67,7 @@ public class Gasto extends AbstractEntity {
 	}
 
 	public BigDecimal getValor() {
-		return new BigDecimal("0.00").add(valor);
+		return valor;
 	}
 
 	public List<GastoCategorizado> getGastosCategorizados() {

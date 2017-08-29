@@ -30,6 +30,7 @@ public class Usuario extends AbstractEntity implements UserDetails{
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<Conta> contas;
 
+	@Override
 	public String getUsername() {
 		return username;
 	}
@@ -63,6 +64,7 @@ public class Usuario extends AbstractEntity implements UserDetails{
         return null;
     }
 
+    @Override
     public String getPassword() {
 		return password;
 	}

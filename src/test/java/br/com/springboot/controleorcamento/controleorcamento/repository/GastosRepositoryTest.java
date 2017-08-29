@@ -84,12 +84,12 @@ public class GastosRepositoryTest {
     public void naoDeveInserirGastoCategorizadoAdicionadoPosteriormenteALista() {
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
-        gastosCategorizado.add(new GastoCategorizado(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
+        gastosCategorizado.add(new GastoCategorizado(new Categoria("Carro"), new BigDecimal("32.50")));
 
         Gasto gasto = new Gasto("Gasolina", LocalDate.now(), gastosCategorizado);
 
         //Adiciona um gasto categorizado posteriormente que deve ser ignorado
-        gastosCategorizado.add(new GastoCategorizado(new Categoria(1L,"Moto"), new BigDecimal("11.50")));
+        gastosCategorizado.add(new GastoCategorizado(new Categoria("Moto"), new BigDecimal("11.50")));
 
         this.gastoRepository.save(gasto);
 
@@ -104,13 +104,13 @@ public class GastosRepositoryTest {
     public void deveAdicionarGastoCategorizado() {
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
-        gastosCategorizado.add(new GastoCategorizado(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
+        gastosCategorizado.add(new GastoCategorizado(new Categoria("Carro"), new BigDecimal("32.50")));
 
         Gasto gasto = new Gasto("Gasolina", LocalDate.now(), gastosCategorizado);
 
         this.gastoRepository.save(gasto);
 
-        gasto.adicionaGastoCategorizado(new GastoCategorizado(new Categoria(1L,"Moto"), new BigDecimal("11.50")));
+        gasto.adicionaGastoCategorizado(new GastoCategorizado(new Categoria("Moto"), new BigDecimal("11.50")));
 
         gasto.setDescricao("Gasolina 2");
 
@@ -154,7 +154,7 @@ public class GastosRepositoryTest {
     @Test
     public void quandoCriaNomeVazioDeveRetornaThrowConstrainViolationException(){
         thrown.expect(ConstraintViolationException.class);
-        thrown.expectMessage("Não pode estar vazio");
+        thrown.expectMessage("A descrição não pode ser vazia");
 
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
