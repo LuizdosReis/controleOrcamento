@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import sun.swing.BakedArrayList;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,13 +27,19 @@ public class Usuario extends AbstractEntity implements UserDetails{
 	@Transient
 	private String ConfirmPassword;
 
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<Role> permissoes = new ArrayList<>();
+
 	private boolean admin;
 
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<Conta> contas;
 
-	@Override
-	public String getUsername() {
+    public Usuario(String username, String password, List<GrantedAuthority> grantedAuthorities) {
+        super();
+    }
+
+    public String getUsername() {
 		return username;
 	}
 
@@ -59,9 +67,17 @@ public class Usuario extends AbstractEntity implements UserDetails{
 		this.username = username;
 	}
 
+    public List<Role> getPermissoes() {
+        return permissoes;
+    }
+
+    public void setPermissoes(List<Role> permissoes) {
+        this.permissoes = permissoes;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return permissoes;
     }
 
     @Override
