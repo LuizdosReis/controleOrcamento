@@ -1,9 +1,12 @@
 package br.com.springboot.controleorcamento.controleorcamento.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import sun.swing.BakedArrayList;
 
 import javax.persistence.*;
@@ -28,16 +31,11 @@ public class Usuario extends AbstractEntity implements UserDetails{
 	private String ConfirmPassword;
 
 	@OneToMany(fetch = FetchType.EAGER)
-	private List<Role> permissoes = new ArrayList<>();
+	private List<Role> roles = new ArrayList<>();
 
-	private boolean admin;
-
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private List<Conta> contas;
-
-    public Usuario(String username, String password, List<GrantedAuthority> grantedAuthorities) {
-        super();
-    }
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+	private List<Conta> contas = new ArrayList<>();
 
     public String getUsername() {
 		return username;
@@ -67,17 +65,17 @@ public class Usuario extends AbstractEntity implements UserDetails{
 		this.username = username;
 	}
 
-    public List<Role> getPermissoes() {
-        return permissoes;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setPermissoes(List<Role> permissoes) {
-        this.permissoes = permissoes;
+    public void setRoles(List<Role> permissoes) {
+        this.roles = permissoes;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return permissoes;
+        return roles;
     }
 
     @Override
@@ -87,14 +85,6 @@ public class Usuario extends AbstractEntity implements UserDetails{
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public boolean isAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
 	}
 
 	public String getNome() {

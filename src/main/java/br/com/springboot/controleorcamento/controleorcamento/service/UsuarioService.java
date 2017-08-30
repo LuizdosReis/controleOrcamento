@@ -34,13 +34,7 @@ public class UsuarioService implements UserDetailsService{
 
     @Override
     public Usuario loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario user = Optional.ofNullable(usuarioRepository.findByUsername(username))
+        return Optional.ofNullable(usuarioRepository.findByUsername(username))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        List<GrantedAuthority> authorityListAdmin = AuthorityUtils.createAuthorityList("ROLE_USER","ROLE_ADMIN","ROLE_ACTUATOR");
-        List<GrantedAuthority> authorityListUser = AuthorityUtils.createAuthorityList("ROLE_USER");
-        return new Usuario(
-                user.getUsername(),
-                user.getPassword(),
-                user.isAdmin() ? authorityListAdmin : authorityListUser);
     }
 }

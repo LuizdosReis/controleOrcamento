@@ -9,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -31,16 +28,19 @@ public class ContaEndpoint {
         this.usuarioRepository = usuarioRepository;
     }
 
+    @GetMapping(path = "protected")
+    public ResponseEntity<?> getAll(@AuthenticationPrincipal Usuario usuario){
+        return new ResponseEntity<>(usuario.getContas(), HttpStatus.OK);
+    }
+
     @PostMapping(path = "protected")
     @Transactional
     public ResponseEntity<?> save(@Valid @RequestBody Conta conta, @AuthenticationPrincipal Usuario usuario){
         conta = contaRepository.save(conta);
 
-        System.out.println(usuario);
+        usuario.setConta(conta);
 
-      //  usuario.setConta(conta);
-
-       // usuarioRepository.save(usuario);
+        usuarioRepository.save(usuario);
 
         return new ResponseEntity<>(conta, HttpStatus.CREATED);
     }
