@@ -3,6 +3,7 @@ package br.com.springboot.controleorcamento.controleorcamento.model;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
@@ -73,7 +74,6 @@ public class Conta extends AbstractEntity{
         return new ArrayList<>(receitas);
     }
 
-
     public static final class Builder {
         private Long id;
         private String descricao;
@@ -98,7 +98,6 @@ public class Conta extends AbstractEntity{
             saldo = val;
             return this;
         }
-
 
         public Conta build() {
             return new Conta(this);

@@ -12,17 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("v1/contas/")
+@Transactional
 public class ContaEndpoint {
 
 
-    @Autowired
+
     private final ContaRepository contaRepository;
     private final UsuarioRepository usuarioRepository;
 
-
+    @Autowired
     public ContaEndpoint(ContaRepository contaRepository, UsuarioRepository usuarioRepository) {
         this.contaRepository = contaRepository;
         this.usuarioRepository = usuarioRepository;
@@ -30,17 +32,23 @@ public class ContaEndpoint {
 
     @GetMapping(path = "protected")
     public ResponseEntity<?> getAll(@AuthenticationPrincipal Usuario usuario){
-        return new ResponseEntity<>(usuario.getContas(), HttpStatus.OK);
+        Usuario one = usuarioRepository.findOne(usuario.getId());
+
+        List<Conta> contas = one.getContas();
+
+        return new ResponseEntity<>(contas, HttpStatus.OK);
     }
 
     @PostMapping(path = "protected")
-    @Transactional
     public ResponseEntity<?> save(@Valid @RequestBody Conta conta, @AuthenticationPrincipal Usuario usuario){
+
         conta = contaRepository.save(conta);
 
-        usuario.setConta(conta);
+        Usuario one = usuarioRepository.findOne(usuario.getId());
 
-        usuarioRepository.save(usuario);
+        one.setConta(conta);
+
+        usuarioRepository.save(one);
 
         return new ResponseEntity<>(conta, HttpStatus.CREATED);
     }

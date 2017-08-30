@@ -1,15 +1,13 @@
 package br.com.springboot.controleorcamento.controleorcamento.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
-import sun.swing.BakedArrayList;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,8 +31,7 @@ public class Usuario extends AbstractEntity implements UserDetails{
 	@OneToMany(fetch = FetchType.EAGER)
 	private List<Role> roles = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany
 	private List<Conta> contas = new ArrayList<>();
 
     public String getUsername() {
@@ -95,10 +92,12 @@ public class Usuario extends AbstractEntity implements UserDetails{
 		this.nome = nome;
 	}
 
+	@Transactional
     public List<Conta> getContas() {
         return contas;
     }
 
+    @Transactional
     public void setConta(Conta conta) {
 	    contas.add(conta);
     }
