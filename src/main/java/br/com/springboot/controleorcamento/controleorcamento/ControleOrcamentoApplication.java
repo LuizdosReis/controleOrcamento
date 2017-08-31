@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.format.FormatterRegistry;
@@ -21,7 +23,7 @@ import java.time.LocalDate;
 @Controller
 @SpringBootApplication
 @EnableTransactionManagement
-public class ControleOrcamentoApplication extends WebMvcConfigurerAdapter{
+public class ControleOrcamentoApplication extends SpringBootServletInitializer{
 	public static void main(String[] args) {
 	    SpringApplication.run(ControleOrcamentoApplication.class, args);
 	}
@@ -38,7 +40,12 @@ public class ControleOrcamentoApplication extends WebMvcConfigurerAdapter{
         return objectMapper;
     }
 
-    @Override
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+
+   // @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new LocalDateConverter("dd/MM/yyyy"));
     }
