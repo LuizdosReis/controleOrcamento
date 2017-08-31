@@ -1,8 +1,11 @@
 package br.com.springboot.controleorcamento.controleorcamento.endpoint;
 
+import br.com.springboot.controleorcamento.controleorcamento.dto.ContaGastoDTO;
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
 import br.com.springboot.controleorcamento.controleorcamento.model.Gasto;
 import br.com.springboot.controleorcamento.controleorcamento.repository.CategoriaRepository;
+import br.com.springboot.controleorcamento.controleorcamento.repository.ContaRepository;
 import br.com.springboot.controleorcamento.controleorcamento.repository.GastoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ResourceNotFoundException;
@@ -21,11 +24,14 @@ public class GastoEndpoint {
 	
 	private final GastoRepository gastoRepository;
 	private final CategoriaRepository categoriaRepository;
-	
+	private final ContaRepository contaRepository;
+
 	@Autowired
-	public GastoEndpoint(GastoRepository repository, CategoriaRepository categoriaRepository) {
+	public GastoEndpoint(GastoRepository repository, CategoriaRepository categoriaRepository,
+						 ContaRepository contaRepository) {
 		this.gastoRepository = repository;
 		this.categoriaRepository = categoriaRepository;
+		this.contaRepository = contaRepository;
 	}
 
 	@GetMapping(path = "protected")
@@ -54,8 +60,19 @@ public class GastoEndpoint {
 	
 	@PostMapping(path = "protected")
 	@Transactional
-	public ResponseEntity<?> save(@RequestBody Gasto gasto){
-		return new ResponseEntity<>(gastoRepository.save(gasto),HttpStatus.CREATED);
+	public ResponseEntity<?> save(@Valid @RequestBody ContaGastoDTO contaGastoDTO){
+
+		Conta conta = contaRepository.findOne(contaGastoDTO.getContaId());
+
+		Gasto gasto = contaGastoDTO.getGasto();
+
+		gasto = gastoRepository.save(gasto);
+
+		conta.adicionaGasto(gasto);
+
+		contaRepository.save(conta);
+
+		return new ResponseEntity<>(gasto,HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping(path = "admin/gastos/{id}")

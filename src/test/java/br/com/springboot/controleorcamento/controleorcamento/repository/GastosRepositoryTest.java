@@ -122,26 +122,25 @@ public class GastosRepositoryTest {
     }
 
 
-    //@Test
+    @Test
     public void deveTrazerGastosPelaCategoria() {
-        List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
+        List<GastoCategorizado> gastosCategorizados = new ArrayList<>();
 
         Categoria carro = new Categoria(1L,"Carro");
 
+        Categoria moto = new Categoria(2L,"Moto");
+
         this.categoriaRepository.save(carro);
-
-        gastosCategorizado.add(new GastoCategorizado(carro, new BigDecimal("32.50")));
-
-        Gasto gasto = new Gasto("Gasolina", LocalDate.now(), gastosCategorizado);
-
-        Categoria moto = new Categoria(1L,"Moto");
 
         this.categoriaRepository.save(moto);
 
-        gasto.adicionaGastoCategorizado(new GastoCategorizado(moto, new BigDecimal("11.50")));
+        gastosCategorizados.add(new GastoCategorizado(carro, new BigDecimal("32.50")));
+
+        gastosCategorizados.add(new GastoCategorizado(moto, new BigDecimal("11.50")));
+
+        Gasto gasto = new Gasto("Gasolina", LocalDate.now(), gastosCategorizados);
 
         this.gastoRepository.save(gasto);
-
 
         List<Gasto> gastos = gastoRepository.findByCategoria(carro, null).getContent();
 
