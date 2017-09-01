@@ -1,5 +1,6 @@
 package br.com.springboot.controleorcamento.controleorcamento.endpoint;
 
+import br.com.springboot.controleorcamento.controleorcamento.dao.GastoDao;
 import br.com.springboot.controleorcamento.controleorcamento.dto.ContaGastoDTO;
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
@@ -25,13 +26,15 @@ public class GastoEndpoint {
 	private final GastoRepository gastoRepository;
 	private final CategoriaRepository categoriaRepository;
 	private final ContaRepository contaRepository;
+	private final GastoDao gastoDao;
 
 	@Autowired
 	public GastoEndpoint(GastoRepository repository, CategoriaRepository categoriaRepository,
-						 ContaRepository contaRepository) {
+						 ContaRepository contaRepository, GastoDao gastoDao) {
 		this.gastoRepository = repository;
 		this.categoriaRepository = categoriaRepository;
 		this.contaRepository = contaRepository;
+		this.gastoDao = gastoDao;
 	}
 
 	@GetMapping(path = "protected")
@@ -49,7 +52,8 @@ public class GastoEndpoint {
 	@GetMapping(path = "protected/findbycategoria/{idCategoria}")
 	public ResponseEntity<?> getByTipo(@PathVariable("idCategoria") long idCategoria,Pageable pageable){
 		Categoria categoria = categoriaRepository.findOne(idCategoria);
-		return new ResponseEntity<>(gastoRepository.findByCategoria(categoria,pageable),HttpStatus.OK);
+
+		return new ResponseEntity<>(gastoDao.findGastoPorCategoria(categoria.getDescricao()),HttpStatus.OK);
 	}
 
 	@GetMapping(path = "protected/findbydatas")

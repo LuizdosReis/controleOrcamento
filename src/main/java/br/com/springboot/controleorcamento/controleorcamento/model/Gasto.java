@@ -43,6 +43,8 @@ public class Gasto extends AbstractEntity {
 	}
 
 	public Gasto() {
+	    this.valor = new BigDecimal("0.00");
+		this.gastosCategorizados = new ArrayList<>();
 	}
 
     public Gasto(Long id, String descricao, LocalDate data, List<GastoCategorizado> gastosCategorizado) {

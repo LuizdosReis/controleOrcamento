@@ -1,5 +1,6 @@
 package br.com.springboot.controleorcamento.controleorcamento.repository;
 
+import br.com.springboot.controleorcamento.controleorcamento.dao.GastoDao;
 import br.com.springboot.controleorcamento.controleorcamento.helper.GastoHelper;
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.controleorcamento.model.Gasto;
@@ -30,6 +31,7 @@ public class GastosRepositoryTest {
 
     @Autowired
     private CategoriaRepository categoriaRepository;
+
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -113,7 +115,7 @@ public class GastosRepositoryTest {
     }
 
 
-    //@Test
+    @Test
     public void deveTrazerGastosPelaCategoria() {
         List<GastoCategorizado> gastosCategorizados = new ArrayList<>();
 
