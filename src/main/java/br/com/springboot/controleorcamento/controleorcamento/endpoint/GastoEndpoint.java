@@ -21,6 +21,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("v1/gastos/")
+@CrossOrigin
 public class GastoEndpoint {
 	
 	private final GastoRepository gastoRepository;

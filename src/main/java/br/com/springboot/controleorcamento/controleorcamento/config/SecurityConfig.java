@@ -3,6 +3,7 @@ package br.com.springboot.controleorcamento.controleorcamento.config;
 import br.com.springboot.controleorcamento.controleorcamento.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired
@@ -28,6 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests()
                 .antMatchers("/*/protected/**").hasRole("USER")
                 .antMatchers("/*/admin/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
 			.anyRequest().authenticated()
     		.and()
 			.httpBasic()

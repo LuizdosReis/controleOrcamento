@@ -15,6 +15,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("v1/categorias/")
+@CrossOrigin
 public class CategoriaEndpoint {
 
     private final CategoriaRepository categoriaRepository;
