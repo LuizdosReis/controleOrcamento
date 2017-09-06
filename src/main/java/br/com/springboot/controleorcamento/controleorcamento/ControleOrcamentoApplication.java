@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 @Controller
 @SpringBootApplication
 @EnableTransactionManagement
+@ComponentScan({"br.com.springboot.controleorcamento.controleorcamento.dao"})
 public class ControleOrcamentoApplication extends SpringBootServletInitializer{
 	public static void main(String[] args) {
 	    SpringApplication.run(ControleOrcamentoApplication.class, args);

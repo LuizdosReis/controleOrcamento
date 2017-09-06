@@ -49,7 +49,7 @@ public class GastoEndpointTest {
 
 
     @Test
-    @WithMockUser(roles = "User")
+    @WithMockUser
     public void deveRetornaStatus200QuandoUsuarioESenhaForemCorretosParaGetGastos() throws Exception {
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
@@ -68,7 +68,7 @@ public class GastoEndpointTest {
     }
 
     @Test
-    @WithMockUser(roles = "User")
+    @WithMockUser
     public void deveRetornaStatus200QuandoUsuarioESenhaForemCorretosParaGetGastosById() throws Exception {
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
@@ -83,7 +83,7 @@ public class GastoEndpointTest {
     }
 
     @Test
-    @WithMockUser(roles = "User")
+    @WithMockUser
     public void deveRetornaStatus404QuandoUsuarioESenhaForemCorretosEGastoNaoExistirParaGetGastosById() throws Exception {
         mockMvc.perform(get("/v1/gastos/protected/{id}",-1L)).andExpect(status().isNotFound());
     }

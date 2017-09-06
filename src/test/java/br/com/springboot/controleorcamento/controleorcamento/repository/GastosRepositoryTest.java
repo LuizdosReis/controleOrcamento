@@ -119,9 +119,9 @@ public class GastosRepositoryTest {
     public void deveTrazerGastosPelaCategoria() {
         List<GastoCategorizado> gastosCategorizados = new ArrayList<>();
 
-        Categoria carro = new Categoria(1L,"Carro");
+        Categoria carro = new Categoria("Carro");
 
-        Categoria moto = new Categoria(2L,"Moto");
+        Categoria moto = new Categoria("Moto");
 
         this.categoriaRepository.save(carro);
 
@@ -164,7 +164,7 @@ public class GastosRepositoryTest {
     @Test
     public void quandoCriaUmGastoComValorZeradoDeveRetornaThrowConstrainViolationException(){
         thrown.expect(ConstraintViolationException.class);
-        thrown.expectMessage("O Valor não pode ser menor ou igual a 0.00");
+        thrown.expectMessage("O Valor não pode ser negativo");
 
         List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
 
