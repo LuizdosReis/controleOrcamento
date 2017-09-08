@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 
 @RunWith(SpringRunner.class)
@@ -50,9 +50,7 @@ public class GastoDaoTest {
 
         gastosCategorizados.add(new GastoCategorizado(moto, new BigDecimal("11.50")));
 
-        Gasto gasto = new Gasto("Gasolina", LocalDate.now(), gastosCategorizados);
-
-        this.gastoRepository.save(gasto);
+        this.gastoRepository.save(new Gasto("Gasolina", LocalDate.now(), gastosCategorizados));
 
         List<Gasto> gastos = gastoDao.findGastoPorCategoria(carro.getDescricao());
 

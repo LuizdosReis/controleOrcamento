@@ -7,16 +7,24 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class GastoDao {
+public class GastoDao{
 
-    private final JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
+    private DataSource dataSource;
 
     @Autowired
-    public GastoDao(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = new JdbcTemplate();
+    public void setDataSource(DataSource dataSource){
+        this.dataSource = dataSource;
+    }
+
+    @PostConstruct
+    private void postConstruct(){
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     public List<Gasto> findGastoPorCategoria(String descricao){
