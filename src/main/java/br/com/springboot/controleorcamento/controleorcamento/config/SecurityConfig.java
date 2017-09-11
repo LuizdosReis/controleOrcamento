@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
@@ -28,11 +29,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests()
                 .antMatchers("/*/protected/**").hasRole("USER")
                 .antMatchers("/*/admin/**").hasRole("ADMIN")
+                .antMatchers("/*/user/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
 			.anyRequest().authenticated()
     		.and()
-			.httpBasic()
-			.and()
+			.addFilterBefore(new JWTLoginFilter("/login", authenticationManager()),UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new JWTAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
 			.csrf().disable();
 	}
 
