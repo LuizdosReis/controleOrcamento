@@ -1,7 +1,6 @@
 package br.com.springboot.controleorcamento.controleorcamento;
 
 
-import br.com.springboot.controleorcamento.controleorcamento.converter.LocalDateConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -11,9 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
-import org.springframework.format.FormatterRegistry;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -50,14 +47,6 @@ public class ControleOrcamentoApplication extends SpringBootServletInitializer{
     public BCryptPasswordEncoder bcyrpt() {
         return new BCryptPasswordEncoder();
     }
-
-
-
-   // @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new LocalDateConverter("dd/MM/yyyy"));
-    }
-
 
     @GetMapping("/home")
     public String index(){
