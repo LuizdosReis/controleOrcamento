@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,6 @@ import java.time.LocalDate;
 @Controller
 @SpringBootApplication
 @EnableTransactionManagement
-@ComponentScan({"br.com.springboot.controleorcamento.controleorcamento.dao"})
 public class ControleOrcamentoApplication extends SpringBootServletInitializer{
 	public static void main(String[] args) {
 	    SpringApplication.run(ControleOrcamentoApplication.class, args);
@@ -44,6 +44,11 @@ public class ControleOrcamentoApplication extends SpringBootServletInitializer{
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bcyrpt() {
+        return new BCryptPasswordEncoder();
     }
 
 

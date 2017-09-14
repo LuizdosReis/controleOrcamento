@@ -15,12 +15,10 @@ import javax.validation.Valid;
 @RequestMapping("v1/user/")
 public class UsuarioEndpoint {
 
-    private final UsuarioRepository usuarioRepository;
     private final UsuarioService usuarioService;
 
     @Autowired
-    public UsuarioEndpoint(UsuarioRepository usuarioRepository, UsuarioService usuarioService) {
-        this.usuarioRepository = usuarioRepository;
+    public UsuarioEndpoint(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
@@ -31,7 +29,7 @@ public class UsuarioEndpoint {
 
     @GetMapping("/{name.sobrenome}")
     public ResponseEntity<?> getByName(@PathVariable("name.sobrenome") String name){
-        return new ResponseEntity<>(usuarioRepository.findByUsername(name),HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.loadUserByUsername(name),HttpStatus.OK);
     }
 
 }

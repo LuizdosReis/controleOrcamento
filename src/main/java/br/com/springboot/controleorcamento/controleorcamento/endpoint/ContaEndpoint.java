@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
@@ -23,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("v1/contas/")
-@Transactional
+@CrossOrigin
 public class ContaEndpoint {
 
 
@@ -40,9 +41,9 @@ public class ContaEndpoint {
     }
 
     @GetMapping(path = "protected")
-    public ResponseEntity<?> getAll(Authentication auth){
+    public ResponseEntity<?> getAll(@AuthenticationPrincipal Usuario usuario){
 
-        Usuario usuario = usuarioRepository.findOne(getCurrentUserId());
+        usuario = usuarioRepository.findOne(usuario.getId());
 
         List<Conta> contas = usuario.getContas();
 
@@ -67,21 +68,5 @@ public class ContaEndpoint {
         usuarioRepository.save(one);
 
         return new ResponseEntity<>(conta, HttpStatus.CREATED);
-    }
-
-    public static Long getCurrentUserId() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
-        String id = null;
-        if (authentication != null)
-            if (authentication.getPrincipal() instanceof UserDetails)
-                id = ((UserDetails) authentication.getPrincipal()).getUsername();
-            else if (authentication.getPrincipal() instanceof String)
-                id = (String) authentication.getPrincipal();
-        try {
-            return Long.valueOf(id != null ? id : "1"); //anonymoususer
-        } catch (NumberFormatException e) {
-            return 1L;
-        }
     }
 }
