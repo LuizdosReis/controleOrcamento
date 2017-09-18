@@ -32,10 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.and().csrf().disable()
 				.authorizeRequests()
 				//.antMatchers(HttpMethod.GET,SIGN_UP_URL).permitAll()
-                .antMatchers("/*/protected/**").hasRole("USER")
-                .antMatchers("/*/admin/**").hasRole("ADMIN")
-                //.antMatchers("/*/user/**").permitAll()
+               // .antMatchers("v1/gastos/protected").access("hasRole('ROLE_USER')")
+               // .antMatchers("/*/admin/**").hasRole("ADMIN")
+                //.antMatchers(/*/user/**"").permitAll()
                 //.antMatchers(HttpMethod.OPTIONS).permitAll()
+				.antMatchers(HttpMethod.POST,"/*/user/**").permitAll()
 				.anyRequest().authenticated()
                 .and()
 				.addFilter(new JWTAuthenticationFilter(authenticationManager()))
@@ -49,6 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**", "/swagger-ui.html", "/webjars/**");
+		web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**", "/swagger-ui.html", "/webjars/**", "/h2-console/**");
 	}
 }

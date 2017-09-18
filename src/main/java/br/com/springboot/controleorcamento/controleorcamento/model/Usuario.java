@@ -1,16 +1,12 @@
 package br.com.springboot.controleorcamento.controleorcamento.model;
 
-import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Usuario extends AbstractEntity implements UserDetails{
@@ -25,14 +21,11 @@ public class Usuario extends AbstractEntity implements UserDetails{
 	@NotEmpty
 	private String password;
 
-	@Transient
-	private String ConfirmPassword;
-
 	@OneToMany(fetch = FetchType.EAGER)
-	private List<Role> roles = new ArrayList<>();
+	private Set<Role> roles = new HashSet<>();
 
-    @OneToMany
-	private List<Conta> contas = new ArrayList<>();
+    @OneToMany(mappedBy = "usuario")
+	private Set<Conta> contas = new HashSet<>();
 
     public String getUsername() {
 		return username;
@@ -58,21 +51,9 @@ public class Usuario extends AbstractEntity implements UserDetails{
         return true;
     }
 
-    public void setUsername(String username) {
-		this.username = username;
-	}
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> permissoes) {
-        this.roles = permissoes;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return Collections.unmodifiableSet(roles);
     }
 
     @Override
@@ -84,6 +65,10 @@ public class Usuario extends AbstractEntity implements UserDetails{
 		this.password = password;
 	}
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
 	public String getNome() {
 		return nome;
 	}
@@ -92,13 +77,15 @@ public class Usuario extends AbstractEntity implements UserDetails{
 		this.nome = nome;
 	}
 
-	@Transactional
-    public List<Conta> getContas() {
+    public Set<Conta> getContas() {
         return contas;
     }
 
-    @Transactional
     public void setConta(Conta conta) {
 	    contas.add(conta);
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

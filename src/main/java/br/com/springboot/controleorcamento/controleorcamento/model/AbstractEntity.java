@@ -1,6 +1,7 @@
 package br.com.springboot.controleorcamento.controleorcamento.model;
 
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
@@ -9,7 +10,7 @@ import java.io.Serializable;
 public abstract class AbstractEntity implements Serializable {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
 	public Long getId() {

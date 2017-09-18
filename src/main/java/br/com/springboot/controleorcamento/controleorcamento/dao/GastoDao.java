@@ -1,11 +1,9 @@
 package br.com.springboot.controleorcamento.controleorcamento.dao;
 
-import br.com.springboot.controleorcamento.controleorcamento.model.Gasto;
+import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -27,7 +25,7 @@ public class GastoDao{
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public List<Gasto> findGastoPorCategoria(String descricao){
+    public List<Despesa> findGastoPorCategoria(String descricao){
 
         StringBuilder sql = new StringBuilder();
 

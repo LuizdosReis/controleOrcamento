@@ -2,15 +2,11 @@ package br.com.springboot.controleorcamento.controleorcamento.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Conta extends AbstractEntity{
@@ -22,24 +18,16 @@ public class Conta extends AbstractEntity{
     @Digits(fraction=2,message="O valor só pode conter dois digitos após a virgula",integer = 9)
     private BigDecimal saldo;
 
-    @OneToMany
-    private List<Gasto> gastos;
+    @ManyToOne
+    @JoinTable(name = "usuario_conta", joinColumns = @JoinColumn(name = "conta_id"),
+    inverseJoinColumns = @JoinColumn(name="usuario_id"))
+    private Usuario usuario;
 
-    @OneToMany
-    private List<Receita> receitas;
+    @OneToMany(mappedBy = "conta")
+    private Set<Despesa> gastos = new HashSet<>();
 
-    public Conta() {
-        gastos = new ArrayList<>();
-        receitas = new ArrayList<>();
-    }
-
-    private Conta(Builder builder) {
-        setId(builder.id);
-        setDescricao(builder.descricao);
-        setSaldo(builder.saldo);
-        gastos = new ArrayList<>();
-        receitas = new ArrayList<>();
-    }
+    @OneToMany(mappedBy = "conta")
+    private Set<Receita> receitas = new HashSet<>();
 
     public String getDescricao() {
         return descricao;
@@ -57,9 +45,17 @@ public class Conta extends AbstractEntity{
         this.saldo = saldo;
     }
 
-    public void adicionaGasto(Gasto gasto){
+    public void adicionaGasto(Despesa gasto){
         this.saldo = this.saldo.subtract(gasto.getValor());
         this.gastos.add(gasto);
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public void adicionaReceita(Receita receita){
@@ -67,41 +63,13 @@ public class Conta extends AbstractEntity{
         this.receitas.add(receita);
     }
 
-    public List<Gasto> getGastos() {
-        return  new ArrayList<>(gastos);
+    public Set<Despesa> getGastos() {
+        return Collections.unmodifiableSet(gastos);
     }
 
-    public List<Receita> getReceitas() {
-        return new ArrayList<>(receitas);
+    public Set<Receita> getReceitas() {
+        return Collections.unmodifiableSet(receitas);
     }
 
-    public static final class Builder {
-        private Long id;
-        private String descricao;
-        private BigDecimal saldo;
-        private List<Gasto> gastos;
-        private List<Receita> receitas;
 
-        public Builder() {
-        }
-
-        public Builder id(Long val) {
-            id = val;
-            return this;
-        }
-
-        public Builder descricao(String val) {
-            descricao = val;
-            return this;
-        }
-
-        public Builder saldo(BigDecimal val) {
-            saldo = val;
-            return this;
-        }
-
-        public Conta build() {
-            return new Conta(this);
-        }
-    }
 }

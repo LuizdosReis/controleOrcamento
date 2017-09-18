@@ -39,13 +39,13 @@ public class ContaEndpoint {
 
         usuario = usuarioRepository.findOne(usuario.getId());
 
-        List<Conta> contas = usuario.getContas();
+       // List<Conta> contas = usuario.getContas();
 
         ArrayList<ContaDTO> contasDTO = new ArrayList<>();
 
-        contas.forEach(conta -> {
-            contasDTO.add(modelMapper.map(conta, ContaDTO.class));
-        });
+//        contas.forEach(conta -> {
+//            contasDTO.add(modelMapper.map(conta, ContaDTO.class));
+//        });
 
         return new ResponseEntity<>(contasDTO, HttpStatus.OK);
     }

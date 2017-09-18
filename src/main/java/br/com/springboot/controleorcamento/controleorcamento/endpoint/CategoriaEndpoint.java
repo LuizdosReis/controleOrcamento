@@ -1,7 +1,6 @@
 package br.com.springboot.controleorcamento.controleorcamento.endpoint;
 
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
-import br.com.springboot.controleorcamento.controleorcamento.model.Gasto;
 import br.com.springboot.controleorcamento.controleorcamento.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ResourceNotFoundException;

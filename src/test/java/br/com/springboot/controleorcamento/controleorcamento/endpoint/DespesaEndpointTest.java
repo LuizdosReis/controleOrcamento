@@ -2,8 +2,8 @@ package br.com.springboot.controleorcamento.controleorcamento.endpoint;
 
 
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
-import br.com.springboot.controleorcamento.controleorcamento.model.Gasto;
-import br.com.springboot.controleorcamento.controleorcamento.model.GastoCategorizado;
+import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
+import br.com.springboot.controleorcamento.controleorcamento.model.DespesaCategorizada;
 import br.com.springboot.controleorcamento.controleorcamento.repository.GastoRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class GastoEndpointTest {
+public class DespesaEndpointTest {
 
     @MockBean
     private GastoRepository gastoRepository;
@@ -51,12 +51,12 @@ public class GastoEndpointTest {
     @Test
     @WithMockUser
     public void deveRetornaStatus200QuandoUsuarioESenhaForemCorretosParaGetGastos() throws Exception {
-        List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
+        List<DespesaCategorizada> gastosCategorizado = new ArrayList<>();
 
-        gastosCategorizado.add(new GastoCategorizado(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
+        gastosCategorizado.add(new DespesaCategorizada(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
 
-        List<Gasto> gastos = asList(new Gasto(1L, "Gasolina", LocalDate.now(), gastosCategorizado),
-                new Gasto(1L, "Filtro", LocalDate.now(), gastosCategorizado));
+        List<Despesa> gastos = asList(new Despesa(1L, "Gasolina", LocalDate.now(), gastosCategorizado),
+                new Despesa(1L, "Filtro", LocalDate.now(), gastosCategorizado));
 
         when(gastoRepository.findAll()).thenReturn(gastos);
 
@@ -70,11 +70,11 @@ public class GastoEndpointTest {
     @Test
     @WithMockUser
     public void deveRetornaStatus200QuandoUsuarioESenhaForemCorretosParaGetGastosById() throws Exception {
-        List<GastoCategorizado> gastosCategorizado = new ArrayList<>();
+        List<DespesaCategorizada> gastosCategorizado = new ArrayList<>();
 
-        gastosCategorizado.add(new GastoCategorizado(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
+        gastosCategorizado.add(new DespesaCategorizada(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
 
-        Gasto gasto = new Gasto(1L, "Gasolina", LocalDate.now(), gastosCategorizado);
+        Despesa gasto = new Despesa(1L, "Gasolina", LocalDate.now(), gastosCategorizado);
 
         given(gastoRepository.findOne(gasto.getId())).willReturn(gasto);
 

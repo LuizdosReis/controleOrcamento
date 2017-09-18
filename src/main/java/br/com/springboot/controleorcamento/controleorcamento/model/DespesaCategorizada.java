@@ -8,7 +8,7 @@ import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
 
 @Entity
-public class GastoCategorizado extends AbstractEntity {
+public class DespesaCategorizada extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Categoria categoria;
@@ -17,12 +17,12 @@ public class GastoCategorizado extends AbstractEntity {
     @DecimalMin(message = "O Valor não pode ser negativo", value = "0.00", inclusive = false)
     private BigDecimal valor;
 
-    public GastoCategorizado(Categoria categoria, BigDecimal valor) {
+    public DespesaCategorizada(Categoria categoria, BigDecimal valor) {
         this.categoria = categoria;
         this.valor = valor;
     }
 
-    public GastoCategorizado() {
+    public DespesaCategorizada() {
     }
 
     public Categoria getCategoria() {

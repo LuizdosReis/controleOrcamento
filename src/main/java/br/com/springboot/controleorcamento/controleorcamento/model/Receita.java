@@ -4,6 +4,9 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
@@ -19,6 +22,11 @@ public class Receita extends AbstractEntity{
     private BigDecimal valor;
 
     private Boolean efetivada;
+
+    @ManyToOne
+    @JoinTable(name = "conta_receita", joinColumns = @JoinColumn(name = "receita_id"),
+            inverseJoinColumns = @JoinColumn(name="conta_id"))
+    private Conta conta;
 
     public String getDescrição() {
         return descrição;
@@ -42,5 +50,13 @@ public class Receita extends AbstractEntity{
 
     public void setEfetivada(Boolean efetivada) {
         this.efetivada = efetivada;
+    }
+
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
     }
 }

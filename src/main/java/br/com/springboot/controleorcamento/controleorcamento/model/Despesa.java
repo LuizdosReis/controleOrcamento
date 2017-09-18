@@ -5,18 +5,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
-public class Gasto extends AbstractEntity {
+public class Despesa extends AbstractEntity {
 
 	@NotEmpty(message = "A descrição não pode ser vazia")
 	private String descricao;
@@ -32,22 +29,25 @@ public class Gasto extends AbstractEntity {
 
 	@NotEmpty
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private List<GastoCategorizado> gastosCategorizados;
+	private Set<DespesaCategorizada> gastosCategorizados = new HashSet<>();
 
-	public Gasto(String descricao, LocalDate data, List<GastoCategorizado> gastosCategorizados) {
+	@ManyToOne
+	@JoinTable(name = "conta_despesa", joinColumns = @JoinColumn(name = "despesa_id"),
+			inverseJoinColumns = @JoinColumn(name="conta_id"))
+	private Conta conta;
+
+	public Despesa(String descricao, LocalDate data, List<DespesaCategorizada> gastosCategorizados) {
 		this.valor = new BigDecimal("0.00");
 		gastosCategorizados.forEach(gastos -> this.valor = this.valor.add(gastos.getValor()));
 		this.descricao = descricao;
 		this.data = data;
-		this.gastosCategorizados = new ArrayList<>(gastosCategorizados);
 	}
 
-	public Gasto() {
+	public Despesa() {
 	    this.valor = new BigDecimal("0.00");
-		this.gastosCategorizados = new ArrayList<>();
 	}
 
-    public Gasto(Long id, String descricao, LocalDate data, List<GastoCategorizado> gastosCategorizado) {
+    public Despesa(Long id, String descricao, LocalDate data, List<DespesaCategorizada> gastosCategorizado) {
 	    this(descricao,data,gastosCategorizado);
         this.id = id;
     }
@@ -72,19 +72,20 @@ public class Gasto extends AbstractEntity {
 		return valor;
 	}
 
-	public List<GastoCategorizado> getGastosCategorizados() {
-		return new ArrayList<>(gastosCategorizados);
+	public Set<DespesaCategorizada> getGastosCategorizados() {
+		return Collections.unmodifiableSet(gastosCategorizados);
 	}
 
-	public void setGastosCategorizados(List<GastoCategorizado> gastosCategorizados) {
-		this.gastosCategorizados = new ArrayList<>(gastosCategorizados);
-		this.valor = new BigDecimal("0.00");
-		gastosCategorizados.forEach(gastos -> this.valor = this.valor.add(gastos.getValor()));
-
+	public Conta getConta() {
+		return conta;
 	}
 
-	public void adicionaGastoCategorizado(GastoCategorizado gastoCategorizado) {
-		this.valor = this.valor.add(gastoCategorizado.getValor());
-		gastosCategorizados.add(gastoCategorizado);
+	public void setConta(Conta conta) {
+		this.conta = conta;
+	}
+
+	public void adicionaGastoCategorizado(DespesaCategorizada despesaCategorizada) {
+		this.valor = this.valor.add(despesaCategorizada.getValor());
+		gastosCategorizados.add(despesaCategorizada);
 	}
 }

@@ -1,8 +1,8 @@
 package br.com.springboot.controleorcamento.controleorcamento.dao;
 
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
-import br.com.springboot.controleorcamento.controleorcamento.model.Gasto;
-import br.com.springboot.controleorcamento.controleorcamento.model.GastoCategorizado;
+import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
+import br.com.springboot.controleorcamento.controleorcamento.model.DespesaCategorizada;
 import br.com.springboot.controleorcamento.controleorcamento.repository.CategoriaRepository;
 import br.com.springboot.controleorcamento.controleorcamento.repository.GastoRepository;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class GastoDaoTest {
+public class DespesaDaoTest {
 
     @Autowired
     private GastoRepository gastoRepository;
@@ -36,7 +36,7 @@ public class GastoDaoTest {
 
     @Test
     public void findGastoPorCategoria() throws Exception {
-        List<GastoCategorizado> gastosCategorizados = new ArrayList<>();
+        List<DespesaCategorizada> gastosCategorizados = new ArrayList<>();
 
         Categoria carro = new Categoria(1L,"Carro");
 
@@ -46,17 +46,23 @@ public class GastoDaoTest {
 
         this.categoriaRepository.save(moto);
 
-        gastosCategorizados.add(new GastoCategorizado(carro, new BigDecimal("32.50")));
+        gastosCategorizados.add(new DespesaCategorizada(carro, new BigDecimal("32.50")));
 
-        gastosCategorizados.add(new GastoCategorizado(moto, new BigDecimal("11.50")));
+        gastosCategorizados.add(new DespesaCategorizada(moto, new BigDecimal("11.50")));
 
-        this.gastoRepository.save(new Gasto("Gasolina", LocalDate.now(), gastosCategorizados));
+        this.gastoRepository.save(new Despesa("Gasolina", LocalDate.now(), gastosCategorizados));
 
-        List<Gasto> gastos = gastoDao.findGastoPorCategoria(carro.getDescricao());
+        List<Despesa> gastos = gastoDao.findGastoPorCategoria(carro.getDescricao());
 
         assertThat(gastos.get(0).getGastosCategorizados().size()).isEqualTo(1);
         assertTrue(gastos.get(0).getValor().equals(new BigDecimal("44.00")));
-        assertTrue(gastos.get(0).getGastosCategorizados().get(0).getValor().equals(new BigDecimal("32.50")));
+
+        BigDecimal soma = gastos.get(0).getGastosCategorizados()
+                .stream()
+                .map(DespesaCategorizada::getValor)
+                .reduce(new BigDecimal("0.00"), (a, b) -> a = a.add(b));
+
+        assertTrue(soma.equals(new BigDecimal("32.50")));
     }
 
 
