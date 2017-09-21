@@ -68,7 +68,29 @@ public class DespesaEndpoint {
 
         Conta conta = contaRepository.findOne(contaGastoDTO.getContaId());
 
-        Despesa gasto = contaGastoDTO.getGasto();
+		return new ResponseEntity<>(gasto,HttpStatus.CREATED);
+	}
+	
+	@DeleteMapping(path = "admin/gastos/{id}")
+
+	public ResponseEntity<?> delete(@PathVariable("id") long id){
+		verificaSeGastoExiste(id);
+		gastoRepository.delete(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	
+	@PutMapping(path = "admin/gastos")
+	@Transactional
+	public ResponseEntity<?> update(@Valid @RequestBody Gasto gasto){
+		verificaSeGastoExiste(gasto.getId());
+		gastoRepository.save(gasto);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	
+	private Gasto verificaSeGastoExiste(Long id) {
+		Gasto gasto = gastoRepository.findOne(id);
 
         gasto = despesaRepository.save(gasto);
 
