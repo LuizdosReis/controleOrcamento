@@ -28,7 +28,6 @@ public class DespesaEndpoint {
     private final ContaRepository contaRepository;
     private final GastoDao gastoDao;
 
-    @Autowired
     public DespesaEndpoint(DespesaRepository despesaRepository, CategoriaRepository categoriaRepository,
                            ContaRepository contaRepository, GastoDao gastoDao) {
         this.despesaRepository = despesaRepository;
@@ -44,8 +43,8 @@ public class DespesaEndpoint {
 
     @GetMapping(path = "protected/{id}")
     public ResponseEntity<?> getGastoById(@PathVariable("id") Long id) {
-        Despesa gasto = verificaSeGastoExiste(id);
-        return new ResponseEntity<>(gasto, HttpStatus.OK);
+        Despesa despesa = verificaSeGastoExiste(id);
+        return new ResponseEntity<>(despesa, HttpStatus.OK);
     }
 
 
@@ -68,46 +67,15 @@ public class DespesaEndpoint {
 
         Conta conta = contaRepository.findOne(contaGastoDTO.getContaId());
 
-		return new ResponseEntity<>(gasto,HttpStatus.CREATED);
+		return new ResponseEntity<>(conta,HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping(path = "admin/gastos/{id}")
-
 	public ResponseEntity<?> delete(@PathVariable("id") long id){
 		verificaSeGastoExiste(id);
-		gastoRepository.delete(id);
+		despesaRepository.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	
-	@PutMapping(path = "admin/gastos")
-	@Transactional
-	public ResponseEntity<?> update(@Valid @RequestBody Gasto gasto){
-		verificaSeGastoExiste(gasto.getId());
-		gastoRepository.save(gasto);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	
-	private Gasto verificaSeGastoExiste(Long id) {
-		Gasto gasto = gastoRepository.findOne(id);
-
-        gasto = despesaRepository.save(gasto);
-
-        conta.adicionaGasto(gasto);
-
-        contaRepository.save(conta);
-
-        return new ResponseEntity<>(gasto, HttpStatus.CREATED);
-    }
-
-    @DeleteMapping(path = "admin/gastos/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") long id) {
-        verificaSeGastoExiste(id);
-        despesaRepository.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
 
     @PutMapping(path = "admin/gastos")
     @Transactional
