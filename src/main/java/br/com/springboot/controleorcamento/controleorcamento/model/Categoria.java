@@ -1,15 +1,25 @@
 package br.com.springboot.controleorcamento.controleorcamento.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Categoria extends AbstractEntity {
 
     @NotEmpty(message = "A descrição não pode estar em branco")
     private String descricao;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinTable(name = "usuario_categoria", joinColumns = @JoinColumn(name = "categoria_id"),
+            inverseJoinColumns = @JoinColumn(name="usuario_id"))
+    private Usuario usuario;
+
 
     public Categoria(Long id, String descricao) {
         this.id = id;
@@ -31,4 +41,11 @@ public class Categoria extends AbstractEntity {
         this.descricao = descricao;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }

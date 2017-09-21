@@ -27,7 +27,7 @@ public class ContaRepositoryTest {
     private ContaRepository contaRepository;
 
     @Autowired
-    private GastoRepository gastoRepository;
+    private DespesaRepository despesaRepository;
 
     Conta conta;
 
@@ -75,7 +75,7 @@ public class ContaRepositoryTest {
 
     @Test
     public void deveAdicionaUmGasto(){
-        Despesa gasto = gastoRepository.save(GastoHelper.CriaGasto());
+        Despesa gasto = despesaRepository.save(GastoHelper.CriaGasto());
 
         conta.adicionaGasto(gasto);
 

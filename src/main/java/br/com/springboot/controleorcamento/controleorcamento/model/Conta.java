@@ -1,5 +1,6 @@
 package br.com.springboot.controleorcamento.controleorcamento.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -18,14 +19,17 @@ public class Conta extends AbstractEntity{
     @Digits(fraction=2,message="O valor só pode conter dois digitos após a virgula",integer = 9)
     private BigDecimal saldo;
 
+    @JsonIgnore
     @ManyToOne
     @JoinTable(name = "usuario_conta", joinColumns = @JoinColumn(name = "conta_id"),
     inverseJoinColumns = @JoinColumn(name="usuario_id"))
     private Usuario usuario;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "conta")
     private Set<Despesa> gastos = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "conta")
     private Set<Receita> receitas = new HashSet<>();
 

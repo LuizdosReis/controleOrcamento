@@ -1,6 +1,9 @@
 package br.com.springboot.controleorcamento.controleorcamento.repository;
 
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,4 +11,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public interface CategoriaRepository extends PagingAndSortingRepository<Categoria, Long> {
+    Page<Categoria> findByUsuario(Usuario usuario,Pageable pageable);
 }

@@ -4,7 +4,7 @@ import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
 import br.com.springboot.controleorcamento.controleorcamento.model.DespesaCategorizada;
 import br.com.springboot.controleorcamento.controleorcamento.repository.CategoriaRepository;
-import br.com.springboot.controleorcamento.controleorcamento.repository.GastoRepository;
+import br.com.springboot.controleorcamento.controleorcamento.repository.DespesaRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 public class DespesaDaoTest {
 
     @Autowired
-    private GastoRepository gastoRepository;
+    private DespesaRepository despesaRepository;
 
     @Autowired
     private CategoriaRepository categoriaRepository;
@@ -50,7 +50,7 @@ public class DespesaDaoTest {
 
         gastosCategorizados.add(new DespesaCategorizada(moto, new BigDecimal("11.50")));
 
-        this.gastoRepository.save(new Despesa("Gasolina", LocalDate.now(), gastosCategorizados));
+        this.despesaRepository.save(new Despesa("Gasolina", LocalDate.now(), gastosCategorizados));
 
         List<Despesa> gastos = gastoDao.findGastoPorCategoria(carro.getDescricao());
 

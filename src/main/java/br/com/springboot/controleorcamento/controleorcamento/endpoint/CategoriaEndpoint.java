@@ -1,11 +1,13 @@
 package br.com.springboot.controleorcamento.controleorcamento.endpoint;
 
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.controleorcamento.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
@@ -26,13 +28,16 @@ public class CategoriaEndpoint {
 
     @PostMapping(path = "protected")
     @Transactional
-    public ResponseEntity<?> save(@Valid @RequestBody Categoria categoria){
+    public ResponseEntity<?> save(@Valid @RequestBody Categoria categoria,@AuthenticationPrincipal Usuario usuario){
+
+        categoria.setUsuario(usuario);
+
         return new ResponseEntity<>(categoriaRepository.save(categoria), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "protected")
-    public ResponseEntity<?> listaTodos(Pageable pageable){
-        return new ResponseEntity<>(categoriaRepository.findAll(pageable),HttpStatus.OK);
+    public ResponseEntity<?> listaTodos(Pageable pageable,@AuthenticationPrincipal Usuario usuario){
+        return new ResponseEntity<>(categoriaRepository.findByUsuario(usuario,pageable),HttpStatus.OK);
     }
 
     @PutMapping(path = "admin/categorias")

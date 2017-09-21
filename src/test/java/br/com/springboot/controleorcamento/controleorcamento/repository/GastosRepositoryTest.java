@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 public class GastosRepositoryTest {
 
     @Autowired
-    private GastoRepository gastoRepository;
+    private DespesaRepository despesaRepository;
 
     @Autowired
     private CategoriaRepository categoriaRepository;
@@ -43,7 +43,7 @@ public class GastosRepositoryTest {
 
         Despesa gasto = new Despesa("Gasolina", LocalDate.now(), gastosCategorizado);
 
-        this.gastoRepository.save(gasto);
+        this.despesaRepository.save(gasto);
 
         assertThat(gasto.getId()).isNotNull();
         assertThat(gasto.getValor()).isEqualTo(new BigDecimal("32.50"));
@@ -55,7 +55,7 @@ public class GastosRepositoryTest {
 
         gasto.adicionaGastoCategorizado(new DespesaCategorizada(new Categoria("Moto"), new BigDecimal("32.50")));
 
-        this.gastoRepository.save(gasto);
+        this.despesaRepository.save(gasto);
 
         assertThat(gasto.getId()).isNotNull();
         assertThat(gasto.getValor()).isEqualTo(new BigDecimal("65.00"));
@@ -65,11 +65,11 @@ public class GastosRepositoryTest {
     public void deveExcluirGasto() {
         Despesa gasto = GastoHelper.CriaGasto();
 
-        this.gastoRepository.save(gasto);
+        this.despesaRepository.save(gasto);
 
-        this.gastoRepository.delete(gasto);
+        this.despesaRepository.delete(gasto);
 
-        assertThat(gastoRepository.findOne(gasto.getId())).isNull();
+        assertThat(despesaRepository.findOne(gasto.getId())).isNull();
     }
 
     @Test
@@ -83,9 +83,9 @@ public class GastosRepositoryTest {
         //Adiciona um gasto categorizado posteriormente que deve ser ignorado
         gastosCategorizado.add(new DespesaCategorizada(new Categoria("Moto"), new BigDecimal("11.50")));
 
-        this.gastoRepository.save(gasto);
+        this.despesaRepository.save(gasto);
 
-        Despesa gastoEncontrado = gastoRepository.findOne(gasto.getId());
+        Despesa gastoEncontrado = despesaRepository.findOne(gasto.getId());
 
         assertTrue(gastoEncontrado.getValor().equals(new BigDecimal("32.50")));
 
@@ -100,13 +100,13 @@ public class GastosRepositoryTest {
 
         Despesa gasto = new Despesa("Gasolina", LocalDate.now(), gastosCategorizado);
 
-        this.gastoRepository.save(gasto);
+        this.despesaRepository.save(gasto);
 
         gasto.adicionaGastoCategorizado(new DespesaCategorizada(new Categoria("Moto"), new BigDecimal("11.50")));
 
         gasto.setDescricao("Gasolina 2");
 
-        Despesa gastoEncontrado = gastoRepository.findOne(gasto.getId());
+        Despesa gastoEncontrado = despesaRepository.findOne(gasto.getId());
 
         assertTrue(gastoEncontrado.getValor().equals(new BigDecimal("44.00")));
         assertThat(gastoEncontrado.getDescricao()).isEqualTo("Gasolina 2");
@@ -132,9 +132,9 @@ public class GastosRepositoryTest {
 
         Despesa gasto = new Despesa("Gasolina", LocalDate.now(), gastosCategorizados);
 
-        this.gastoRepository.save(gasto);
+        this.despesaRepository.save(gasto);
 
-        List<Despesa> gastos = gastoRepository.findByCategoria(carro, null).getContent();
+        List<Despesa> gastos = despesaRepository.findByCategoria(carro, null).getContent();
 
         assertThat(gastos.get(0).getGastosCategorizados().size()).isEqualTo(1);
         assertTrue(gastos.get(0).getValor().equals(new BigDecimal("44.00")));
@@ -157,7 +157,7 @@ public class GastosRepositoryTest {
 
         Despesa gasto = new Despesa("", LocalDate.now(), gastosCategorizado);
 
-        this.gastoRepository.save(gasto);
+        this.despesaRepository.save(gasto);
     }
 
     @Test
@@ -177,7 +177,7 @@ public class GastosRepositoryTest {
 
         this.categoriaRepository.save(carro);
 
-        this.gastoRepository.save(gasto);
+        this.despesaRepository.save(gasto);
     }
 
 }

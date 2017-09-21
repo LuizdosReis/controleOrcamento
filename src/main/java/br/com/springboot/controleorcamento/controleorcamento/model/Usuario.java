@@ -27,6 +27,9 @@ public class Usuario extends AbstractEntity implements UserDetails{
     @OneToMany(mappedBy = "usuario")
 	private Set<Conta> contas = new HashSet<>();
 
+    @OneToMany(mappedBy = "usuario")
+    private Set<Categoria> categorias = new HashSet<>();
+
     public String getUsername() {
 		return username;
 	}
@@ -87,5 +90,13 @@ public class Usuario extends AbstractEntity implements UserDetails{
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(Set<Categoria> categorias) {
+        this.categorias = categorias;
     }
 }

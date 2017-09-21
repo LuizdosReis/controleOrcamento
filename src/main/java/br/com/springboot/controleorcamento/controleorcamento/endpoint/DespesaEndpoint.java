@@ -7,7 +7,7 @@ import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
 import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
 import br.com.springboot.controleorcamento.controleorcamento.repository.CategoriaRepository;
 import br.com.springboot.controleorcamento.controleorcamento.repository.ContaRepository;
-import br.com.springboot.controleorcamento.controleorcamento.repository.GastoRepository;
+import br.com.springboot.controleorcamento.controleorcamento.repository.DespesaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Pageable;
@@ -20,18 +20,18 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("v1/gastos/")
-public class GastoEndpoint {
+@RequestMapping("v1/despesas/")
+public class DespesaEndpoint {
 
-    private final GastoRepository gastoRepository;
+    private final DespesaRepository despesaRepository;
     private final CategoriaRepository categoriaRepository;
     private final ContaRepository contaRepository;
     private final GastoDao gastoDao;
 
     @Autowired
-    public GastoEndpoint(GastoRepository repository, CategoriaRepository categoriaRepository,
-                         ContaRepository contaRepository, GastoDao gastoDao) {
-        this.gastoRepository = repository;
+    public DespesaEndpoint(DespesaRepository despesaRepository, CategoriaRepository categoriaRepository,
+                           ContaRepository contaRepository, GastoDao gastoDao) {
+        this.despesaRepository = despesaRepository;
         this.categoriaRepository = categoriaRepository;
         this.contaRepository = contaRepository;
         this.gastoDao = gastoDao;
@@ -39,7 +39,7 @@ public class GastoEndpoint {
 
     @GetMapping(path = "protected")
     public ResponseEntity<?> listaTodos(Pageable pageable) {
-        return new ResponseEntity<>(gastoRepository.findAll(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(despesaRepository.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(path = "protected/{id}")
@@ -59,7 +59,7 @@ public class GastoEndpoint {
     @GetMapping(path = "protected/findbydatas")
     public ResponseEntity<?> getByDatas(@RequestParam("dataInicial") LocalDate dataInicial,
                                         @RequestParam("dataFinal") LocalDate dataFinal, Pageable pageable) {
-        return new ResponseEntity<>(gastoRepository.findByDataBetween(dataInicial, dataFinal, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(despesaRepository.findByDataBetween(dataInicial, dataFinal, pageable), HttpStatus.OK);
     }
 
     @PostMapping(path = "protected")
@@ -70,7 +70,7 @@ public class GastoEndpoint {
 
         Despesa gasto = contaGastoDTO.getGasto();
 
-        gasto = gastoRepository.save(gasto);
+        gasto = despesaRepository.save(gasto);
 
         conta.adicionaGasto(gasto);
 
@@ -82,7 +82,7 @@ public class GastoEndpoint {
     @DeleteMapping(path = "admin/gastos/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") long id) {
         verificaSeGastoExiste(id);
-        gastoRepository.delete(id);
+        despesaRepository.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -91,13 +91,13 @@ public class GastoEndpoint {
     @Transactional
     public ResponseEntity<?> update(@Valid @RequestBody Despesa gasto) {
         verificaSeGastoExiste(gasto.getId());
-        gastoRepository.save(gasto);
+        despesaRepository.save(gasto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     private Despesa verificaSeGastoExiste(Long id) {
-        Despesa gasto = gastoRepository.findOne(id);
+        Despesa gasto = despesaRepository.findOne(id);
 
         if (gasto == null)
             throw new ResourceNotFoundException("Nenhum gasto encontrado no id", null);

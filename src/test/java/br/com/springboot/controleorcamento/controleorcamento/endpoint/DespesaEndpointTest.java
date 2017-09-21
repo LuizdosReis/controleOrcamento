@@ -4,7 +4,7 @@ package br.com.springboot.controleorcamento.controleorcamento.endpoint;
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
 import br.com.springboot.controleorcamento.controleorcamento.model.DespesaCategorizada;
-import br.com.springboot.controleorcamento.controleorcamento.repository.GastoRepository;
+import br.com.springboot.controleorcamento.controleorcamento.repository.DespesaRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class DespesaEndpointTest {
 
     @MockBean
-    private GastoRepository gastoRepository;
+    private DespesaRepository despesaRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -58,7 +58,7 @@ public class DespesaEndpointTest {
         List<Despesa> gastos = asList(new Despesa(1L, "Gasolina", LocalDate.now(), gastosCategorizado),
                 new Despesa(1L, "Filtro", LocalDate.now(), gastosCategorizado));
 
-        when(gastoRepository.findAll()).thenReturn(gastos);
+        when(despesaRepository.findAll()).thenReturn(gastos);
 
         this.mockMvc.perform(get("/v1/gastos/protected")
                                         .param("page","0"))
@@ -76,7 +76,7 @@ public class DespesaEndpointTest {
 
         Despesa gasto = new Despesa(1L, "Gasolina", LocalDate.now(), gastosCategorizado);
 
-        given(gastoRepository.findOne(gasto.getId())).willReturn(gasto);
+        given(despesaRepository.findOne(gasto.getId())).willReturn(gasto);
 
         this.mockMvc.perform(get("/v1/gastos/protected/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
