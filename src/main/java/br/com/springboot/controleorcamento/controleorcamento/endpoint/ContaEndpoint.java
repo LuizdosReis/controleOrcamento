@@ -41,6 +41,6 @@ public class ContaEndpoint {
 
         conta = contaRepository.save(conta);
 
-        return new ResponseEntity<>(modelMapper.map(conta,ContaDTO.class), HttpStatus.CREATED);
+        return new ResponseEntity<>(conta, HttpStatus.CREATED);
     }
 }
