@@ -17,8 +17,7 @@ import java.time.LocalDate;
 @Transactional
 public interface DespesaRepository extends PagingAndSortingRepository<Despesa, Long> {
 
-    @Query("select g from Despesa g join g.gastosCategorizados gc join gc.categoria c where c = :categoria")
-    Page<Despesa> findByCategoria(@Param("categoria") Categoria categoria, Pageable pageable);
+   // Page<Despesa> findByGastosCategorizados(@Param("categoria") Categoria categoria, Pageable pageable);
 
     Page<Despesa> findByDataBetween(LocalDate dataInicial, LocalDate dataFinal, Pageable pageable);
 

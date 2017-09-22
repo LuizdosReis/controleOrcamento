@@ -2,16 +2,16 @@ package br.com.springboot.controleorcamento.controleorcamento.dto;
 
 import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
 
-public class ContaGastoDTO {
-    private Despesa gasto;
+public class ContaDespesaDTO {
+    private Despesa despesa;
     private Long contaId;
 
-    public Despesa getGasto() {
-        return gasto;
+    public Despesa getDespesa() {
+        return despesa;
     }
 
-    public void setGasto(Despesa gasto) {
-        this.gasto = gasto;
+    public void setDespesa(Despesa despesa) {
+        this.despesa = despesa;
     }
 
     public Long getContaId() {

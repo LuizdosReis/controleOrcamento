@@ -1,14 +1,13 @@
 package br.com.springboot.controleorcamento.controleorcamento.endpoint;
 
 import br.com.springboot.controleorcamento.controleorcamento.dao.GastoDao;
-import br.com.springboot.controleorcamento.controleorcamento.dto.ContaGastoDTO;
+import br.com.springboot.controleorcamento.controleorcamento.dto.ContaDespesaDTO;
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
 import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
 import br.com.springboot.controleorcamento.controleorcamento.repository.CategoriaRepository;
 import br.com.springboot.controleorcamento.controleorcamento.repository.ContaRepository;
 import br.com.springboot.controleorcamento.controleorcamento.repository.DespesaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -63,11 +62,15 @@ public class DespesaEndpoint {
 
     @PostMapping(path = "protected")
     @Transactional
-    public ResponseEntity<?> save(@Valid @RequestBody ContaGastoDTO contaGastoDTO) {
+    public ResponseEntity<?> save(@Valid @RequestBody ContaDespesaDTO contaDespesaDTO) {
 
-        Conta conta = contaRepository.findOne(contaGastoDTO.getContaId());
+        Conta conta = contaRepository.findOne(contaDespesaDTO.getContaId());
 
-		return new ResponseEntity<>(conta,HttpStatus.CREATED);
+        Despesa despesa = contaDespesaDTO.getDespesa();
+
+        despesa.setConta(conta);
+
+        return new ResponseEntity<>(despesaRepository.save(despesa),HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping(path = "admin/gastos/{id}")

@@ -29,16 +29,16 @@ public class Despesa extends AbstractEntity {
 
 	@NotEmpty
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private Set<DespesaCategorizada> gastosCategorizados = new HashSet<>();
+	private Set<DespesaCategorizada> despesasCategorizadas = new HashSet<>();
 
 	@ManyToOne
 	@JoinTable(name = "conta_despesa", joinColumns = @JoinColumn(name = "despesa_id"),
 			inverseJoinColumns = @JoinColumn(name="conta_id"))
 	private Conta conta;
 
-	public Despesa(String descricao, LocalDate data, List<DespesaCategorizada> gastosCategorizados) {
+	public Despesa(String descricao, LocalDate data, List<DespesaCategorizada> despesasCategorizadas) {
 		this.valor = new BigDecimal("0.00");
-		gastosCategorizados.forEach(gastos -> this.valor = this.valor.add(gastos.getValor()));
+		despesasCategorizadas.forEach(gastos -> this.valor = this.valor.add(gastos.getValor()));
 		this.descricao = descricao;
 		this.data = data;
 	}
@@ -47,8 +47,8 @@ public class Despesa extends AbstractEntity {
 	    this.valor = new BigDecimal("0.00");
 	}
 
-    public Despesa(Long id, String descricao, LocalDate data, List<DespesaCategorizada> gastosCategorizado) {
-	    this(descricao,data,gastosCategorizado);
+    public Despesa(Long id, String descricao, LocalDate data, List<DespesaCategorizada> despesasCategorizadas) {
+	    this(descricao,data,despesasCategorizadas);
         this.id = id;
     }
 
@@ -72,8 +72,8 @@ public class Despesa extends AbstractEntity {
 		return valor;
 	}
 
-	public Set<DespesaCategorizada> getGastosCategorizados() {
-		return Collections.unmodifiableSet(gastosCategorizados);
+	public Set<DespesaCategorizada> getDespesasCategorizadas() {
+		return Collections.unmodifiableSet(despesasCategorizadas);
 	}
 
 	public Conta getConta() {
@@ -81,11 +81,12 @@ public class Despesa extends AbstractEntity {
 	}
 
 	public void setConta(Conta conta) {
+		conta.adicionaGasto(this);
 		this.conta = conta;
 	}
 
 	public void adicionaGastoCategorizado(DespesaCategorizada despesaCategorizada) {
 		this.valor = this.valor.add(despesaCategorizada.getValor());
-		gastosCategorizados.add(despesaCategorizada);
+		despesasCategorizadas.add(despesaCategorizada);
 	}
 }
