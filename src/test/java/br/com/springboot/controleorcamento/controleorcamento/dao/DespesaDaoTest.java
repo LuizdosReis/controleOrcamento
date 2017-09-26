@@ -54,10 +54,10 @@ public class DespesaDaoTest {
 
         List<Despesa> gastos = gastoDao.findGastoPorCategoria(carro.getDescricao());
 
-        assertThat(gastos.get(0).getGastosCategorizados().size()).isEqualTo(1);
+        assertThat(gastos.get(0).getDespesasCategorizadas().size()).isEqualTo(1);
         assertTrue(gastos.get(0).getValor().equals(new BigDecimal("44.00")));
 
-        BigDecimal soma = gastos.get(0).getGastosCategorizados()
+        BigDecimal soma = gastos.get(0).getDespesasCategorizadas()
                 .stream()
                 .map(DespesaCategorizada::getValor)
                 .reduce(new BigDecimal("0.00"), (a, b) -> a = a.add(b));

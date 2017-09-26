@@ -134,9 +134,9 @@ public class GastosRepositoryTest {
 
         this.despesaRepository.save(gasto);
 
-        List<Despesa> gastos = despesaRepository.findByCategoria(carro, null).getContent();
+        List<Despesa> gastos = despesaRepository.findByDespesasCategorizadas(carro, null).getContent();
 
-        assertThat(gastos.get(0).getGastosCategorizados().size()).isEqualTo(1);
+        assertThat(gastos.get(0).getDespesasCategorizadas().size()).isEqualTo(1);
         assertTrue(gastos.get(0).getValor().equals(new BigDecimal("44.00")));
         //assertTrue(gastos.get(0).getGastosCategorizados().get(0).getValor().equals(new BigDecimal("32.50")));
 
