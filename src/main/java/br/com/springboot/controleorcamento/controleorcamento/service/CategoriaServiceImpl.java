@@ -34,6 +34,12 @@ public class CategoriaServiceImpl implements CategoriaService {
         categoriaRepository.save(categoria);
     }
 
+    @Override
+    public Categoria findOne(Long id) {
+        verificaSeGastoExiste(id);
+        return categoriaRepository.findOne(id);
+    }
+
     private Categoria verificaSeGastoExiste(Long id) {
         Categoria categoria = categoriaRepository.findOne(id);
 

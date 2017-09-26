@@ -11,4 +11,6 @@ public interface CategoriaService {
     Page<Categoria> findByUsuario(Usuario usuario, Pageable pageable);
 
     void update(Categoria categoria);
+
+    Categoria findOne(Long id);
 }

@@ -1,17 +1,12 @@
 package br.com.springboot.controleorcamento.controleorcamento.endpoint;
 
-import br.com.springboot.controleorcamento.controleorcamento.dao.GastoDao;
-import br.com.springboot.controleorcamento.controleorcamento.dto.ContaDespesaDTO;
-import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
-import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
 import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
-import br.com.springboot.controleorcamento.controleorcamento.repository.CategoriaRepository;
-import br.com.springboot.controleorcamento.controleorcamento.repository.ContaRepository;
-import br.com.springboot.controleorcamento.controleorcamento.repository.DespesaRepository;
-import org.springframework.boot.context.config.ResourceNotFoundException;
+import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
+import br.com.springboot.controleorcamento.controleorcamento.service.DespesaService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,79 +17,54 @@ import java.time.LocalDate;
 @RequestMapping("v1/despesas/")
 public class DespesaEndpoint {
 
-    private final DespesaRepository despesaRepository;
-    private final CategoriaRepository categoriaRepository;
-    private final ContaRepository contaRepository;
-    private final GastoDao gastoDao;
+    private final DespesaService despesaService;
 
-    public DespesaEndpoint(DespesaRepository despesaRepository, CategoriaRepository categoriaRepository,
-                           ContaRepository contaRepository, GastoDao gastoDao) {
-        this.despesaRepository = despesaRepository;
-        this.categoriaRepository = categoriaRepository;
-        this.contaRepository = contaRepository;
-        this.gastoDao = gastoDao;
+    public DespesaEndpoint(DespesaService despesaService) {
+        this.despesaService = despesaService;
     }
 
     @GetMapping(path = "protected")
-    public ResponseEntity<?> listaTodos(Pageable pageable) {
-        return new ResponseEntity<>(despesaRepository.findAll(pageable), HttpStatus.OK);
+    public ResponseEntity<?> listaTodos(Pageable pageable, @AuthenticationPrincipal Usuario usuario) {
+        return new ResponseEntity<>(despesaService.findAll(usuario,pageable), HttpStatus.OK);
     }
 
     @GetMapping(path = "protected/{id}")
-    public ResponseEntity<?> getGastoById(@PathVariable("id") Long id) {
-        Despesa despesa = verificaSeGastoExiste(id);
-        return new ResponseEntity<>(despesa, HttpStatus.OK);
+    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(despesaService.getById(id), HttpStatus.OK);
     }
 
 
     @GetMapping(path = "protected/findbycategoria/{idCategoria}")
     public ResponseEntity<?> getByTipo(@PathVariable("idCategoria") long idCategoria, Pageable pageable) {
-        Categoria categoria = categoriaRepository.findOne(idCategoria);
-
-        return new ResponseEntity<>(gastoDao.findGastoPorCategoria(categoria.getDescricao()), HttpStatus.OK);
+        return new ResponseEntity<>(despesaService.findByCategoria(idCategoria,pageable), HttpStatus.OK);
     }
 
     @GetMapping(path = "protected/findbydatas")
     public ResponseEntity<?> getByDatas(@RequestParam("dataInicial") LocalDate dataInicial,
                                         @RequestParam("dataFinal") LocalDate dataFinal, Pageable pageable) {
-        return new ResponseEntity<>(despesaRepository.findByDataBetween(dataInicial, dataFinal, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(despesaService.findByDataBetween(dataInicial, dataFinal, pageable), HttpStatus.OK);
     }
 
     @PostMapping(path = "protected")
     @Transactional
-    public ResponseEntity<?> save(@Valid @RequestBody ContaDespesaDTO contaDespesaDTO) {
-
-        Conta conta = contaRepository.findOne(contaDespesaDTO.getContaId());
-
-        Despesa despesa = contaDespesaDTO.getDespesa();
-
-        despesa.setConta(conta);
-
-        return new ResponseEntity<>(despesaRepository.save(despesa),HttpStatus.CREATED);
+    public ResponseEntity<?> save(@Valid @RequestBody Despesa despesa) {
+        return new ResponseEntity<>(despesaService.save(despesa),HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping(path = "admin/gastos/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long id){
-		verificaSeGastoExiste(id);
-		despesaRepository.delete(id);
+        despesaService.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
     @PutMapping(path = "admin/gastos")
     @Transactional
     public ResponseEntity<?> update(@Valid @RequestBody Despesa gasto) {
-        verificaSeGastoExiste(gasto.getId());
-        despesaRepository.save(gasto);
+        despesaService.update(gasto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
-    private Despesa verificaSeGastoExiste(Long id) {
-        Despesa gasto = despesaRepository.findOne(id);
 
-        if (gasto == null)
-            throw new ResourceNotFoundException("Nenhum gasto encontrado no id", null);
-        return gasto;
-    }
 
 }

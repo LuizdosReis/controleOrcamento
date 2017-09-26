@@ -33,4 +33,5 @@ public class UsuarioService implements UserDetailsService{
         return Optional.ofNullable(usuarioRepository.findByUsername(username))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
 }

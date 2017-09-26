@@ -9,4 +9,6 @@ public interface ContaService {
     Page<Conta> findByUsuario(Usuario usuario, Pageable pageable);
 
     Conta save(Conta conta, Usuario usuario);
+
+    Conta findOne(Long id);
 }
