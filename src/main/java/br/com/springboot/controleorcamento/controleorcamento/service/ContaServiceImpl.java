@@ -3,7 +3,6 @@ package br.com.springboot.controleorcamento.controleorcamento.service;
 import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
 import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.controleorcamento.repository.ContaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
