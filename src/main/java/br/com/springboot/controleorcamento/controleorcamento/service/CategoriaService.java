@@ -5,6 +5,8 @@ import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface CategoriaService {
     Categoria save(Categoria categoria, Usuario usuario);
 
@@ -13,4 +15,7 @@ public interface CategoriaService {
     void update(Categoria categoria);
 
     Categoria findOne(Long id);
+
+    boolean verificaSeCategoriasPertencemAoUsuario(List<Categoria> categorias, Usuario usuario);
+
 }

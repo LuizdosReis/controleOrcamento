@@ -1,9 +1,6 @@
 package br.com.springboot.controleorcamento.controleorcamento.service;
 
-import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
-import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
-import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
-import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
+import br.com.springboot.controleorcamento.controleorcamento.model.*;
 import br.com.springboot.controleorcamento.controleorcamento.repository.DespesaRepository;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
@@ -11,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DespesaServiceImpl implements DespesaService {
@@ -37,12 +36,15 @@ public class DespesaServiceImpl implements DespesaService {
 
         conta.adicionaDespesa(despesa);
 
+        verificaCategorias(despesa, conta.getUsuario());
+
         contaService.update(conta);
 
         despesa.setConta(conta);
 
         return despesaRepository.save(despesa);
     }
+
 
     @Override
     public void delete(long id) {
@@ -86,5 +88,16 @@ public class DespesaServiceImpl implements DespesaService {
         if (gasto == null)
             throw new ResourceNotFoundException("Nenhum gasto encontrado no id", null);
         return gasto;
+    }
+
+    private void verificaCategorias(Despesa despesa, Usuario usuario) {
+        List<Categoria> categorias = despesa.getDespesasCategorizadas()
+                .stream()
+                .map(DespesaCategorizada::getCategoria)
+                .collect(Collectors.toList());
+
+        if(!categoriaService.verificaSeCategoriasPertencemAoUsuario(categorias,usuario)){
+            throw new ResourceNotFoundException("Categoria não pertence ao usuário",null);
+        }
     }
 }

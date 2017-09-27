@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CategoriaServiceImpl implements CategoriaService {
 
@@ -38,6 +40,11 @@ public class CategoriaServiceImpl implements CategoriaService {
     public Categoria findOne(Long id) {
         verificaSeGastoExiste(id);
         return categoriaRepository.findOne(id);
+    }
+
+    @Override
+    public boolean verificaSeCategoriasPertencemAoUsuario(List<Categoria> categorias, Usuario usuario) {
+        return categorias.containsAll(categoriaRepository.findByUsuario(usuario));
     }
 
     private Categoria verificaSeGastoExiste(Long id) {
