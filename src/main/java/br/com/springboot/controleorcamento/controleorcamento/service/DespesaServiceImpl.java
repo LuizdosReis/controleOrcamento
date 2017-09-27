@@ -1,6 +1,7 @@
 package br.com.springboot.controleorcamento.controleorcamento.service;
 
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
 import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
 import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.controleorcamento.repository.DespesaRepository;
@@ -17,15 +18,29 @@ public class DespesaServiceImpl implements DespesaService {
     private final DespesaRepository despesaRepository;
     private final CategoriaService categoriaService;
     private final UsuarioService usuarioService;
+    private final ContaService contaService;
 
-    public DespesaServiceImpl(DespesaRepository despesaRepository, CategoriaService categoriaService,UsuarioService usuarioService) {
+    public DespesaServiceImpl(DespesaRepository despesaRepository,
+                              CategoriaService categoriaService,
+                              UsuarioService usuarioService,
+                              ContaService contaService) {
         this.despesaRepository = despesaRepository;
         this.categoriaService = categoriaService;
         this.usuarioService = usuarioService;
+        this.contaService = contaService;
     }
 
     @Override
     public Despesa save(Despesa despesa) {
+
+        Conta conta = contaService.findOne(despesa.getConta().getId());
+
+        conta.adicionaDespesa(despesa);
+
+        contaService.update(conta);
+
+        despesa.setConta(conta);
+
         return despesaRepository.save(despesa);
     }
 

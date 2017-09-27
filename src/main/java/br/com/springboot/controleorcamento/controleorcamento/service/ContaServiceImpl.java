@@ -35,6 +35,12 @@ public class ContaServiceImpl implements ContaService{
         return contaRepository.findOne(id);
     }
 
+    @Override
+    public void update(Conta conta) {
+        verificaSeContaExiste(conta.getId());
+        contaRepository.save(conta);
+    }
+
     private Conta verificaSeContaExiste(Long id) {
         Conta conta = contaRepository.findOne(id);
 

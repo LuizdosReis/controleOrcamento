@@ -77,7 +77,7 @@ public class ContaRepositoryTest {
     public void deveAdicionaUmGasto(){
         Despesa gasto = despesaRepository.save(GastoHelper.CriaGasto());
 
-        conta.adicionaGasto(gasto);
+        conta.adicionaDespesa(gasto);
 
         conta = contaRepository.save(conta);
 

@@ -11,4 +11,6 @@ public interface ContaService {
     Conta save(Conta conta, Usuario usuario);
 
     Conta findOne(Long id);
+
+    void update(Conta conta);
 }

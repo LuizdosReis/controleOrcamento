@@ -49,9 +49,9 @@ public class Conta extends AbstractEntity{
         this.saldo = saldo;
     }
 
-    public void adicionaGasto(Despesa gasto){
-        this.saldo = this.saldo.subtract(gasto.getValor());
-        this.gastos.add(gasto);
+    public void adicionaDespesa(Despesa despesa){
+        this.saldo = this.saldo.subtract(despesa.getValor());
+        this.gastos.add(despesa);
     }
 
     public Usuario getUsuario() {

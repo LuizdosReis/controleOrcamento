@@ -81,7 +81,6 @@ public class Despesa extends AbstractEntity {
 	}
 
 	public void setConta(Conta conta) {
-		conta.adicionaGasto(this);
 		this.conta = conta;
 	}
 
