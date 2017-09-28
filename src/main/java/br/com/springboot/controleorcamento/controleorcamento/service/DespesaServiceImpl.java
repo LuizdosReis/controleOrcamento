@@ -34,6 +34,10 @@ public class DespesaServiceImpl implements DespesaService {
 
         Conta conta = contaService.findOne(despesa.getConta().getId());
 
+        return adicionaDespesa(despesa, conta);
+    }
+
+    private Despesa adicionaDespesa(Despesa despesa, Conta conta) {
         conta.adicionaDespesa(despesa);
 
         verificaCategorias(despesa, conta.getUsuario());
@@ -79,7 +83,15 @@ public class DespesaServiceImpl implements DespesaService {
     @Override
     public void update(Despesa despesa) {
         verificaSeDespesaExiste(despesa.getId());
-        despesaRepository.save(despesa);
+
+        Conta conta = contaService.findOne(despesa.getConta().getId());
+
+        conta.getDespesas().stream()
+                .filter(d -> d.getId() == despesa.getId())
+                .findFirst()
+                .ifPresent(d -> conta.removeDespesa(d));
+
+        adicionaDespesa(despesa,conta);
     }
 
     private Despesa verificaSeDespesaExiste(Long id) {

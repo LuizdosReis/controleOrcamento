@@ -1,6 +1,6 @@
 package br.com.springboot.controleorcamento.controleorcamento.repository;
 
-import br.com.springboot.controleorcamento.controleorcamento.helper.GastoHelper;
+import br.com.springboot.controleorcamento.controleorcamento.helper.DespesaHelper;
 import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
 import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
 import org.junit.Before;
@@ -75,7 +75,7 @@ public class ContaRepositoryTest {
 
     @Test
     public void deveAdicionaUmGasto(){
-        Despesa gasto = despesaRepository.save(GastoHelper.CriaGasto());
+        Despesa gasto = despesaRepository.save(DespesaHelper.CriaDespesa());
 
         conta.adicionaDespesa(gasto);
 
@@ -84,8 +84,8 @@ public class ContaRepositoryTest {
         assertThat(conta.getId()).isNotNull();
         assertThat(conta.getDescricao()).isEqualTo("bradesco");
         assertThat(conta.getSaldo()).isEqualTo(new BigDecimal("-20.50"));
-        assertThat(conta.getGastos().size()).isEqualTo(1);
-      //  assertThat(conta.getGastos().get(0).getValor()).isEqualTo(new BigDecimal("32.50"));
+        assertThat(conta.getDespesas().size()).isEqualTo(1);
+      //  assertThat(conta.getDespesas().get(0).getValor()).isEqualTo(new BigDecimal("32.50"));
     }
 
 }

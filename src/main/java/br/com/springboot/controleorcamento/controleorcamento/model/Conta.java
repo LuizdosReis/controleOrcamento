@@ -27,7 +27,7 @@ public class Conta extends AbstractEntity{
 
     @JsonIgnore
     @OneToMany(mappedBy = "conta")
-    private Set<Despesa> gastos = new HashSet<>();
+    private Set<Despesa> despesas = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "conta")
@@ -51,7 +51,12 @@ public class Conta extends AbstractEntity{
 
     public void adicionaDespesa(Despesa despesa){
         this.saldo = this.saldo.subtract(despesa.getValor());
-        this.gastos.add(despesa);
+        this.despesas.add(despesa);
+    }
+
+    public void removeDespesa(Despesa despesa){
+        this.saldo = this.saldo.add(despesa.getValor());
+        this.despesas.remove(despesa);
     }
 
     public Usuario getUsuario() {
@@ -67,8 +72,8 @@ public class Conta extends AbstractEntity{
         this.receitas.add(receita);
     }
 
-    public Set<Despesa> getGastos() {
-        return Collections.unmodifiableSet(gastos);
+    public Set<Despesa> getDespesas() {
+        return Collections.unmodifiableSet(despesas);
     }
 
     public Set<Receita> getReceitas() {

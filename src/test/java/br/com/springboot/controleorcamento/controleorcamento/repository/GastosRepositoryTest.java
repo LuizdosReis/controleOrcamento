@@ -1,6 +1,6 @@
 package br.com.springboot.controleorcamento.controleorcamento.repository;
 
-import br.com.springboot.controleorcamento.controleorcamento.helper.GastoHelper;
+import br.com.springboot.controleorcamento.controleorcamento.helper.DespesaHelper;
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
 import br.com.springboot.controleorcamento.controleorcamento.model.DespesaCategorizada;
@@ -51,7 +51,7 @@ public class GastosRepositoryTest {
 
     @Test
     public void deveCriarGastoSetandoCategoriaPosteriormente() {
-        Despesa gasto = GastoHelper.CriaGasto();
+        Despesa gasto = DespesaHelper.CriaDespesa();
 
         gasto.adicionaGastoCategorizado(new DespesaCategorizada(new Categoria("Moto"), new BigDecimal("32.50")));
 
@@ -63,7 +63,7 @@ public class GastosRepositoryTest {
 
     @Test
     public void deveExcluirGasto() {
-        Despesa gasto = GastoHelper.CriaGasto();
+        Despesa gasto = DespesaHelper.CriaDespesa();
 
         this.despesaRepository.save(gasto);
 

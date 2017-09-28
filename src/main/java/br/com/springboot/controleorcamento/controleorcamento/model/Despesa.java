@@ -47,11 +47,6 @@ public class Despesa extends AbstractEntity {
 	    this.valor = new BigDecimal("0.00");
 	}
 
-    public Despesa(Long id, String descricao, LocalDate data, List<DespesaCategorizada> despesasCategorizadas) {
-	    this(descricao,data,despesasCategorizadas);
-        this.id = id;
-    }
-
     public String getDescricao() {
 		return descricao;
 	}
@@ -70,6 +65,12 @@ public class Despesa extends AbstractEntity {
 
 	public BigDecimal getValor() {
 		return valor;
+	}
+
+	public void setDespesasCategorizadas(Set<DespesaCategorizada> despesasCategorizadas) {
+		Optional<BigDecimal> total = despesasCategorizadas.stream().map(DespesaCategorizada::getValor).reduce((valor1, valor2) -> valor1.add(valor2));
+		this.valor = this.valor.add(total.get());
+		this.despesasCategorizadas = despesasCategorizadas;
 	}
 
 	public Set<DespesaCategorizada> getDespesasCategorizadas() {

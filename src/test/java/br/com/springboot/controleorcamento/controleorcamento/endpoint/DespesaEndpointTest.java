@@ -55,10 +55,10 @@ public class DespesaEndpointTest {
 
         gastosCategorizado.add(new DespesaCategorizada(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
 
-        List<Despesa> gastos = asList(new Despesa(1L, "Gasolina", LocalDate.now(), gastosCategorizado),
-                new Despesa(1L, "Filtro", LocalDate.now(), gastosCategorizado));
+        //List<Despesa> gastos = asList(new Despesa(1L, "Gasolina", LocalDate.now(), gastosCategorizado),
+                //new Despesa(1L, "Filtro", LocalDate.now(), gastosCategorizado));
 
-        when(despesaRepository.findAll()).thenReturn(gastos);
+        //when(despesaRepository.findAll()).thenReturn(gastos);
 
         this.mockMvc.perform(get("/v1/gastos/protected")
                                         .param("page","0"))
@@ -74,9 +74,9 @@ public class DespesaEndpointTest {
 
         gastosCategorizado.add(new DespesaCategorizada(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
 
-        Despesa gasto = new Despesa(1L, "Gasolina", LocalDate.now(), gastosCategorizado);
+        //Despesa gasto = new Despesa(1L, "Gasolina", LocalDate.now(), gastosCategorizado);
 
-        given(despesaRepository.findOne(gasto.getId())).willReturn(gasto);
+        //given(despesaRepository.findOne(gasto.getId())).willReturn(gasto);
 
         this.mockMvc.perform(get("/v1/gastos/protected/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

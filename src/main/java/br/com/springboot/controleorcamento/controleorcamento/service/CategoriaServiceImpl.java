@@ -44,7 +44,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public boolean verificaSeCategoriasPertencemAoUsuario(List<Categoria> categorias, Usuario usuario) {
-        return categorias.containsAll(categoriaRepository.findByUsuario(usuario));
+        return categoriaRepository.findByUsuario(usuario).containsAll(categorias);
     }
 
     private Categoria verificaSeGastoExiste(Long id) {
