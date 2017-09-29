@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Categoria extends AbstractEntity {
@@ -14,6 +15,7 @@ public class Categoria extends AbstractEntity {
     @NotEmpty(message = "A descrição não pode estar em branco")
     private String descricao;
 
+    @NotNull(message = "Usuario não pode ser nulo")
     @JsonIgnore
     @ManyToOne
     @JoinTable(name = "usuario_categoria", joinColumns = @JoinColumn(name = "categoria_id"),

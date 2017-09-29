@@ -21,11 +21,12 @@ public class DespesaHelper {
         Categoria gasolina = new Categoria("Gasolina");
 
         DespesaCategorizada despesaCarro = new DespesaCategorizada();
-
+        despesaCarro.setId(1L);
         despesaCarro.setCategoria(carro);
         despesaCarro.setValor(new BigDecimal("12.50"));
 
         DespesaCategorizada despesaGasolina = new DespesaCategorizada();
+        despesaGasolina.setId(2L);
         despesaGasolina.setCategoria(gasolina);
         despesaGasolina.setValor(new BigDecimal("12.50"));
 
@@ -33,11 +34,12 @@ public class DespesaHelper {
         despesasCategorizadas.add(despesaGasolina);
 
         Conta bancoDoBrasil = new Conta();
+        bancoDoBrasil.setId(1L);
         bancoDoBrasil.setDescricao("banco do brasil");
         bancoDoBrasil.setSaldo(new BigDecimal("0.00"));
 
         Despesa despesa = new Despesa();
-
+        despesa.setId(1L);
         despesa.setDescricao("Gasolina e oleo");
         despesa.setConta(bancoDoBrasil);
         despesa.setDespesasCategorizadas(despesasCategorizadas);
