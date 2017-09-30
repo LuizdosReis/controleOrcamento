@@ -26,7 +26,7 @@ public class CategoriaEndpoint {
 
     @PostMapping(path = "protected")
     @Transactional
-    public ResponseEntity<?> save(@Valid @RequestBody Categoria categoria,@AuthenticationPrincipal Usuario usuario){
+    public ResponseEntity<?> save(@RequestBody Categoria categoria,@AuthenticationPrincipal Usuario usuario){
         return new ResponseEntity<>(categoriaService.save(categoria,usuario), HttpStatus.CREATED);
     }
 
