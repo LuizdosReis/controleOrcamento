@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class GastosRepositoryTest {
+public class DespesaRepositoryTest {
 
     @Autowired
     private DespesaRepository despesaRepository;
@@ -31,27 +31,24 @@ public class GastosRepositoryTest {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void deveCriarGasto() {
-        List<DespesaCategorizada> gastosCategorizado = new ArrayList<>();
+        Despesa despesa = DespesaHelper.criaDespesa();
 
-        gastosCategorizado.add(new DespesaCategorizada(new Categoria("Carro"), new BigDecimal("32.50")));
+        despesa = this.despesaRepository.save(despesa);
 
-        Despesa gasto = new Despesa("Gasolina", LocalDate.now(), gastosCategorizado);
+        assertThat(despesa.getId()).isNotNull();
+        assertThat(despesa.getValor()).isEqualTo(new BigDecimal("25.00"));
+        assertThat(despesa.getDespesasCategorizadas().size()).isEqualTo(2);
 
-        this.despesaRepository.save(gasto);
-
-        assertThat(gasto.getId()).isNotNull();
-        assertThat(gasto.getValor()).isEqualTo(new BigDecimal("32.50"));
     }
 
     @Test
     public void deveCriarGastoSetandoCategoriaPosteriormente() {
-        Despesa gasto = DespesaHelper.CriaDespesa();
+        Despesa gasto = DespesaHelper.criaDespesa();
 
         gasto.adicionaGastoCategorizado(new DespesaCategorizada(new Categoria("Moto"), new BigDecimal("32.50")));
 
@@ -63,7 +60,7 @@ public class GastosRepositoryTest {
 
     @Test
     public void deveExcluirGasto() {
-        Despesa gasto = DespesaHelper.CriaDespesa();
+        Despesa gasto = DespesaHelper.criaDespesa();
 
         this.despesaRepository.save(gasto);
 
