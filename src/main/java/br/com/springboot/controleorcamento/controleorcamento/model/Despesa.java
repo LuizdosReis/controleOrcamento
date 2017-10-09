@@ -24,7 +24,7 @@ public class Despesa extends AbstractEntity {
 	private LocalDate data;
 	
 	@Digits(fraction=2,message="O valor só pode conter dois digitos após a virgula",integer = 9)
-    @DecimalMin(message = "O Valor não pode ser negativo", value = "0.00", inclusive = false)
+    @DecimalMin(message = "O Valor não pode ser zerado ou negativo", value = "0.00", inclusive = false)
 	private BigDecimal valor;
 
 	@NotEmpty
@@ -88,5 +88,10 @@ public class Despesa extends AbstractEntity {
 	public void adicionaGastoCategorizado(DespesaCategorizada despesaCategorizada) {
 		this.valor = this.valor.add(despesaCategorizada.getValor());
 		despesasCategorizadas.add(despesaCategorizada);
+	}
+
+	public void removeGastoCategorizado(DespesaCategorizada despesaCategorizada) {
+		this.valor = this.valor.subtract(despesaCategorizada.getValor());
+		despesasCategorizadas.remove(despesaCategorizada);
 	}
 }
