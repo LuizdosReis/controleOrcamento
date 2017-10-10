@@ -1,5 +1,6 @@
 package br.com.springboot.controleorcamento.controleorcamento.repository;
 
+import br.com.springboot.controleorcamento.controleorcamento.helper.ContaHelper;
 import br.com.springboot.controleorcamento.controleorcamento.helper.DespesaHelper;
 import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
 import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
@@ -25,21 +26,15 @@ public class ContaRepositoryTest {
 
     @Autowired
     private ContaRepository contaRepository;
-
-    @Autowired
-    private DespesaRepository despesaRepository;
-
+    
     Conta conta;
-
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void setUp(){
-        conta = new Conta();
-        conta.setDescricao("bradesco");
-        conta.setSaldo(new BigDecimal("12.00"));
+        conta = ContaHelper.criaConta();
     }
 
     @Test
@@ -57,35 +52,17 @@ public class ContaRepositoryTest {
         thrown.expect(ConstraintViolationException.class);
         thrown.expectMessage("O valor só pode conter dois digitos após a virgula");
 
-        conta = new Conta();
-        conta.setDescricao("bradesco");
         conta.setSaldo(new BigDecimal("12.000"));
         contaRepository.save(conta);
     }
 
     @Test
     public void deveCriarUmaConta(){
+
         contaRepository.save(conta);
 
         assertThat(conta.getId()).isNotNull();
         assertThat(conta.getDescricao()).isEqualTo("bradesco");
         assertThat(conta.getSaldo()).isEqualTo(new BigDecimal("12.00"));
     }
-
-
-    @Test
-    public void deveAdicionaUmGasto(){
-        Despesa gasto = despesaRepository.save(DespesaHelper.criaDespesa());
-
-        conta.adicionaDespesa(gasto);
-
-        conta = contaRepository.save(conta);
-
-        assertThat(conta.getId()).isNotNull();
-        assertThat(conta.getDescricao()).isEqualTo("bradesco");
-        assertThat(conta.getSaldo()).isEqualTo(new BigDecimal("-20.50"));
-        assertThat(conta.getDespesas().size()).isEqualTo(1);
-      //  assertThat(conta.getDespesas().get(0).getValor()).isEqualTo(new BigDecimal("32.50"));
-    }
-
 }
