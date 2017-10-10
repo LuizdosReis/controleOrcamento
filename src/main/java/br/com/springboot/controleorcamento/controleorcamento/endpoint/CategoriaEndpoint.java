@@ -3,13 +3,12 @@ package br.com.springboot.controleorcamento.controleorcamento.endpoint;
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.controleorcamento.service.CategoriaService;
-import org.springframework.boot.context.config.ResourceNotFoundException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Pageable;
 
 import javax.validation.Valid;
 
