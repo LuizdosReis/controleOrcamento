@@ -3,28 +3,22 @@ package br.com.springboot.controleorcamento.controleorcamento.service;
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.controleorcamento.repository.CategoriaRepository;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -33,12 +27,16 @@ public class CategoriaServiceImplTest {
 
     @MockBean
     private CategoriaRepository categoriaRepository;
+
     @Autowired
-    private CategoriaService categoriaServiceImpl;
+    private CategoriaService categoriaService;
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
 
     @Test
-    public void save() throws Exception {
+    public void deveSalvarCategoria() throws Exception {
         Usuario luiz = new Usuario();
         luiz.setNome("Luiz Henrique");
         luiz.setUsername("luiz.reis");
@@ -49,10 +47,22 @@ public class CategoriaServiceImplTest {
 
         when(categoriaRepository.save(carro)).thenReturn(carro);
 
-        Categoria categoriaRetornada = categoriaServiceImpl.save(carro,luiz);
+        Categoria categoriaRetornada = categoriaService.save(carro,luiz);
 
         assertThat(categoriaRetornada.getDescricao()).isEqualTo(carro.getDescricao());
         assertThat(categoriaRetornada.getUsuario()).isEqualTo(luiz);
+    }
+
+    @Test
+    public void naoDeveSalvarCategoriaSemUsuario() throws Exception {
+        thrown.expect(ConstraintViolationException.class);
+
+        Categoria carro = new Categoria();
+        carro.setDescricao("Carro");
+
+        when(categoriaRepository.save(carro)).thenThrow(ConstraintViolationException.class);
+
+        categoriaService.save(carro,null);
 
     }
 
@@ -68,7 +78,7 @@ public class CategoriaServiceImplTest {
 
         when(categoriaRepository.findByUsuario(luiz,new PageRequest(0,20))).thenReturn(new PageImpl<>(Collections.singletonList(carro)));
 
-        List<Categoria> categorias = categoriaServiceImpl.findByUsuario(luiz, new PageRequest(0,20)).getContent();
+        List<Categoria> categorias = categoriaService.findByUsuario(luiz, new PageRequest(0,20)).getContent();
 
         assertThat(categorias.size()).isEqualTo(1);
         assertThat(categorias.get(0)).isEqualTo(carro);

@@ -39,7 +39,7 @@ public abstract class AbstractEntity implements Serializable {
 			return false;
 		AbstractEntity other = (AbstractEntity) obj;
 		if (id == null) {
-			if (other.id != null)
+			if (other.id == null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
