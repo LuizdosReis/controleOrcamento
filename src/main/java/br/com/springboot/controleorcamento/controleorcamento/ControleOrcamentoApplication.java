@@ -8,20 +8,21 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
 
 @Controller
 @SpringBootApplication
 @EnableTransactionManagement
-public class ControleOrcamentoApplication extends SpringBootServletInitializer{
+public class ControleOrcamentoApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 	    SpringApplication.run(ControleOrcamentoApplication.class, args);
 	}
@@ -48,7 +49,7 @@ public class ControleOrcamentoApplication extends SpringBootServletInitializer{
         return new BCryptPasswordEncoder();
     }
 
-    @GetMapping("/home")
+    @RequestMapping({"","/","index"})
     public String index(){
 	    return "index";
     }
