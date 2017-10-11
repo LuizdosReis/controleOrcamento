@@ -11,10 +11,9 @@ spring:
 
   jpa:
     show-sql: true
-    properties:
-      hibernate:
-        ddl-auto: update
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
 
   jackson:
     serialization.WRITE_DATES_AS_TIMESTAMPS: false

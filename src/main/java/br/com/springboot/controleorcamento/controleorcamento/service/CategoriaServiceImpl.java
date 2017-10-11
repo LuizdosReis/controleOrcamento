@@ -43,12 +43,12 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public boolean verificaSeCategoriasPertencemAoUsuario(List<Categoria> categorias, Usuario usuario) {
-        return categoriaRepository.findByUsuario(usuario).containsAll(categorias);
+    public boolean verificaSeCategoriasPertencemAoUsuario(Categoria categoria, Usuario usuario) {
+        return categoriaRepository.findByUsuario(usuario).contains(categoria);
     }
 
     private void verificaSeGastoExiste(Long id) {
-        if (categoriaRepository.existsById(id))
+        if (!categoriaRepository.existsById(id))
             throw new ResourceNotFoundException("Nenhuma categoria encontrado no id", null);
     }
 }

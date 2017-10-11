@@ -1,6 +1,9 @@
 package br.com.springboot.controleorcamento.controleorcamento.service;
 
-import br.com.springboot.controleorcamento.controleorcamento.model.*;
+import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
+import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
+import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.controleorcamento.repository.DespesaRepository;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
@@ -8,8 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class DespesaServiceImpl implements DespesaService {
@@ -42,6 +43,8 @@ public class DespesaServiceImpl implements DespesaService {
 
         verificaCategorias(despesa, conta.getUsuario());
 
+        despesa.setCategoria(categoriaService.findOne(despesa.getCategoria().getId()));
+
         contaService.update(conta);
 
         despesa.setConta(conta);
@@ -72,7 +75,8 @@ public class DespesaServiceImpl implements DespesaService {
     @Override
     public Page<Despesa> findByCategoria(long idCategoria, Pageable pageable) {
         Categoria categoria = categoriaService.findOne(idCategoria);
-        return despesaRepository.findByDespesasCategorizadas(categoria,pageable);
+        //despesaRepository.findDespesaByCategoria(null);
+        return null;
     }
 
     @Override
@@ -87,7 +91,7 @@ public class DespesaServiceImpl implements DespesaService {
         Conta conta = contaService.findOne(despesa.getConta().getId());
 
         conta.getDespesas().stream()
-                .filter(d -> d.getId() == despesa.getId())
+                .filter(d -> d.getId().equals(despesa.getId()))
                 .findFirst()
                 .ifPresent(d -> conta.removeDespesa(d));
 
@@ -100,12 +104,8 @@ public class DespesaServiceImpl implements DespesaService {
     }
 
     private void verificaCategorias(Despesa despesa, Usuario usuario) {
-        List<Categoria> categorias = despesa.getDespesasCategorizadas()
-                .stream()
-                .map(DespesaCategorizada::getCategoria)
-                .collect(Collectors.toList());
 
-        if(!categoriaService.verificaSeCategoriasPertencemAoUsuario(categorias,usuario)){
+        if(!categoriaService.verificaSeCategoriasPertencemAoUsuario(despesa.getCategoria(),usuario)){
             throw new ResourceNotFoundException("Categoria não pertence ao usuário",null);
         }
     }

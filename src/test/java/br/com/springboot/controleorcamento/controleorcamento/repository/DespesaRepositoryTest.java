@@ -3,13 +3,14 @@ package br.com.springboot.controleorcamento.controleorcamento.repository;
 import br.com.springboot.controleorcamento.controleorcamento.helper.DespesaHelper;
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
-import br.com.springboot.controleorcamento.controleorcamento.model.DespesaCategorizada;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.ConstraintViolationException;
@@ -41,21 +42,9 @@ public class DespesaRepositoryTest {
         despesa = this.despesaRepository.save(despesa);
 
         assertThat(despesa.getId()).isNotNull();
-        assertThat(despesa.getValor()).isEqualTo(new BigDecimal("25.00"));
-        assertThat(despesa.getDespesasCategorizadas().size()).isEqualTo(2);
+        assertThat(despesa.getValor()).isEqualTo(new BigDecimal("12.50"));
+//        assertThat(despesa.getCategoria().getDescricao()).isEqualTo("Carro");
 
-    }
-
-    @Test
-    public void deveCriarGastoSetandoCategoriaPosteriormente() {
-        Despesa gasto = DespesaHelper.criaDespesa();
-
-        gasto.adicionaGastoCategorizado(new DespesaCategorizada(new Categoria("Moto"), new BigDecimal("32.50")));
-
-        this.despesaRepository.save(gasto);
-
-        assertThat(gasto.getId()).isNotNull();
-        assertThat(gasto.getValor()).isEqualTo(new BigDecimal("65.00"));
     }
 
     @Test
@@ -70,73 +59,14 @@ public class DespesaRepositoryTest {
     }
 
     @Test
-    public void naoDeveInserirGastoCategorizadoAdicionadoPosteriormenteALista() {
-        List<DespesaCategorizada> gastosCategorizado = new ArrayList<>();
+    public void deveTrazerDespesasPelaCategoria() {
+        Despesa despesa = DespesaHelper.criaDespesa();
 
-        gastosCategorizado.add(new DespesaCategorizada(new Categoria("Carro"), new BigDecimal("32.50")));
+        despesa = this.despesaRepository.save(despesa);
 
-        Despesa gasto = new Despesa("Gasolina", LocalDate.now(), gastosCategorizado);
+        Page<Despesa> despesas = despesaRepository.findByCategoria(despesa.getCategoria(),new PageRequest(0, 20));
 
-        //Adiciona um gasto categorizado posteriormente que deve ser ignorado
-        gastosCategorizado.add(new DespesaCategorizada(new Categoria("Moto"), new BigDecimal("11.50")));
-
-        this.despesaRepository.save(gasto);
-
-        Despesa gastoEncontrado = despesaRepository.findById(gasto.getId()).get();
-
-        assertTrue(gastoEncontrado.getValor().equals(new BigDecimal("32.50")));
-
-    }
-
-
-    @Test
-    public void deveAdicionarGastoCategorizado() {
-        List<DespesaCategorizada> gastosCategorizado = new ArrayList<>();
-
-        gastosCategorizado.add(new DespesaCategorizada(new Categoria("Carro"), new BigDecimal("32.50")));
-
-        Despesa gasto = new Despesa("Gasolina", LocalDate.now(), gastosCategorizado);
-
-        this.despesaRepository.save(gasto);
-
-        gasto.adicionaGastoCategorizado(new DespesaCategorizada(new Categoria("Moto"), new BigDecimal("11.50")));
-
-        gasto.setDescricao("Gasolina 2");
-
-        Despesa gastoEncontrado = despesaRepository.findById(gasto.getId()).get();
-
-        assertTrue(gastoEncontrado.getValor().equals(new BigDecimal("44.00")));
-        assertThat(gastoEncontrado.getDescricao()).isEqualTo("Gasolina 2");
-
-    }
-
-
-    @Test
-    public void deveTrazerGastosPelaCategoria() {
-        List<DespesaCategorizada> gastosCategorizados = new ArrayList<>();
-
-        Categoria carro = new Categoria("Carro");
-
-        Categoria moto = new Categoria("Moto");
-
-        this.categoriaRepository.save(carro);
-
-        this.categoriaRepository.save(moto);
-
-        gastosCategorizados.add(new DespesaCategorizada(carro, new BigDecimal("32.50")));
-
-        gastosCategorizados.add(new DespesaCategorizada(moto, new BigDecimal("11.50")));
-
-        Despesa gasto = new Despesa("Gasolina", LocalDate.now(), gastosCategorizados);
-
-        this.despesaRepository.save(gasto);
-
-        List<Despesa> gastos = despesaRepository.findByDespesasCategorizadas(carro, null).getContent();
-
-        assertThat(gastos.get(0).getDespesasCategorizadas().size()).isEqualTo(1);
-        assertTrue(gastos.get(0).getValor().equals(new BigDecimal("44.00")));
-        //assertTrue(gastos.get(0).getGastosCategorizados().get(0).getValor().equals(new BigDecimal("32.50")));
-
+        assertThat(despesas.getSize()).isEqualTo(1);
     }
 
     @Test
@@ -144,37 +74,20 @@ public class DespesaRepositoryTest {
         thrown.expect(ConstraintViolationException.class);
         thrown.expectMessage("A descrição não pode ser vazia");
 
-        List<DespesaCategorizada> gastosCategorizado = new ArrayList<>();
+        Despesa despesa = DespesaHelper.criaDespesa();
+        despesa.setDescricao("");
 
-        Categoria carro = new Categoria(1L,"Carro");
-
-        this.categoriaRepository.save(carro);
-
-        gastosCategorizado.add(new DespesaCategorizada(carro, new BigDecimal("32.50")));
-
-        Despesa gasto = new Despesa("", LocalDate.now(), gastosCategorizado);
-
-        this.despesaRepository.save(gasto);
+        this.despesaRepository.save(despesa);
     }
 
     @Test
     public void quandoCriaUmGastoComValorZeradoDeveRetornaThrowConstrainViolationException(){
         thrown.expect(ConstraintViolationException.class);
-        thrown.expectMessage("O Valor não pode ser negativo");
+        thrown.expectMessage("O Valor não pode ser zerado ou negativo");
 
-        List<DespesaCategorizada> gastosCategorizado = new ArrayList<>();
+        Despesa despesa = DespesaHelper.CriaDespesaComValorZerado();
 
-        Categoria carro = new Categoria(1L,"Carro");
-
-        categoriaRepository.save(carro);
-
-        gastosCategorizado.add(new DespesaCategorizada(carro, new BigDecimal("0.00")));
-
-        Despesa gasto = new Despesa("Gasolina", LocalDate.now(), gastosCategorizado);
-
-        this.categoriaRepository.save(carro);
-
-        this.despesaRepository.save(gasto);
+        this.despesaRepository.save(despesa);
     }
 
 }

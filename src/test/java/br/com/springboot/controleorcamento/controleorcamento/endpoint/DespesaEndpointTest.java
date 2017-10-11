@@ -2,8 +2,6 @@ package br.com.springboot.controleorcamento.controleorcamento.endpoint;
 
 
 import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
-import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
-import br.com.springboot.controleorcamento.controleorcamento.model.DespesaCategorizada;
 import br.com.springboot.controleorcamento.controleorcamento.repository.DespesaRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,13 +15,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Arrays.asList;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -51,14 +45,6 @@ public class DespesaEndpointTest {
     @Test
     @WithMockUser
     public void deveRetornaStatus200QuandoUsuarioESenhaForemCorretosParaGetGastos() throws Exception {
-        List<DespesaCategorizada> gastosCategorizado = new ArrayList<>();
-
-        gastosCategorizado.add(new DespesaCategorizada(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
-
-        //List<Despesa> gastos = asList(new Despesa(1L, "Gasolina", LocalDate.now(), gastosCategorizado),
-                //new Despesa(1L, "Filtro", LocalDate.now(), gastosCategorizado));
-
-        //when(despesaRepository.findAll()).thenReturn(gastos);
 
         this.mockMvc.perform(get("/v1/gastos/protected")
                                         .param("page","0"))
@@ -70,14 +56,6 @@ public class DespesaEndpointTest {
     @Test
     @WithMockUser
     public void deveRetornaStatus200QuandoUsuarioESenhaForemCorretosParaGetGastosById() throws Exception {
-        List<DespesaCategorizada> gastosCategorizado = new ArrayList<>();
-
-        gastosCategorizado.add(new DespesaCategorizada(new Categoria(1L,"Carro"), new BigDecimal("32.50")));
-
-        //Despesa gasto = new Despesa(1L, "Gasolina", LocalDate.now(), gastosCategorizado);
-
-        //given(despesaRepository.findOne(gasto.getId())).willReturn(gasto);
-
         this.mockMvc.perform(get("/v1/gastos/protected/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

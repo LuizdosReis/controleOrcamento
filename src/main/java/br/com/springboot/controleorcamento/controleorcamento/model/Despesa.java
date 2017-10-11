@@ -10,88 +10,80 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
 
 @Entity
 public class Despesa extends AbstractEntity {
 
-	@NotEmpty(message = "A descrição não pode ser vazia")
-	private String descricao;
-	
-	@NotNull
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	@Convert(converter = LocalDateAttributeConverter.class)
-	private LocalDate data;
-	
-	@Digits(fraction=2,message="O valor só pode conter dois digitos após a virgula",integer = 9)
+    @NotEmpty(message = "A descrição não pode ser vazia")
+    private String descricao;
+
+    @NotNull
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @Convert(converter = LocalDateAttributeConverter.class)
+    private LocalDate data;
+
+    @Digits(fraction=2,message="O valor só pode conter dois digitos após a virgula",integer = 9)
     @DecimalMin(message = "O Valor não pode ser zerado ou negativo", value = "0.00", inclusive = false)
-	private BigDecimal valor;
+    private BigDecimal valor;
 
-	@NotEmpty
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private Set<DespesaCategorizada> despesasCategorizadas = new HashSet<>();
+    @NotNull
+    @ManyToOne
+    @JoinTable(name = "categoria_despesa", joinColumns = @JoinColumn(name = "despesa_id"),
+            inverseJoinColumns = @JoinColumn(name="categoria_id"))
+    private Categoria categoria;
 
-	@ManyToOne
-	@JoinTable(name = "conta_despesa", joinColumns = @JoinColumn(name = "despesa_id"),
-			inverseJoinColumns = @JoinColumn(name="conta_id"))
-	private Conta conta;
+    @ManyToOne
+    @JoinTable(name = "conta_despesa", joinColumns = @JoinColumn(name = "despesa_id"),
+            inverseJoinColumns = @JoinColumn(name="conta_id"))
+    private Conta conta;
 
-	public Despesa(String descricao, LocalDate data, List<DespesaCategorizada> despesasCategorizadas) {
-		this.valor = new BigDecimal("0.00");
-		despesasCategorizadas.forEach(gastos -> this.valor = this.valor.add(gastos.getValor()));
-		this.descricao = descricao;
-		this.data = data;
-	}
+    public Despesa(String descricao, LocalDate data, BigDecimal valor, Categoria categoria) {
+        this.valor = valor;
+        this.descricao = descricao;
+        this.data = data;
+        this.categoria = categoria;
+    }
 
-	public Despesa() {
-	    this.valor = new BigDecimal("0.00");
-	}
+    public Despesa(){
+    }
 
     public String getDescricao() {
-		return descricao;
-	}
+        return descricao;
+    }
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-	public LocalDate getData() {
-		return data;
-	}
+    public LocalDate getData() {
+        return data;
+    }
 
-	public void setData(LocalDate data) {
-		this.data = data;
-	}
+    public void setData(LocalDate data) {
+        this.data = data;
+    }
 
-	public BigDecimal getValor() {
-		return valor;
-	}
+    public BigDecimal getValor() {
+        return valor;
+    }
 
-	public void setDespesasCategorizadas(Set<DespesaCategorizada> despesasCategorizadas) {
-		Optional<BigDecimal> total = despesasCategorizadas.stream().map(DespesaCategorizada::getValor).reduce((valor1, valor2) -> valor1.add(valor2));
-		this.valor = this.valor.add(total.get());
-		this.despesasCategorizadas = despesasCategorizadas;
-	}
+    public Categoria getCategoria() {
+        return categoria;
+    }
 
-	public Set<DespesaCategorizada> getDespesasCategorizadas() {
-		return Collections.unmodifiableSet(despesasCategorizadas);
-	}
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
 
-	public Conta getConta() {
-		return conta;
-	}
+    public Conta getConta() {
+        return conta;
+    }
 
-	public void setConta(Conta conta) {
-		this.conta = conta;
-	}
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
 
-	public void adicionaGastoCategorizado(DespesaCategorizada despesaCategorizada) {
-		this.valor = this.valor.add(despesaCategorizada.getValor());
-		despesasCategorizadas.add(despesaCategorizada);
-	}
-
-	public void removeGastoCategorizado(DespesaCategorizada despesaCategorizada) {
-		this.valor = this.valor.subtract(despesaCategorizada.getValor());
-		despesasCategorizadas.remove(despesaCategorizada);
-	}
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
 }

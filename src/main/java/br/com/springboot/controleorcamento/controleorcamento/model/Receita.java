@@ -21,7 +21,7 @@ public class Receita extends AbstractEntity{
     @DecimalMin(message = "O Valor não pode ser negativo", value = "0.00", inclusive = false)
     private BigDecimal valor;
 
-    private Boolean efetivada;
+    private boolean efetivada;
 
     @ManyToOne
     @JoinTable(name = "conta_receita", joinColumns = @JoinColumn(name = "receita_id"),
@@ -44,11 +44,11 @@ public class Receita extends AbstractEntity{
         this.valor = valor;
     }
 
-    public Boolean getEfetivada() {
+    public boolean isEfetivada() {
         return efetivada;
     }
 
-    public void setEfetivada(Boolean efetivada) {
+    public void setEfetivada(boolean efetivada) {
         this.efetivada = efetivada;
     }
 

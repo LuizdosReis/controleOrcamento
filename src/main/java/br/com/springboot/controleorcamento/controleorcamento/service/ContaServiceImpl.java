@@ -42,6 +42,6 @@ public class ContaServiceImpl implements ContaService{
 
     private void verificaSeContaExiste(Long id) {
         if (!contaRepository.existsById(id))
-            throw new ResourceNotFoundException("Nenhum gasto encontrado no id", null);
+            throw new ResourceNotFoundException("Nenhum conta encontrado no id", null);
     }
 }

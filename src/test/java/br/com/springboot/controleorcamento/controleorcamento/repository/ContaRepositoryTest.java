@@ -26,7 +26,7 @@ public class ContaRepositoryTest {
 
     @Autowired
     private ContaRepository contaRepository;
-    
+
     Conta conta;
 
     @Rule
