@@ -1,7 +1,6 @@
 package br.com.springboot.controleorcamento.controleorcamento.service;
 
 import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
-import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
 import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.controleorcamento.repository.ContaRepository;
 import org.springframework.boot.context.config.ResourceNotFoundException;
@@ -32,7 +31,7 @@ public class ContaServiceImpl implements ContaService{
     @Override
     public Conta findOne(Long id) {
         verificaSeContaExiste(id);
-        return contaRepository.findOne(id);
+        return contaRepository.findById(id).get();
     }
 
     @Override
@@ -41,11 +40,8 @@ public class ContaServiceImpl implements ContaService{
         contaRepository.save(conta);
     }
 
-    private Conta verificaSeContaExiste(Long id) {
-        Conta conta = contaRepository.findOne(id);
-
-        if (conta == null)
+    private void verificaSeContaExiste(Long id) {
+        if (!contaRepository.existsById(id))
             throw new ResourceNotFoundException("Nenhum gasto encontrado no id", null);
-        return conta;
     }
 }

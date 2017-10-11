@@ -6,7 +6,6 @@ import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -54,7 +53,7 @@ public class DespesaServiceImpl implements DespesaService {
     @Override
     public void delete(long id) {
         verificaSeDespesaExiste(id);
-        despesaRepository.delete(id);
+        despesaRepository.deleteById(id);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class DespesaServiceImpl implements DespesaService {
     @Override
     public Despesa getById(Long id) {
         verificaSeDespesaExiste(id);
-        return despesaRepository.findOne(id);
+        return despesaRepository.findById(id).get();
     }
 
     @Override
@@ -95,12 +94,9 @@ public class DespesaServiceImpl implements DespesaService {
         adicionaDespesa(despesa,conta);
     }
 
-    private Despesa verificaSeDespesaExiste(Long id) {
-        Despesa gasto = despesaRepository.findOne(id);
-
-        if (gasto == null)
+    private void verificaSeDespesaExiste(Long id) {
+        if (despesaRepository.existsById(id))
             throw new ResourceNotFoundException("Nenhum gasto encontrado no id", null);
-        return gasto;
     }
 
     private void verificaCategorias(Despesa despesa, Usuario usuario) {

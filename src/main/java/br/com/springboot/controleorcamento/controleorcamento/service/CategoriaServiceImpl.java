@@ -39,7 +39,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     public Categoria findOne(Long id) {
         verificaSeGastoExiste(id);
-        return categoriaRepository.findOne(id);
+        return categoriaRepository.findById(id).get();
     }
 
     @Override
@@ -47,11 +47,8 @@ public class CategoriaServiceImpl implements CategoriaService {
         return categoriaRepository.findByUsuario(usuario).containsAll(categorias);
     }
 
-    private Categoria verificaSeGastoExiste(Long id) {
-        Categoria categoria = categoriaRepository.findOne(id);
-
-        if (categoria == null)
+    private void verificaSeGastoExiste(Long id) {
+        if (categoriaRepository.existsById(id))
             throw new ResourceNotFoundException("Nenhuma categoria encontrado no id", null);
-        return categoria;
     }
 }

@@ -66,7 +66,7 @@ public class DespesaRepositoryTest {
 
         this.despesaRepository.delete(gasto);
 
-        assertThat(despesaRepository.findOne(gasto.getId())).isNull();
+        assertThat(despesaRepository.findById(gasto.getId())).isNull();
     }
 
     @Test
@@ -82,7 +82,7 @@ public class DespesaRepositoryTest {
 
         this.despesaRepository.save(gasto);
 
-        Despesa gastoEncontrado = despesaRepository.findOne(gasto.getId());
+        Despesa gastoEncontrado = despesaRepository.findById(gasto.getId()).get();
 
         assertTrue(gastoEncontrado.getValor().equals(new BigDecimal("32.50")));
 
@@ -103,7 +103,7 @@ public class DespesaRepositoryTest {
 
         gasto.setDescricao("Gasolina 2");
 
-        Despesa gastoEncontrado = despesaRepository.findOne(gasto.getId());
+        Despesa gastoEncontrado = despesaRepository.findById(gasto.getId()).get();
 
         assertTrue(gastoEncontrado.getValor().equals(new BigDecimal("44.00")));
         assertThat(gastoEncontrado.getDescricao()).isEqualTo("Gasolina 2");
