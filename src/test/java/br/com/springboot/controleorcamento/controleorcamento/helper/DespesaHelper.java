@@ -34,7 +34,7 @@ public class DespesaHelper {
         Despesa despesa = new Despesa();
         despesa.setDescricao("Gasolina e oleo");
         despesa.setConta(bancoDoBrasil);
-      //  despesa.setCategoria(carro);
+        despesa.setCategoria(carro);
         despesa.setValor(new BigDecimal("12.50"));
         despesa.setData(LocalDate.parse("15/01/2017", DateTimeFormatter.ofPattern("dd/MM/yyy")));
 

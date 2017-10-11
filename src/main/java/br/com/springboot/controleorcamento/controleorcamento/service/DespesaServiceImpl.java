@@ -43,8 +43,6 @@ public class DespesaServiceImpl implements DespesaService {
 
         verificaCategorias(despesa, conta.getUsuario());
 
-        despesa.setCategoria(categoriaService.findOne(despesa.getCategoria().getId()));
-
         contaService.update(conta);
 
         despesa.setConta(conta);
@@ -75,8 +73,7 @@ public class DespesaServiceImpl implements DespesaService {
     @Override
     public Page<Despesa> findByCategoria(long idCategoria, Pageable pageable) {
         Categoria categoria = categoriaService.findOne(idCategoria);
-        //despesaRepository.findDespesaByCategoria(null);
-        return null;
+        return despesaRepository.findByCategoria(categoria,pageable);
     }
 
     @Override
