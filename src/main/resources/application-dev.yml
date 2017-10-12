@@ -2,5 +2,18 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/controle_orcamento
+    tomcat:
+      test-while-idle: true
+      validation-query: SELECT 1
+      max-active: 5
     username: postgres
     password: root
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8092

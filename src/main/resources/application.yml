@@ -8,6 +8,7 @@ spring:
       max-active: 5
     username: udpqyywbwqrnsx
     password: 1607f59fef207fbd2b0ea4c3ac567461162cbfd0a2b578c527b74b719c2a0e7c
+    initialize: true
 
   jpa:
     show-sql: true
@@ -17,6 +18,3 @@ spring:
 
   jackson:
     serialization.WRITE_DATES_AS_TIMESTAMPS: false
-
-server:
-  port: 8092
