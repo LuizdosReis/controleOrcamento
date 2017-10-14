@@ -26,11 +26,11 @@ public class Conta extends AbstractEntity{
     private Usuario usuario;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "conta")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "conta")
     private Set<Despesa> despesas = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "conta")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "conta")
     private Set<Receita> receitas = new HashSet<>();
 
     public String getDescricao() {
