@@ -22,10 +22,7 @@ public class Categoria extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name="usuario_id"))
     private Usuario usuario;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "categoria")
-    private Set<Despesa> despesas = new HashSet<>();
-
+    private Tipo tipo;
 
     public Categoria(Long id, String descricao) {
         this.id = id;
@@ -55,11 +52,11 @@ public class Categoria extends AbstractEntity {
         this.usuario = usuario;
     }
 
-    public Set<Despesa> getDespesas() {
-        return Collections.unmodifiableSet(despesas);
+    public Tipo getTipo() {
+        return tipo;
     }
 
-    public void adicionaDespesa(Despesa despesa){
-        this.despesas.add(despesa);
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
     }
 }
