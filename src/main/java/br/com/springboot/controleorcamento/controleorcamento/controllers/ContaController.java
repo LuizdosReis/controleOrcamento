@@ -9,8 +9,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/site/contas")
 public class ContaController {
 
     private final ContaService contaService;
@@ -21,15 +23,16 @@ public class ContaController {
         this.usuarioService = usuarioService;
     }
 
-    @GetMapping("/contas")
+
+    @GetMapping
     public String getall(Model model){
 
-        model.addAttribute("contas",contaService.findByUsuario(usuarioService.loadUserByUsername("luiz.reis"),null));
+        model.addAttribute("contas",contaService.findByUsuario(usuarioService.loadUserByUsername("joao.silva"),null));
 
         return "contas";
     }
 
-    @PostMapping(value = "/contas")
+    @PostMapping
     public String salvaConta(@ModelAttribute Conta conta, BindingResult errors, Model model) {
 
         contaService.save(conta,usuarioService.loadUserByUsername("luiz.reis"));
