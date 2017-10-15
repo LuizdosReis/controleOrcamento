@@ -16,6 +16,6 @@ public interface CategoriaService {
 
     Categoria findOne(Long id);
 
-    boolean verificaSeCategoriasPertencemAoUsuario(Categoria categoria, Usuario usuario);
+    boolean verificaSeCategoriaPertencemAoUsuario(Categoria categoria, Usuario usuario);
 
 }

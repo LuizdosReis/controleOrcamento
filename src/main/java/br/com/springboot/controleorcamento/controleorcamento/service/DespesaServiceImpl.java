@@ -35,17 +35,33 @@ public class DespesaServiceImpl implements DespesaService {
 
         Conta conta = contaService.findOne(despesa.getConta().getId());
 
-        return adicionaDespesa(despesa, conta);
+        return adicionaDespesa(despesa,conta);
     }
 
-    private Despesa adicionaDespesa(Despesa despesa, Conta conta) {
+    @Override
+    public void update(Despesa despesa) {
+        verificaSeDespesaExiste(despesa.getId());
+
+        Conta conta = contaService.findOne(despesa.getConta().getId());
+
+        conta.getDespesas().stream()
+                .filter(d -> d.getId().equals(despesa.getId()))
+                .findFirst()
+                .ifPresent(d -> conta.removeDespesa(d));
+
+        adicionaDespesa(despesa,conta);
+    }
+
+    private Despesa adicionaDespesa(Despesa despesa,Conta conta) {
+        despesa.setCategoria(categoriaService.findOne(despesa.getCategoria().getId()));
+
         conta.adicionaDespesa(despesa);
 
-        verificaCategorias(despesa, conta.getUsuario());
-
-        contaService.update(conta);
-
         despesa.setConta(conta);
+
+
+
+        verificaCategoria(despesa, conta.getUsuario());
 
         return despesaRepository.save(despesa);
     }
@@ -81,28 +97,14 @@ public class DespesaServiceImpl implements DespesaService {
         return despesaRepository.findByDataBetween(dataInicial,dataFinal,pageable);
     }
 
-    @Override
-    public void update(Despesa despesa) {
-        verificaSeDespesaExiste(despesa.getId());
-
-        Conta conta = contaService.findOne(despesa.getConta().getId());
-
-        conta.getDespesas().stream()
-                .filter(d -> d.getId().equals(despesa.getId()))
-                .findFirst()
-                .ifPresent(d -> conta.removeDespesa(d));
-
-        adicionaDespesa(despesa,conta);
-    }
-
     private void verificaSeDespesaExiste(Long id) {
         if (despesaRepository.existsById(id))
             throw new ResourceNotFoundException("Nenhum gasto encontrado no id", null);
     }
 
-    private void verificaCategorias(Despesa despesa, Usuario usuario) {
+    private void verificaCategoria(Despesa despesa, Usuario usuario) {
 
-        if(!categoriaService.verificaSeCategoriasPertencemAoUsuario(despesa.getCategoria(),usuario)){
+        if(!categoriaService.verificaSeCategoriaPertencemAoUsuario(despesa.getCategoria(),usuario)){
             throw new ResourceNotFoundException("Categoria não pertence ao usuário",null);
         }
     }
