@@ -10,7 +10,7 @@ import java.io.Serializable;
 public abstract class AbstractEntity implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
 	public Long getId() {
@@ -30,20 +30,12 @@ public abstract class AbstractEntity implements Serializable {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AbstractEntity other = (AbstractEntity) obj;
-		if (id == null) {
-			if (other.id == null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
+		AbstractEntity that = (AbstractEntity) o;
+
+		return id.equals(that.id);
+	}
 }
