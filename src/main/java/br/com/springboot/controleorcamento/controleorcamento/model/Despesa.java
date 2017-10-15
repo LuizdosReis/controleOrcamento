@@ -4,7 +4,9 @@ import br.com.springboot.controleorcamento.controleorcamento.converter.LocalDate
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
@@ -22,19 +24,18 @@ public class Despesa extends AbstractEntity {
     @Convert(converter = LocalDateAttributeConverter.class)
     private LocalDate data;
 
+    private boolean efetivada;
+
     @Digits(fraction=2,message="O valor só pode conter dois digitos após a virgula",integer = 9)
     @DecimalMin(message = "O Valor não pode ser zerado ou negativo", value = "0.00", inclusive = false)
     private BigDecimal valor;
 
     @NotNull
     @ManyToOne
-    @JoinTable(name = "categoria_despesa", joinColumns = @JoinColumn(name = "despesa_id"),
-            inverseJoinColumns = @JoinColumn(name="categoria_id"))
     private Categoria categoria;
 
+    @NotNull
     @ManyToOne
-    @JoinTable(name = "conta_despesa", joinColumns = @JoinColumn(name = "despesa_id"),
-            inverseJoinColumns = @JoinColumn(name="conta_id"))
     private Conta conta;
 
     public Despesa(String descricao, LocalDate data, BigDecimal valor, Categoria categoria) {
@@ -85,5 +86,13 @@ public class Despesa extends AbstractEntity {
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
+    }
+
+    public boolean isEfetivada() {
+        return efetivada;
+    }
+
+    public void setEfetivada(boolean efetivada) {
+        this.efetivada = efetivada;
     }
 }

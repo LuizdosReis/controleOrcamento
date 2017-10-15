@@ -5,9 +5,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class Categoria extends AbstractEntity {
@@ -18,10 +15,9 @@ public class Categoria extends AbstractEntity {
     @NotNull(message = "Usuario não pode ser nulo")
     @JsonIgnore
     @ManyToOne
-    @JoinTable(name = "usuario_categoria", joinColumns = @JoinColumn(name = "categoria_id"),
-            inverseJoinColumns = @JoinColumn(name="usuario_id"))
     private Usuario usuario;
 
+    @Enumerated(value = EnumType.STRING)
     private Tipo tipo;
 
     public Categoria(Long id, String descricao) {

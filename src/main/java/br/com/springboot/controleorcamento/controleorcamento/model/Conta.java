@@ -17,12 +17,10 @@ public class Conta extends AbstractEntity{
 
     @NotNull
     @Digits(fraction=2,message="O valor só pode conter dois digitos após a virgula",integer = 9)
-    private BigDecimal saldo;
+    private BigDecimal saldo = new BigDecimal("0.00");
 
     @JsonIgnore
     @ManyToOne
-    @JoinTable(name = "usuario_conta", joinColumns = @JoinColumn(name = "conta_id"),
-    inverseJoinColumns = @JoinColumn(name="usuario_id"))
     private Usuario usuario;
 
     @JsonIgnore
@@ -50,7 +48,8 @@ public class Conta extends AbstractEntity{
     }
 
     public void adicionaDespesa(Despesa despesa){
-        this.saldo = this.saldo.subtract(despesa.getValor());
+        if(despesa.isEfetivada())
+            this.saldo = this.saldo.subtract(despesa.getValor());
         this.despesas.add(despesa);
     }
 
@@ -64,12 +63,20 @@ public class Conta extends AbstractEntity{
     }
 
     public void setUsuario(Usuario usuario) {
+        usuario.setConta(this);
         this.usuario = usuario;
     }
 
     public void adicionaReceita(Receita receita){
         this.saldo = this.saldo.add(receita.getValor());
+        receita.setConta(this);
         this.receitas.add(receita);
+    }
+
+    public void removeReceita(Receita receita){
+        this.saldo = this.saldo.subtract(receita.getValor());
+        receita.setConta(null);
+        this.despesas.remove(receita);
     }
 
     public Set<Despesa> getDespesas() {
