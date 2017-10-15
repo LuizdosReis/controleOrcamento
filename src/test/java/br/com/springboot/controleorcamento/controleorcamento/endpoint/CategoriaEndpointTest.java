@@ -4,12 +4,14 @@ import br.com.springboot.controleorcamento.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.controleorcamento.repository.CategoriaRepository;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -42,14 +44,20 @@ public class CategoriaEndpointTest {
     @MockBean
     private CategoriaRepository categoriaRepository;
 
+    private Categoria categoria;
+
+    @Before
+    public void setUp(){
+        Categoria categoria = new Categoria();
+        categoria.setId(1L);
+        categoria.setDescricao("Carro");
+
+        given(categoriaRepository.save(categoria)).willReturn(categoria);
+    }
 
     @Test
     @WithMockUser
     public void deveRetornaStatusCriadoECategoriaCriada() throws Exception {
-        Categoria categoria = new Categoria(1l,"Carro");
-
-        given(categoriaRepository.save(categoria)).willReturn(categoria);
-
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
@@ -67,7 +75,7 @@ public class CategoriaEndpointTest {
     @Test
     @WithMockUser
     public void deveLancarExecaoDeValidacaoDaDescricao() throws Exception {
-        Categoria categoria = new Categoria(1l,"");
+        categoria.setDescricao("");
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -84,8 +92,6 @@ public class CategoriaEndpointTest {
 
     @Test
     public void NaoDevePermitirCriacaoDeCategoriaDeUsuarioNaoAutenticado() throws Exception {
-        Categoria categoria = new Categoria(1l,"Carro");
-
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
@@ -102,7 +108,7 @@ public class CategoriaEndpointTest {
     @WithMockUser
     public void listaTodos() throws Exception {
         given(categoriaRepository.findAll(new PageRequest(0,20)))
-                .willReturn(new PageImpl<Categoria>(Collections.singletonList(new Categoria(1L,"Carro"))));
+                .willReturn(new PageImpl<Categoria>(Collections.singletonList(categoria)));
 
         mockMvc.perform(get("/v1/categorias/protected").param("page","0"))
                 .andDo(print())

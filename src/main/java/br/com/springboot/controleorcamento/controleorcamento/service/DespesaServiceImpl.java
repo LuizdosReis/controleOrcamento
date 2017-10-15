@@ -5,6 +5,7 @@ import br.com.springboot.controleorcamento.controleorcamento.model.Conta;
 import br.com.springboot.controleorcamento.controleorcamento.model.Despesa;
 import br.com.springboot.controleorcamento.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.controleorcamento.repository.DespesaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 
 @Service
+@Slf4j
 public class DespesaServiceImpl implements DespesaService {
 
     private final DespesaRepository despesaRepository;
@@ -32,6 +34,8 @@ public class DespesaServiceImpl implements DespesaService {
 
     @Override
     public Despesa save(Despesa despesa) {
+
+        log.debug("Metodo save");
 
         Conta conta = contaService.findOne(despesa.getConta().getId());
 
@@ -58,8 +62,6 @@ public class DespesaServiceImpl implements DespesaService {
         conta.adicionaDespesa(despesa);
 
         despesa.setConta(conta);
-
-
 
         verificaCategoria(despesa, conta.getUsuario());
 

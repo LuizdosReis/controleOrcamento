@@ -2,6 +2,8 @@ package br.com.springboot.controleorcamento.controleorcamento.model;
 
 import br.com.springboot.controleorcamento.controleorcamento.converter.LocalDateAttributeConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Convert;
@@ -14,6 +16,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class Despesa extends AbstractEntity {
 
     @NotEmpty(message = "A descrição não pode ser vazia")
@@ -37,62 +41,4 @@ public class Despesa extends AbstractEntity {
     @NotNull
     @ManyToOne
     private Conta conta;
-
-    public Despesa(String descricao, LocalDate data, BigDecimal valor, Categoria categoria) {
-        this.valor = valor;
-        this.descricao = descricao;
-        this.data = data;
-        this.categoria = categoria;
-    }
-
-    public Despesa(){
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public Conta getConta() {
-        return conta;
-    }
-
-    public void setConta(Conta conta) {
-        this.conta = conta;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
-    public boolean isEfetivada() {
-        return efetivada;
-    }
-
-    public void setEfetivada(boolean efetivada) {
-        this.efetivada = efetivada;
-    }
 }

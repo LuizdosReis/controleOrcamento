@@ -1,6 +1,8 @@
 package br.com.springboot.controleorcamento.controleorcamento.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +12,8 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class Usuario extends AbstractEntity implements UserDetails{
 
 	@NotEmpty
@@ -30,10 +34,6 @@ public class Usuario extends AbstractEntity implements UserDetails{
 
     @OneToMany(mappedBy = "usuario")
     private Set<Categoria> categorias = new HashSet<>();
-
-    public String getUsername() {
-		return username;
-	}
 
     @Override
     public boolean isAccountNonExpired() {
@@ -65,39 +65,29 @@ public class Usuario extends AbstractEntity implements UserDetails{
 		return password;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-    public Set<Conta> getContas() {
-        return contas;
-    }
-
     public void setConta(Conta conta) {
 	    contas.add(conta);
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setCategoria(Categoria categoria){
+        categorias.add(categoria);
+    }
+
+    public void setRole(Role role) {
+        this.roles.add(role);
+    }
+
+    public Set<Conta> getContas() {
+        return Collections.unmodifiableSet(contas);
     }
 
     public Set<Categoria> getCategorias() {
-        return categorias;
+        return Collections.unmodifiableSet(categorias);
     }
 
-    public void setCategorias(Set<Categoria> categorias) {
-        this.categorias = categorias;
+    public Set<Role> getRoles() {
+        return Collections.unmodifiableSet(roles);
     }
+
+
 }

@@ -1,6 +1,7 @@
 package br.com.springboot.controleorcamento.controleorcamento.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -10,6 +11,8 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Entity
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class Conta extends AbstractEntity{
 
     @NotEmpty(message = "A descrição não pode ser vazia")
@@ -25,27 +28,13 @@ public class Conta extends AbstractEntity{
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "conta")
+    @Setter(AccessLevel.NONE)
     private Set<Despesa> despesas = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "conta")
+    @Setter(AccessLevel.NONE)
     private Set<Receita> receitas = new HashSet<>();
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public BigDecimal getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
-    }
 
     public void adicionaDespesa(Despesa despesa){
         if(despesa.isEfetivada())
@@ -56,15 +45,6 @@ public class Conta extends AbstractEntity{
     public void removeDespesa(Despesa despesa){
         this.saldo = this.saldo.add(despesa.getValor());
         this.despesas.remove(despesa);
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        usuario.setConta(this);
-        this.usuario = usuario;
     }
 
     public void adicionaReceita(Receita receita){
