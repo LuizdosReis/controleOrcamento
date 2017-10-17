@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = {"id"})
 public class Categoria extends AbstractEntity {
 
     @NotEmpty(message = "A descrição não pode estar em branco")

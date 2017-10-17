@@ -1,17 +1,21 @@
 package br.com.springboot.controleorcamento.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@ToString(exclude = {"contas","categorias"})
+@EqualsAndHashCode(of = {"id"})
 public class Usuario extends AbstractEntity implements UserDetails{
 
 	@NotEmpty
@@ -27,9 +31,11 @@ public class Usuario extends AbstractEntity implements UserDetails{
 	@OneToMany(fetch = FetchType.EAGER)
 	private Set<Role> roles = new HashSet<>();
 
+	@JsonIgnore
     @OneToMany(mappedBy = "usuario")
 	private Set<Conta> contas = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario")
     private Set<Categoria> categorias = new HashSet<>();
 
@@ -71,20 +77,18 @@ public class Usuario extends AbstractEntity implements UserDetails{
         categorias.add(categoria);
     }
 
-    public void setRole(Role role) {
-        this.roles.add(role);
-    }
-
     public Set<Conta> getContas() {
-        return Collections.unmodifiableSet(contas);
+        return contas;
     }
 
-    public Set<Categoria> getCategorias() {
-        return Collections.unmodifiableSet(categorias);
-    }
-
+    @Transactional
     public Set<Role> getRoles() {
-        return Collections.unmodifiableSet(roles);
+        return roles;
+    }
+
+    @Transactional
+    public Set<Categoria> getCategorias() {
+        return categorias;
     }
 
 

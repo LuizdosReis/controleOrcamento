@@ -17,7 +17,7 @@ import java.time.LocalDate;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = {"id"})
 public class Despesa extends AbstractEntity {
 
     @NotEmpty(message = "A descrição não pode ser vazia")

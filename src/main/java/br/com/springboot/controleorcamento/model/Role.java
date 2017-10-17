@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = {"id"})
 public class Role extends AbstractEntity implements GrantedAuthority {
 
     private String nome;
