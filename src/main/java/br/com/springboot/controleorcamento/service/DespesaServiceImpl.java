@@ -106,8 +106,7 @@ public class DespesaServiceImpl implements DespesaService {
 
     private void verificaCategoria(Despesa despesa, Usuario usuario) {
 
-        if(!categoriaService.verificaSeCategoriaPertencemAoUsuario(despesa.getCategoria(),usuario)){
-            throw new ResourceNotFoundException("Categoria não pertence ao usuário",null);
-        }
+        categoriaService.verificaSeCategoriaPertencemAoUsuario(despesa.getCategoria(),usuario);
+
     }
 }

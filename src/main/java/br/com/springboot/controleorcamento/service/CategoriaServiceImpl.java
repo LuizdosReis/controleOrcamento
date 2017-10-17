@@ -22,7 +22,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     public Categoria save(Categoria categoria, Usuario usuario) {
         categoria.setUsuario(usuario);
-        return categoriaRepository.save(categoria);
+        categoria = categoriaRepository.save(categoria);
+        return categoria;
     }
 
     @Override
@@ -31,8 +32,13 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public void update(Categoria categoria) {
+    public void update(Categoria categoria,Usuario usuario) {
         verificaSeGastoExiste(categoria.getId());
+
+        verificaSeCategoriaPertencemAoUsuario(categoria,usuario);
+
+        categoria.setUsuario(usuario);
+
         categoriaRepository.save(categoria);
     }
 
@@ -43,8 +49,26 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public boolean verificaSeCategoriaPertencemAoUsuario(Categoria categoria, Usuario usuario) {
-        return categoriaRepository.findByUsuario(usuario).contains(categoria);
+    public void verificaSeCategoriaPertencemAoUsuario(Categoria categoria, Usuario usuario) {
+       if(!categoriaRepository.findByUsuario(usuario).contains(categoria))
+           throw new IllegalArgumentException("Categoria não pertence ao usuário logado");
+    }
+
+    @Override
+    public void delete(Long id) {
+        verificaSeGastoExiste(id);
+        categoriaRepository.deleteById(id);
+    }
+
+    @Override
+    public Categoria findById(Long id, Usuario usuario) {
+        verificaSeGastoExiste(id);
+
+        Categoria categoria = categoriaRepository.findById(id).get();
+
+        verificaSeCategoriaPertencemAoUsuario(categoria,usuario);
+
+        return categoria;
     }
 
     private void verificaSeGastoExiste(Long id) {

@@ -10,10 +10,13 @@ public interface CategoriaService {
 
     Page<Categoria> findByUsuario(Usuario usuario, Pageable pageable);
 
-    void update(Categoria categoria);
+    void update(Categoria categoria,Usuario usuario);
 
     Categoria findOne(Long id);
 
-    boolean verificaSeCategoriaPertencemAoUsuario(Categoria categoria, Usuario usuario);
+    void verificaSeCategoriaPertencemAoUsuario(Categoria categoria, Usuario usuario);
 
+    void delete(Long id);
+
+    Categoria findById(Long id, Usuario usuario);
 }
