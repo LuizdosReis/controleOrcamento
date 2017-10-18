@@ -7,41 +7,52 @@
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></link>
 </head>
 <body>
-    <header class="container">
-        <h1 class="text-center">Contas</h1>
-    </header>
 
-    <form action="#" th:action="@{contas}" th:object="${conta}" method="post">
-        <div class="form-group">
-            <label for="descricao">Descrição</label>
-            <input type="text" class="form-control" id="descricao" placeholder="Descrição"/>
+    <div class="container">
+        <div class="row">
+            <section class="col-md-6">
+                <h2 class="text-center">Cadastro</h2>
+                <form action="#" th:action="@{contas}" th:object="${conta}" method="post">
+                    <div class="form-group">
+                        <label for="descricao">Descrição</label>
+                        <input type="text" class="form-control" id="descricao" placeholder="Descrição"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="saldo">Saldo</label>
+                        <input type="text" class="form-control" id="saldo" placeholder="Saldo"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </form>
+            </section>
+            <section class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Contas</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive" th:if="${not #lists.isEmpty(contas)}">
+                            <table class="table table-hover">
+                                <thead class="thead-inverse">
+                                <tr>
+                                    <th>Descrição</th>
+                                    <th>Saldo</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="conta: ${contas}">
+                                    <td th:text="${conta.descricao}"></td>
+                                    <td th:text="${conta.saldo}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
-        <div class="form-group">
-            <label for="saldo">Saldo</label>
-            <input type="text" class="form-control" id="saldo" placeholder="Saldo"/>
-        </div>
-
-        <button type="submit" class="btn btn-default">Submit</button>
-    </form>
-
-
-    <section class="container">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Descrição</th>
-                    <th>Saldo</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="conta: ${contas}">
-                    <td th:text="${conta.descricao}"></td>
-                    <td th:text="${conta.saldo}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+    </div>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>
 </html>
+</div>
