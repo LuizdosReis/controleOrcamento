@@ -3,37 +3,42 @@ package br.com.springboot.controleorcamento.service;
 import br.com.springboot.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.repository.CategoriaRepository;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+
 public class CategoriaServiceImplTest {
 
-    @MockBean
+    @Mock
     private CategoriaRepository categoriaRepository;
 
-    @Autowired
     private CategoriaService categoriaService;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
+
+    @Before
+    public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
+
+        categoriaService = new CategoriaServiceImpl(categoriaRepository);
+    }
 
     @Test
     public void deveSalvarCategoria() throws Exception {
@@ -51,6 +56,7 @@ public class CategoriaServiceImplTest {
 
         assertThat(categoriaRetornada.getDescricao()).isEqualTo(carro.getDescricao());
         assertThat(categoriaRetornada.getUsuario()).isEqualTo(luiz);
+        verify(categoriaRepository,times(1)).save(carro);
     }
 
     @Test
@@ -63,7 +69,6 @@ public class CategoriaServiceImplTest {
         when(categoriaRepository.save(carro)).thenThrow(ConstraintViolationException.class);
 
         categoriaService.save(carro,null);
-
     }
 
     @Test
