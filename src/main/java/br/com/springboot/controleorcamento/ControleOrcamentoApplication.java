@@ -12,13 +12,11 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
 
-@Controller
 @SpringBootApplication
 @EnableTransactionManagement
 public class ControleOrcamentoApplication extends SpringBootServletInitializer {
@@ -46,10 +44,5 @@ public class ControleOrcamentoApplication extends SpringBootServletInitializer {
     @Bean
     public BCryptPasswordEncoder bcyrpt() {
         return new BCryptPasswordEncoder();
-    }
-
-    @RequestMapping({"","/","index"})
-    public String index(){
-	    return "index";
     }
 }
