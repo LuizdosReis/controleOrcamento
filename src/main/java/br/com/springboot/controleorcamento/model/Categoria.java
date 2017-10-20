@@ -3,6 +3,7 @@ package br.com.springboot.controleorcamento.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -10,7 +11,8 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(callSuper = true,exclude = {"usuario","tipo","descricao"})
+@ToString(callSuper = true)
 public class Categoria extends AbstractEntity {
 
     @NotEmpty(message = "A descrição não pode estar em branco")
