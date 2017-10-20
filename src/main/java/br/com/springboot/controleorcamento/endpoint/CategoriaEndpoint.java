@@ -3,7 +3,6 @@ package br.com.springboot.controleorcamento.endpoint;
 import br.com.springboot.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.service.CategoriaService;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

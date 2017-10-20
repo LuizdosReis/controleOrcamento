@@ -21,6 +21,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public Categoria save(Categoria categoria, Usuario usuario) {
+        log.debug("CategoriaService - save");
         categoria.setUsuario(usuario);
         categoria = categoriaRepository.save(categoria);
         return categoria;
