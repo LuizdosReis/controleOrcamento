@@ -2,6 +2,7 @@ package br.com.springboot.controleorcamento.repository;
 
 import br.com.springboot.controleorcamento.helper.ContaHelper;
 import br.com.springboot.controleorcamento.model.Conta;
+import br.com.springboot.controleorcamento.model.Despesa;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.validation.ConstraintViolationException;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,6 +26,9 @@ public class ContaRepositoryTest {
 
     @Autowired
     private ContaRepository contaRepository;
+
+    @Autowired
+    private DespesaRepository despesaRepository;
 
     Conta conta;
 
@@ -62,5 +67,35 @@ public class ContaRepositoryTest {
         assertThat(conta.getId()).isNotNull();
         assertThat(conta.getDescricao()).isEqualTo("bradesco");
         assertThat(conta.getSaldo()).isEqualTo(new BigDecimal("12.00"));
+    }
+
+    @Test
+    public void deveAtualizarUmaConta(){
+
+        Conta conta = contaRepository.findById(1L).get();
+
+        conta.setDescricao("Conta Atualizada");
+
+        Conta contaRetornada = contaRepository.save(conta);
+
+        assertThat(contaRetornada.getDescricao()).isEqualTo(conta.getDescricao());
+
+    }
+
+    @Test
+    public void deveLancarExcecaoParaExcluirContaComGastosCadastrados(){
+
+
+        contaRepository.deleteById(1L);
+
+        Optional<Conta> conta = contaRepository.findById(1L);
+
+        System.out.println(conta);
+
+        Optional<Despesa> despesa = despesaRepository.findById(1L);
+
+        System.out.println(despesa);
+
+
     }
 }

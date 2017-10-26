@@ -1,6 +1,7 @@
 package br.com.springboot.controleorcamento.service;
 
 import br.com.springboot.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.model.Tipo;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.repository.CategoriaRepository;
 import org.junit.Before;
@@ -26,6 +27,7 @@ public class CategoriaServiceImplTest {
 
     @Mock
     private CategoriaRepository categoriaRepository;
+
 
     private CategoriaService categoriaService;
 
@@ -78,15 +80,30 @@ public class CategoriaServiceImplTest {
         luiz.setUsername("luiz.reis");
         luiz.setPassword("123");
 
-        Categoria carro = new Categoria();
-        carro.setDescricao("Carro");
+        CategoriaInfo categoriaInfo = new CategoriaInfo() {
+            @Override
+            public Long getId() {
+                return 1L;
+            }
 
-        when(categoriaRepository.findByUsuario(luiz,new PageRequest(0,20))).thenReturn(new PageImpl<>(Collections.singletonList(carro)));
+            @Override
+            public String getDescricao() {
+                return "Carro";
+            }
 
-        List<Categoria> categorias = categoriaService.findByUsuario(luiz, new PageRequest(0,20)).getContent();
+            @Override
+            public Tipo getTipo() {
+                return Tipo.SAIDA;
+            }
+        };
+
+
+        when(categoriaRepository.findByUsuario(luiz,new PageRequest(0,20))).thenReturn(new PageImpl<>(Collections.singletonList(categoriaInfo)));
+
+        List<CategoriaInfo> categorias = categoriaService.findByUsuario(luiz, new PageRequest(0,20)).getContent();
 
         assertThat(categorias.size()).isEqualTo(1);
-        assertThat(categorias.get(0)).isEqualTo(carro);
+        assertThat(categorias.get(0)).isEqualTo(categoriaInfo);
 
     }
 

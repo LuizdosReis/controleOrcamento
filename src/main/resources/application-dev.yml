@@ -15,5 +15,3 @@ spring:
       ddl-auto: create-drop
       dialect: org.hibernate.dialect.PostgreSQLDialect
 
-server:
-  port: 8092

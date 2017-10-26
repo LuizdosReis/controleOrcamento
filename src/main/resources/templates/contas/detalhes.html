@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Detalhes</title>
+    <div th:replace="header :: header-css"/>
+</head>
+<body>
+
+<div th:replace="header :: header"/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <div th:replace="header :: menu"/>
+        </div>
+        <div class="col-md-2">
+        </div>
+        <section class="col-md-5">
+
+            <h1 class="text-center">Detalhes</h1>
+            <!--/*@thymesVar id="conta" type="br.com.springboot.controleorcamento.model.Conta"*/-->
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+
+                    <h1 class="panel-title" th:text="${conta.descricao}"></h1>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="saldo">Saldo :</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p id ="saldo" th:text="'R$ ' + ${conta.saldo}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div th:replace="footer :: footer"/>
+</body>
+</html>

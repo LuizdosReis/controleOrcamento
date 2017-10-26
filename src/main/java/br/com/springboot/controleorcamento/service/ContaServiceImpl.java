@@ -3,11 +3,15 @@ package br.com.springboot.controleorcamento.service;
 import br.com.springboot.controleorcamento.model.Conta;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.repository.ContaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+@Slf4j
 @Service
 public class ContaServiceImpl implements ContaService{
 
@@ -30,8 +34,15 @@ public class ContaServiceImpl implements ContaService{
 
     @Override
     public Conta findOne(Long id) {
-        verificaSeContaExiste(id);
-        return contaRepository.findById(id).get();
+        log.debug("Service - findOne");
+
+        Optional<Conta> contaOptional = contaRepository.findById(id);
+
+        if(!contaOptional.isPresent()){
+            throw new ResourceNotFoundException("Nenhum conta encontrado no id", null);
+        }
+
+        return contaOptional.get();
     }
 
     @Override

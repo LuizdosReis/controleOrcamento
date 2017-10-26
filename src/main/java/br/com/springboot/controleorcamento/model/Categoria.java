@@ -19,7 +19,6 @@ public class Categoria extends AbstractEntity {
     private String descricao;
 
     @NotNull(message = "Usuario não pode ser nulo")
-    @JsonIgnore
     @ManyToOne
     private Usuario usuario;
 

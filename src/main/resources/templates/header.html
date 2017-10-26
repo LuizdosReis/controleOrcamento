@@ -3,8 +3,9 @@
 <head>
     <div th:fragment="header-css">
         <!-- this is header-css -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></link>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
+              th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
     </div>
 </head>
 <body>
@@ -22,6 +23,14 @@
             </div>
         </div>
     </nav>
+</div>
+
+<div th:fragment="menu">
+    <ul class="nav nav-pills nav-stacked">
+        <li role="presentation" class="active"><a href="#">Home</a></li>
+        <li role="presentation"><a href="#" th:href="@{'/site/contas/'}"></a></li>
+        <li role="presentation"><a href="#">Messages</a></li>
+    </ul>
 </div>
 
 </body>

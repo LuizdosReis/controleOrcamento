@@ -13,12 +13,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -33,6 +36,7 @@ public class ContaControllerTest {
 
     ContaController controller;
     Usuario usuario;
+    Conta conta;
 
     @Before
     public void setUp() throws Exception {
@@ -45,16 +49,39 @@ public class ContaControllerTest {
         usuario.setNome("luiz henrique dandolini dos reis");
         usuario.setUsername("luiz.reis");
 
+        conta = new Conta();
+        conta.setId(1L);
+
 
     }
 
     @Test
     public void deveRetornarViewContas() throws Exception {
+
+
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        when(contaService.findByUsuario(usuario,null))
+                .thenReturn(new PageImpl<>(Arrays.asList(conta)));
 
         mockMvc.perform(get("/site/contas"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("contas/lista"));
+                .andExpect(view().name("contas/lista"))
+                .andExpect(model().attributeExists("contas"));
+    }
+
+    @Test
+    public void deveRetornaViewById() throws Exception {
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        when(contaService.findOne(anyLong())).thenReturn(conta);
+
+        mockMvc.perform(get("/site/contas/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("contas/detalhes"))
+                .andExpect(model().attributeExists("conta"));
+
     }
 
     @Test

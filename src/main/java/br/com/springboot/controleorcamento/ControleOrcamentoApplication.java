@@ -14,12 +14,12 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.time.LocalDate;
 
 @SpringBootApplication
-@EnableTransactionManagement
-public class ControleOrcamentoApplication extends SpringBootServletInitializer {
+public class ControleOrcamentoApplication{
 	public static void main(String[] args) {
 	    SpringApplication.run(ControleOrcamentoApplication.class, args);
 	}

@@ -12,7 +12,8 @@ import java.util.*;
 
 @Entity
 @Data
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(callSuper = true,exclude = {"despesas","receitas","usuario","saldo","descricao"})
+@ToString(callSuper = true,exclude = {"receitas","despesas"})
 public class Conta extends AbstractEntity{
 
     @NotEmpty(message = "A descrição não pode ser vazia")
@@ -27,12 +28,12 @@ public class Conta extends AbstractEntity{
     private Usuario usuario;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "conta")
+    @OneToMany(mappedBy = "conta")
     @Setter(AccessLevel.NONE)
     private Set<Despesa> despesas = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "conta")
+    @OneToMany(mappedBy = "conta")
     @Setter(AccessLevel.NONE)
     private Set<Receita> receitas = new HashSet<>();
 

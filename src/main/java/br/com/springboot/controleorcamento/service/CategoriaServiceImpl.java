@@ -29,7 +29,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public Page<Categoria> findByUsuario(Usuario usuario, Pageable pageable) {
-        return categoriaRepository.findByUsuario(usuario,pageable);
+        return categoriaRepository.findByUsuario(usuario, pageable);
     }
 
     @Override
@@ -45,8 +45,8 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public Categoria findOne(Long id) {
-        verificaSeGastoExiste(id);
-        return categoriaRepository.findById(id).get();
+        return categoriaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Nenhuma categoria encontrado no id", null));
     }
 
     @Override
