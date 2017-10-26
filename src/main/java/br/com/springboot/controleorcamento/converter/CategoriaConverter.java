@@ -6,17 +6,26 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Component
 public class CategoriaConverter {
 
     @Autowired
-    private ModelMapper modelMapper;
+    private ModelMapper iModelMapper;
 
-    public CategoriaDto convertToDto(Categoria categoria){
+    private static ModelMapper modelMapper;
+
+    @PostConstruct
+    private void setUp() {
+        this.modelMapper = iModelMapper;
+    }
+
+    public static CategoriaDto convertToDto(Categoria categoria) {
         return modelMapper.map(categoria, CategoriaDto.class);
     }
 
-    public Categoria convertToEntity(CategoriaDto categoriaDto){
+    public static Categoria convertToEntity(CategoriaDto categoriaDto) {
         return modelMapper.map(categoriaDto,Categoria.class);
     }
 }

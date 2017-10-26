@@ -1,5 +1,6 @@
 package br.com.springboot.controleorcamento.endpoint;
 
+import br.com.springboot.controleorcamento.dto.CategoriaDto;
 import br.com.springboot.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.service.CategoriaService;
@@ -20,7 +21,7 @@ public class CategoriaEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Categoria categoria,@AuthenticationPrincipal Usuario usuario){
+    public ResponseEntity<?> save(@RequestBody CategoriaDto categoria, @AuthenticationPrincipal Usuario usuario) {
         return new ResponseEntity<>(categoriaService.save(categoria,usuario), HttpStatus.CREATED);
     }
 

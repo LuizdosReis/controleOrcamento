@@ -1,13 +1,19 @@
 package br.com.springboot.controleorcamento.service;
 
+import br.com.springboot.controleorcamento.converter.CategoriaConverter;
+import br.com.springboot.controleorcamento.dto.CategoriaDto;
 import br.com.springboot.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.repository.CategoriaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -20,16 +26,27 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public Categoria save(Categoria categoria, Usuario usuario) {
+    public CategoriaDto save(CategoriaDto categoriaDto, Usuario usuario) {
         log.debug("CategoriaService - save");
+
+        Categoria categoria = CategoriaConverter.convertToEntity(categoriaDto);
+
         categoria.setUsuario(usuario);
         categoria = categoriaRepository.save(categoria);
-        return categoria;
+        return CategoriaConverter.convertToDto(categoria);
     }
 
     @Override
-    public Page<Categoria> findByUsuario(Usuario usuario, Pageable pageable) {
-        return categoriaRepository.findByUsuario(usuario, pageable);
+    public Page<CategoriaDto> findByUsuario(Usuario usuario, Pageable pageable) {
+
+        Page<Categoria> page = categoriaRepository.findByUsuario(usuario, pageable);
+
+        List<CategoriaDto> categoriasDtos = page.getContent()
+                .stream()
+                .map(CategoriaConverter::convertToDto)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(categoriasDtos, pageable, page.getTotalElements());
     }
 
     @Override
@@ -63,9 +80,8 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public Categoria findById(Long id, Usuario usuario) {
-        verificaSeGastoExiste(id);
-
-        Categoria categoria = categoriaRepository.findById(id).get();
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Nenhuma categoria encontrado no id", null));
 
         verificaSeCategoriaPertencemAoUsuario(categoria,usuario);
 
