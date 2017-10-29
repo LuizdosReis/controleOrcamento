@@ -1,7 +1,7 @@
 package br.com.springboot.controleorcamento.endpoint;
 
-import br.com.springboot.controleorcamento.dto.CategoriaDto;
-import br.com.springboot.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
+import br.com.springboot.controleorcamento.dto.CategoriaUpdateDto;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.service.CategoriaService;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("v1/categorias")
@@ -21,7 +23,7 @@ public class CategoriaEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody CategoriaDto categoria, @AuthenticationPrincipal Usuario usuario) {
+    public ResponseEntity<?> save(@Valid @RequestBody CategoriaCreateDto categoria, @AuthenticationPrincipal Usuario usuario) {
         return new ResponseEntity<>(categoriaService.save(categoria,usuario), HttpStatus.CREATED);
     }
 
@@ -31,8 +33,8 @@ public class CategoriaEndpoint {
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody Categoria categoria,@AuthenticationPrincipal Usuario usuario){
-        categoriaService.update(categoria,usuario);
+    public ResponseEntity<?> update(@Valid @RequestBody CategoriaUpdateDto categoriaDto, @AuthenticationPrincipal Usuario usuario){
+        categoriaService.update(categoriaDto,usuario);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

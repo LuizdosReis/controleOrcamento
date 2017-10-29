@@ -26,6 +26,6 @@ public class CategoriaConverter {
     }
 
     public static Categoria convertToEntity(CategoriaDto categoriaDto) {
-        return modelMapper.map(categoriaDto,Categoria.class);
+         return modelMapper.map(categoriaDto,Categoria.class);
     }
 }
