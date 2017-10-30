@@ -56,6 +56,15 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
+    public List<CategoriaDto> findByUsuario(Usuario usuario) {
+        List<Categoria> categorias = categoriaRepository.findByUsuario(usuario);
+
+        return categorias.stream()
+                .map(categoria -> modelMapper.map(categoria,CategoriaDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void update(CategoriaUpdateDto categoriaDto, Usuario usuario) {
         Categoria categoria = modelMapper.map(categoriaDto, Categoria.class);
 

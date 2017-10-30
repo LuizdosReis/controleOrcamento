@@ -8,10 +8,14 @@ import br.com.springboot.controleorcamento.model.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface CategoriaService {
     CategoriaDto save(CategoriaCreateDto categoriaDto, Usuario usuario);
 
     Page<CategoriaDto> findByUsuario(Usuario usuario, Pageable pageable);
+
+    List<CategoriaDto> findByUsuario(Usuario usuario);
 
     void update(CategoriaUpdateDto categoriaDto, Usuario usuario);
 
