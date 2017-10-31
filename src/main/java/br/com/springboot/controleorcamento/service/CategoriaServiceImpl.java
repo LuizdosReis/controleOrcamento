@@ -43,6 +43,15 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
+    public Categoria save(Categoria categoria, Usuario usuario) {
+        log.debug("CategoriaService - save");
+
+        categoria.setUsuario(usuario);
+
+        return categoriaRepository.save(categoria);
+    }
+
+    @Override
     public Page<CategoriaDto> findByUsuario(Usuario usuario, Pageable pageable) {
         log.debug("CategoriaService - findByUsuario");
         Page<Categoria> page = categoriaRepository.findByUsuario(usuario, pageable);
@@ -85,7 +94,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id, Usuario usuario) {
         verificaSeGastoExiste(id);
         categoriaRepository.deleteById(id);
     }

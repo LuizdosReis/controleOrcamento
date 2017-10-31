@@ -2,7 +2,6 @@ package br.com.springboot.controleorcamento.controllers;
 
 import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
 import br.com.springboot.controleorcamento.dto.CategoriaDto;
-import br.com.springboot.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.model.Tipo;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.service.CategoriaService;
@@ -10,34 +9,24 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import springfox.documentation.schema.Model;
 
 import java.util.Arrays;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class CategoriaControllerTest {
 
     @Mock
     CategoriaService categoriaService;
 
-    @Mock
-    Model model;
-
-    CategoriaController controller;
+    CategoriaController categoriaController;
 
     Usuario usuario;
 
@@ -49,7 +38,7 @@ public class CategoriaControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new CategoriaController(categoriaService);
+        categoriaController = new CategoriaController(categoriaService);
 
         usuario = new Usuario();
         usuario.setId(1L);
@@ -61,8 +50,7 @@ public class CategoriaControllerTest {
         categoriaDto.setTipo(Tipo.SAIDA);
         categoriaDto.setId(1L);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-
+        mockMvc = MockMvcBuilders.standaloneSetup(categoriaController).build();
     }
 
     @Test
@@ -82,7 +70,6 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    @WithMockUser(value = "luiz.reis")
     public void deveSalvarNovaCategoria() throws Exception {
         CategoriaCreateDto categoriaCreateDto = new CategoriaCreateDto();
         categoriaCreateDto.setDescricao("Carro");
@@ -93,11 +80,21 @@ public class CategoriaControllerTest {
 
         mockMvc.perform(post("/site/categorias")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("tipo","SAIDA")
-                .param("descricao","alguma descricao")
+                .with(user(usuario))
+                .param("tipo",categoriaCreateDto.getTipo().toString())
+                .param("descricao",categoriaCreateDto.getDescricao())
                 )
 
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/site/categorias/1"));
+    }
+
+    @Test
+    public void testGetNewCategoryForm() throws Exception {
+        mockMvc.perform(get("/site/categorias/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("categorias/form"))
+                .andExpect(model().attributeExists("categoria"))
+                .andExpect(model().attributeExists("tipos"));
     }
 }

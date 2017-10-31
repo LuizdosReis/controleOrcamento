@@ -13,6 +13,8 @@ import java.util.List;
 public interface CategoriaService {
     CategoriaDto save(CategoriaCreateDto categoriaDto, Usuario usuario);
 
+    Categoria save(Categoria categoria,Usuario usuario);
+
     Page<CategoriaDto> findByUsuario(Usuario usuario, Pageable pageable);
 
     List<CategoriaDto> findByUsuario(Usuario usuario);
@@ -21,7 +23,7 @@ public interface CategoriaService {
 
     void verificaSeCategoriaPertencemAoUsuario(Categoria categoria, Usuario usuario);
 
-    void delete(Long id);
+    void delete(Long id, Usuario usuario);
 
     CategoriaDto findById(Long id, Usuario usuario);
 
