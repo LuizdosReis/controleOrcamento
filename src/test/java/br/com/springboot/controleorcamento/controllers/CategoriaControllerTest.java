@@ -2,6 +2,7 @@ package br.com.springboot.controleorcamento.controllers;
 
 import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
 import br.com.springboot.controleorcamento.dto.CategoriaDto;
+import br.com.springboot.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.model.Tipo;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.service.CategoriaService;
@@ -30,7 +31,7 @@ public class CategoriaControllerTest {
 
     Usuario usuario;
 
-    CategoriaDto categoriaDto;
+    Categoria categoria;
 
     MockMvc mockMvc;
 
@@ -45,19 +46,22 @@ public class CategoriaControllerTest {
         usuario.setNome("luiz henrique dandolini dos reis");
         usuario.setUsername("luiz.reis");
 
-        categoriaDto = new CategoriaDto();
-        categoriaDto.setDescricao("Carro");
-        categoriaDto.setTipo(Tipo.SAIDA);
-        categoriaDto.setId(1L);
+        categoria = new Categoria();
+        categoria.setDescricao("Carro");
+        categoria.setTipo(Tipo.SAIDA);
+        categoria.setId(1L);
 
         mockMvc = MockMvcBuilders.standaloneSetup(categoriaController).build();
     }
 
     @Test
     public void deveRetornaViewLista() throws Exception {
+        CategoriaDto categoriaDto = new CategoriaDto();
+        categoriaDto.setDescricao("Carro");
+        categoriaDto.setTipo(Tipo.SAIDA);
+        categoriaDto.setId(1L);
 
-
-        when(categoriaService.findByUsuario(usuario))
+        when(categoriaService.findAll())
                 .thenReturn(Arrays.asList(categoriaDto));
 
         mockMvc.perform(get("/site/categorias"))
@@ -65,23 +69,24 @@ public class CategoriaControllerTest {
                 .andExpect(view().name("categorias/lista"))
                 .andExpect(model().attributeExists("categorias"));
 
-        verify(categoriaService, times(1)).findByUsuario(usuario);
+        verify(categoriaService, times(1)).findAll();
 
     }
 
     @Test
     public void deveSalvarNovaCategoria() throws Exception {
-        CategoriaCreateDto categoriaCreateDto = new CategoriaCreateDto();
-        categoriaCreateDto.setDescricao("Carro");
-        categoriaCreateDto.setTipo(Tipo.SAIDA);
+        Categoria categoryParam = new Categoria();
+        categoryParam.setDescricao("Carro");
+        categoryParam.setTipo(Tipo.SAIDA);
 
-        when(categoriaService.save(categoriaCreateDto,usuario)).thenReturn(categoriaDto);
+
+        when(categoriaService.save(categoryParam)).thenReturn(this.categoria);
 
         mockMvc.perform(post("/site/categorias")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .with(user(usuario))
-                .param("tipo",categoriaCreateDto.getTipo().toString())
-                .param("descricao",categoriaCreateDto.getDescricao())
+                .param("tipo", this.categoria.getTipo().toString())
+                .param("descricao", this.categoria.getDescricao())
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/site/categorias/1"));

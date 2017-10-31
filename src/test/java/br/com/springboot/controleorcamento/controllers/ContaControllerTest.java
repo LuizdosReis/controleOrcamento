@@ -84,27 +84,27 @@ public class ContaControllerTest {
 
     }
 
-    @Test
-    public void deveRetornaPaginaComAsContasDoUsuario() throws Exception {
-        //given
-        when(contaService.findByUsuario(usuario,null)).thenReturn(new PageImpl<>(Collections.singletonList(new Conta())));
-
-        ArgumentCaptor<PageImpl<Conta>> argumentCaptor = ArgumentCaptor.forClass(PageImpl.class);
-
-
-        //when
-        String viewName = controller.getall(model,usuario);
-
-        //then
-        assertEquals("contas",viewName);
-        verify(contaService, times(1)).findByUsuario(usuario,null);
-        verify(model,times(1)).addAttribute("conta", new Conta());
-        verify(model,times(1))
-                .addAttribute(eq("contas"),argumentCaptor.capture());
-        PageImpl<Conta> pageInController = argumentCaptor.getValue();
-        assertEquals(1,pageInController.getContent().size());
-
-    }
+//    @Test
+//    public void deveRetornaPaginaComAsContasDoUsuario() throws Exception {
+//        //given
+//        when(contaService.findByUsuario(usuario,null)).thenReturn(new PageImpl<>(Collections.singletonList(new Conta())));
+//
+//        ArgumentCaptor<PageImpl<Conta>> argumentCaptor = ArgumentCaptor.forClass(PageImpl.class);
+//
+//
+//        //when
+//        String viewName = controller.getall(model,usuario);
+//
+//        //then
+//        assertEquals("contas",viewName);
+//        verify(contaService, times(1)).findByUsuario(usuario,null);
+//        verify(model,times(1)).addAttribute("conta", new Conta());
+//        verify(model,times(1))
+//                .addAttribute(eq("contas"),argumentCaptor.capture());
+//        PageImpl<Conta> pageInController = argumentCaptor.getValue();
+//        assertEquals(1,pageInController.getContent().size());
+//
+//    }
 
 
 }

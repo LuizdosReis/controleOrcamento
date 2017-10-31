@@ -12,15 +12,21 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 public class CategoriaServiceImplTest {
 
     @Mock
     private CategoriaRepository categoriaRepository;
+
+    @Mock
+    private UsuarioService usuarioService;
 
     @Mock
     private ModelMapper modelMapper;
@@ -36,34 +42,32 @@ public class CategoriaServiceImplTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        categoriaService = new CategoriaServiceImpl(categoriaRepository, modelMapper);
+        categoriaService = new CategoriaServiceImpl(categoriaRepository, usuarioService, modelMapper);
     }
 
-//    @Test
-//    public void deveSalvarCategoria() throws Exception {
-//        Usuario luiz = new Usuario();
-//        luiz.setNome("Luiz Henrique");
-//        luiz.setUsername("luiz.reis");
-//        luiz.setPassword("123");
-//
-//        Categoria carro = new Categoria();
-//        carro.setDescricao("Carro");
-//        carro.setTipo(Tipo.SAIDA);
-//
-//        CategoriaDto carroDto = new CategoriaDto();
-//        carroDto.setDescricao("Carro");
-//        carro.setTipo(Tipo.SAIDA);
-//
-//        when(categoriaRepository.save(carro)).thenReturn(carro);
-//
-//        when(modelMapper.map(carroDto,Categoria.class)).thenReturn(carro);
-//
-//        CategoriaDto categoriaDtoRetornada = categoriaService.save(carroDto, luiz);
-//
-//        assertThat(categoriaDtoRetornada.getDescricao()).isEqualTo(carro.getDescricao());
-//        assertThat(categoriaDtoRetornada.getTipo()).isEqualTo(carro.getTipo());
-//        verify(categoriaRepository,times(1)).save(carro);
-//    }
+    @Test
+    public void deveSalvarCategoria() throws Exception {
+        Usuario luiz = new Usuario();
+        luiz.setNome("Luiz Henrique");
+        luiz.setUsername("luiz.reis");
+        luiz.setPassword("123");
+
+        Categoria carro = new Categoria();
+        carro.setDescricao("Carro");
+        carro.setTipo(Tipo.SAIDA);
+        carro.setUsuario(luiz);
+
+        when(categoriaRepository.save(carro)).thenReturn(carro);
+        when(usuarioService.getCurrentUser()).thenReturn(luiz);
+
+        Categoria categorySaved = categoriaService.save(carro);
+
+        assertThat(categorySaved.getDescricao()).isEqualTo(carro.getDescricao());
+        assertThat(categorySaved.getTipo()).isEqualTo(carro.getTipo());
+        assertThat(categorySaved.getUsuario()).isEqualTo(luiz);
+        verify(categoriaRepository,times(1)).save(carro);
+        verify(usuarioService,times(1)).getCurrentUser();
+    }
 
 //    @Test
 //    public void naoDeveSalvarCategoriaSemUsuario() throws Exception {
