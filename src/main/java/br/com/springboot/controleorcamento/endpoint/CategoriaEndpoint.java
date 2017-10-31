@@ -23,18 +23,18 @@ public class CategoriaEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@Valid @RequestBody CategoriaCreateDto categoria, @AuthenticationPrincipal Usuario usuario) {
-        return new ResponseEntity<>(categoriaService.save(categoria,usuario), HttpStatus.CREATED);
+    public ResponseEntity<?> save(@Valid @RequestBody CategoriaCreateDto categoria) {
+        return new ResponseEntity<>(categoriaService.save(categoria), HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<?> listaTodos(Pageable pageable,@AuthenticationPrincipal Usuario usuario){
-        return new ResponseEntity<>(categoriaService.findByUsuario(usuario,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(categoriaService.findAll(pageable),HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@Valid @RequestBody CategoriaUpdateDto categoriaDto, @AuthenticationPrincipal Usuario usuario){
-        categoriaService.update(categoriaDto,usuario);
+    public ResponseEntity<?> update(@Valid @RequestBody CategoriaUpdateDto categoriaDto){
+        categoriaService.update(categoriaDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -45,8 +45,8 @@ public class CategoriaEndpoint {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<?> findById(@PathVariable("id") Long id,@AuthenticationPrincipal Usuario usuario){
-        return new ResponseEntity<>(categoriaService.findById(id,usuario),HttpStatus.OK);
+    public ResponseEntity<?> findById(@PathVariable("id") Long id){
+        return new ResponseEntity<>(categoriaService.findOne(id),HttpStatus.OK);
     }
 
 

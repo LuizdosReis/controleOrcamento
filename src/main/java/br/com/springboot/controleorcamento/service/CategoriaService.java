@@ -13,19 +13,19 @@ import java.util.List;
 public interface CategoriaService {
     CategoriaDto save(CategoriaCreateDto categoriaDto);
 
-    Categoria save(Categoria categoria,Usuario usuario);
+    Categoria save(Categoria categoria);
 
-    Page<CategoriaDto> findByUsuario(Usuario usuario, Pageable pageable);
+    Page<CategoriaDto> findAll(Pageable pageable);
 
-    List<CategoriaDto> findByUsuario(Usuario usuario);
+    List<CategoriaDto> findAll();
 
-    void update(CategoriaUpdateDto categoriaDto, Usuario usuario);
+    void update(CategoriaUpdateDto categoriaDto);
 
     void verificaSeCategoriaPertencemAoUsuario(Categoria categoria, Usuario usuario);
 
-    void delete(Long id, Usuario usuario);
+    void delete(Long id);
 
-    CategoriaDto findById(Long id, Usuario usuario);
+    CategoriaDto findOne(Long id);
 
-    Categoria findOne(Long id);
+    Categoria findBy(Long id);
 }

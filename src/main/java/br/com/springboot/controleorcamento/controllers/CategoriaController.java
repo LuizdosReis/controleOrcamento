@@ -1,19 +1,14 @@
 package br.com.springboot.controleorcamento.controllers;
 
 
-import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
 import br.com.springboot.controleorcamento.dto.CategoriaDto;
 import br.com.springboot.controleorcamento.model.Categoria;
 import br.com.springboot.controleorcamento.model.Tipo;
-import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.service.CategoriaService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/site/categorias")
@@ -27,9 +22,9 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public String getAll(Model model, @AuthenticationPrincipal Usuario usuario){
+    public String getAll(Model model){
 
-        model.addAttribute("categorias", categoriaService.findByUsuario(usuario));
+        model.addAttribute("categorias", categoriaService.findAll());
 
         return "categorias/lista";
     }
@@ -42,11 +37,11 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public String saveOrUpdate(@ModelAttribute Categoria categoria, @AuthenticationPrincipal Usuario usuario) {
+    public String saveOrUpdate(@ModelAttribute Categoria categoria) {
 
-        Categoria categoriaSalva = categoriaService.save(categoria, usuario);
+        Categoria categorySaved = categoriaService.save(categoria);
 
-        return "redirect:/site/categorias/" + categoriaSalva.getId();
+        return "redirect:/site/categorias/" + categorySaved.getId();
     }
 
     @GetMapping("/new")
@@ -59,8 +54,8 @@ public class CategoriaController {
     }
 
     @GetMapping("/{id}/update")
-    public String updateCategory(@PathVariable long id, Model model,@AuthenticationPrincipal Usuario usuario){
-        model.addAttribute("categoria", categoriaService.findById(id,usuario));
+    public String updateCategory(@PathVariable long id, Model model){
+        model.addAttribute("categoria", categoriaService.findOne(id));
 
         model.addAttribute("tipos", Tipo.values());
 
@@ -68,13 +63,11 @@ public class CategoriaController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteCategory(@PathVariable long id,@AuthenticationPrincipal Usuario usuario){
+    public String deleteCategory(@PathVariable long id){
 
-        categoriaService.delete(id,usuario);
+        categoriaService.delete(id);
 
-       // model.addAttribute("tipos", Tipo.values());
-
-        return "categorias/form";
+        return "redirect:/site/categorias";
     }
 
 

@@ -57,7 +57,7 @@ public class DespesaServiceImpl implements DespesaService {
     }
 
     private Despesa adicionaDespesa(Despesa despesa,Conta conta) {
-        despesa.setCategoria(categoriaService.findOne(despesa.getCategoria().getId()));
+        despesa.setCategoria(categoriaService.findBy(despesa.getCategoria().getId()));
 
         conta.adicionaDespesa(despesa);
 
@@ -90,7 +90,7 @@ public class DespesaServiceImpl implements DespesaService {
 
     @Override
     public Page<Despesa> findByCategoria(long idCategoria, Pageable pageable) {
-        Categoria categoria = categoriaService.findOne(idCategoria);
+        Categoria categoria = categoriaService.findBy(idCategoria);
         return despesaRepository.findByCategoria(categoria,pageable);
     }
 

@@ -23,38 +23,40 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     private static final String NENHUMA_CATEGORIA_ENCONTRADO_NO_ID = "Nenhuma categoria encontrado no id";
     private final CategoriaRepository categoriaRepository;
+    private final UsuarioService usuarioService;
 
     private final ModelMapper modelMapper;
 
-    public CategoriaServiceImpl(CategoriaRepository categoriaRepository, ModelMapper modelMapper) {
+    public CategoriaServiceImpl(CategoriaRepository categoriaRepository, UsuarioService usuarioService, ModelMapper modelMapper) {
         this.categoriaRepository = categoriaRepository;
+        this.usuarioService = usuarioService;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public CategoriaDto save(CategoriaCreateDto categoriaDto, Usuario usuario) {
+    public CategoriaDto save(CategoriaCreateDto categoriaDto) {
         log.debug("CategoriaService - save");
 
         Categoria categoria = modelMapper.map(categoriaDto,Categoria.class);
 
-        categoria.setUsuario(usuario);
+        categoria.setUsuario(usuarioService.getCurrentUser());
         categoria = categoriaRepository.save(categoria);
         return modelMapper.map(categoria,CategoriaDto.class);
     }
 
     @Override
-    public Categoria save(Categoria categoria, Usuario usuario) {
+    public Categoria save(Categoria categoria) {
         log.debug("CategoriaService - save");
 
-        categoria.setUsuario(usuario);
+        categoria.setUsuario(usuarioService.getCurrentUser());
 
         return categoriaRepository.save(categoria);
     }
 
     @Override
-    public Page<CategoriaDto> findByUsuario(Usuario usuario, Pageable pageable) {
+    public Page<CategoriaDto> findAll(Pageable pageable) {
         log.debug("CategoriaService - findByUsuario");
-        Page<Categoria> page = categoriaRepository.findByUsuario(usuario, pageable);
+        Page<Categoria> page = categoriaRepository.findByUsuario(usuarioService.getCurrentUser(), pageable);
 
         List<CategoriaDto> categoriasDtos = page.getContent()
                 .stream()
@@ -65,8 +67,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public List<CategoriaDto> findByUsuario(Usuario usuario) {
-        List<Categoria> categorias = categoriaRepository.findByUsuario(usuario);
+    public List<CategoriaDto> findAll() {
+        List<Categoria> categorias = categoriaRepository.findByUsuario(usuarioService.getCurrentUser());
 
         return categorias.stream()
                 .map(categoria -> modelMapper.map(categoria,CategoriaDto.class))
@@ -74,10 +76,12 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public void update(CategoriaUpdateDto categoriaDto, Usuario usuario) {
+    public void update(CategoriaUpdateDto categoriaDto) {
         Categoria categoria = modelMapper.map(categoriaDto, Categoria.class);
 
         verificaSeGastoExiste(categoria.getId());
+
+        Usuario usuario = usuarioService.getCurrentUser();
 
         verificaSeCategoriaPertencemAoUsuario(categoria,usuario);
 
@@ -94,23 +98,23 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public void delete(Long id, Usuario usuario) {
+    public void delete(Long id) {
         verificaSeGastoExiste(id);
         categoriaRepository.deleteById(id);
     }
 
     @Override
-    public CategoriaDto findById(Long id, Usuario usuario) {
+    public CategoriaDto findOne(Long id) {
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(NENHUMA_CATEGORIA_ENCONTRADO_NO_ID, null));
 
-        verificaSeCategoriaPertencemAoUsuario(categoria,usuario);
+        verificaSeCategoriaPertencemAoUsuario(categoria,usuarioService.getCurrentUser());
 
         return modelMapper.map(categoria,CategoriaDto.class);
     }
 
     @Override
-    public Categoria findOne(Long id) {
+    public Categoria findBy(Long id) {
         return categoriaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(NENHUMA_CATEGORIA_ENCONTRADO_NO_ID, null));
     }
