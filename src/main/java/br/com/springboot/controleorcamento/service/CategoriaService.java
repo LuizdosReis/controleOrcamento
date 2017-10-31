@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface CategoriaService {
-    CategoriaDto save(CategoriaCreateDto categoriaDto, Usuario usuario);
+    CategoriaDto save(CategoriaCreateDto categoriaDto);
 
     Categoria save(Categoria categoria,Usuario usuario);
 

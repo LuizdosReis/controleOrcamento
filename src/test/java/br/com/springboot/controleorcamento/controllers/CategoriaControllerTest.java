@@ -75,7 +75,6 @@ public class CategoriaControllerTest {
         categoriaCreateDto.setDescricao("Carro");
         categoriaCreateDto.setTipo(Tipo.SAIDA);
 
-
         when(categoriaService.save(categoriaCreateDto,usuario)).thenReturn(categoriaDto);
 
         mockMvc.perform(post("/site/categorias")
@@ -84,7 +83,6 @@ public class CategoriaControllerTest {
                 .param("tipo",categoriaCreateDto.getTipo().toString())
                 .param("descricao",categoriaCreateDto.getDescricao())
                 )
-
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/site/categorias/1"));
     }
