@@ -1,7 +1,7 @@
 package br.com.springboot.controleorcamento.converter;
 
 import br.com.springboot.controleorcamento.dto.CategoriaDto;
-import br.com.springboot.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.model.Category;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,11 +21,11 @@ public class CategoriaConverter {
         this.modelMapper = iModelMapper;
     }
 
-    public static CategoriaDto convertToDto(Categoria categoria) {
-        return modelMapper.map(categoria, CategoriaDto.class);
+    public static CategoriaDto convertToDto(Category category) {
+        return modelMapper.map(category, CategoriaDto.class);
     }
 
-    public static Categoria convertToEntity(CategoriaDto categoriaDto) {
-         return modelMapper.map(categoriaDto,Categoria.class);
+    public static Category convertToEntity(CategoriaDto categoriaDto) {
+         return modelMapper.map(categoriaDto,Category.class);
     }
 }

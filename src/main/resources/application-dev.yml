@@ -7,7 +7,7 @@ spring:
       validation-query: SELECT 1
       max-active: 5
     username: postgres
-    password: root
+    password: postgres
 
   jpa:
     show-sql: true

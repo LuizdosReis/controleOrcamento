@@ -8,7 +8,8 @@
 <body>
 
     <div th:replace="header :: header"/>
-    <!--/*@thymesVar id="conta" type="br.com.springboot.controleorcamento.model.Conta"*/-->
+    <!--/*@thymesVar id="account" type="br.com.springboot.controleorcamento.model.Account"*/-->
+    <!--/*@thymesVar id="accounts" type="java.util.List"*/-->
     <div class="container">
         <div class="row">
             <div class="col-md-2">
@@ -18,7 +19,7 @@
                 <div class="row">
                     <section class="col-md-6">
                         <h2 class="text-center">Cadastro</h2>
-                        <form th:action="@{/site/contas}" th:object="${conta}" method="post">
+                        <form th:action="@{/site/account}" th:object="${account}" method="post">
                             <div class="form-group">
                                 <label for="descricao">Descrição</label>
                                 <input type="text" class="form-control" th:field="*{descricao}" id="descricao" placeholder="Descrição"/>
@@ -36,7 +37,7 @@
                                 <h2 class="panel-title">Contas</h2>
                             </div>
                             <div class="panel-body">
-                                <div class="table-responsive" th:if="${not #lists.isEmpty(contas)}">
+                                <div class="table-responsive" th:if="${not #lists.isEmpty(accounts)}">
                                     <table class="table table-hover">
                                         <thead class="thead-inverse">
                                         <tr>
@@ -46,17 +47,18 @@
                                         </thead>
                                         <tbody>
 
-                                        <tr th:each="conta: ${contas.content}">
+                                        <tr th:each="account: ${accounts}">
 
                                             <td>
-                                                <a href="#" th:href="@{'/site/contas/'+${conta.id}}" th:text="${conta.descricao}">
+                                                <a href="#" th:href="@{'/site/accounts/'+${account.id}}" th:text="${account.descricao}">
                                                 </a>
                                             </td>
-                                            <td th:text="${conta.saldo}"></td>
+                                            <td th:text="${account.saldo}"></td>
 
                                         </tr>
                                         </tbody>
                                     </table>
+                                    <div th:replace="pagination :: paginationbar"/>
                                 </div>
                             </div>
                         </div>

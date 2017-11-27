@@ -3,7 +3,7 @@ package br.com.springboot.controleorcamento.service;
 import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
 import br.com.springboot.controleorcamento.dto.CategoriaDto;
 import br.com.springboot.controleorcamento.dto.CategoriaUpdateDto;
-import br.com.springboot.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.model.Category;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.repository.CategoriaRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -19,15 +19,15 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class CategoriaServiceImpl implements CategoriaService {
+public class CategoryServiceImpl implements CategoryService {
 
-    private static final String NENHUMA_CATEGORIA_ENCONTRADO_NO_ID = "Nenhuma categoria encontrado no id";
+    private static final String NENHUMA_CATEGORIA_ENCONTRADO_NO_ID = "Nenhuma category encontrado no id";
     private final CategoriaRepository categoriaRepository;
     private final UsuarioService usuarioService;
 
     private final ModelMapper modelMapper;
 
-    public CategoriaServiceImpl(CategoriaRepository categoriaRepository, UsuarioService usuarioService, ModelMapper modelMapper) {
+    public CategoryServiceImpl(CategoriaRepository categoriaRepository, UsuarioService usuarioService, ModelMapper modelMapper) {
         this.categoriaRepository = categoriaRepository;
         this.usuarioService = usuarioService;
         this.modelMapper = modelMapper;
@@ -35,28 +35,28 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public CategoriaDto save(CategoriaCreateDto categoriaDto) {
-        log.debug("CategoriaService - save");
+        log.debug("CategoryService - save");
 
-        Categoria categoria = modelMapper.map(categoriaDto,Categoria.class);
+        Category category = modelMapper.map(categoriaDto,Category.class);
 
-        categoria.setUsuario(usuarioService.getCurrentUser());
-        categoria = categoriaRepository.save(categoria);
-        return modelMapper.map(categoria,CategoriaDto.class);
+        category.setUsuario(usuarioService.getCurrentUser());
+        category = categoriaRepository.save(category);
+        return modelMapper.map(category,CategoriaDto.class);
     }
 
     @Override
-    public Categoria save(Categoria categoria) {
-        log.debug("CategoriaService - save");
+    public Category save(Category category) {
+        log.debug("CategoryService - save");
 
-        categoria.setUsuario(usuarioService.getCurrentUser());
+        category.setUsuario(usuarioService.getCurrentUser());
 
-        return categoriaRepository.save(categoria);
+        return categoriaRepository.save(category);
     }
 
     @Override
     public Page<CategoriaDto> findAll(Pageable pageable) {
-        log.debug("CategoriaService - findByUsuario");
-        Page<Categoria> page = categoriaRepository.findByUsuario(usuarioService.getCurrentUser(), pageable);
+        log.debug("CategoryService - findAll");
+        Page<Category> page = categoriaRepository.findByUsuario(usuarioService.getCurrentUser(), pageable);
 
         List<CategoriaDto> categoriasDtos = page.getContent()
                 .stream()
@@ -68,33 +68,33 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public List<CategoriaDto> findAll() {
-        List<Categoria> categorias = categoriaRepository.findByUsuario(usuarioService.getCurrentUser());
+        List<Category> categories = categoriaRepository.findByUsuario(usuarioService.getCurrentUser());
 
-        return categorias.stream()
+        return categories.stream()
                 .map(categoria -> modelMapper.map(categoria,CategoriaDto.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public void update(CategoriaUpdateDto categoriaDto) {
-        Categoria categoria = modelMapper.map(categoriaDto, Categoria.class);
+        Category category = modelMapper.map(categoriaDto, Category.class);
 
-        verificaSeGastoExiste(categoria.getId());
+        verificaSeGastoExiste(category.getId());
 
         Usuario usuario = usuarioService.getCurrentUser();
 
-        verificaSeCategoriaPertencemAoUsuario(categoria,usuario);
+        verificaSeCategoriaPertencemAoUsuario(category,usuario);
 
-        categoria.setUsuario(usuario);
+        category.setUsuario(usuario);
 
-        categoriaRepository.save(categoria);
+        categoriaRepository.save(category);
     }
 
 
     @Override
-    public void verificaSeCategoriaPertencemAoUsuario(Categoria categoria, Usuario usuario) {
-       if(!categoriaRepository.findByUsuario(usuario).contains(categoria))
-           throw new IllegalArgumentException("Categoria não pertence ao usuário logado");
+    public void verificaSeCategoriaPertencemAoUsuario(Category category, Usuario usuario) {
+       if(!categoriaRepository.findByUsuario(usuario).contains(category))
+           throw new IllegalArgumentException("Category não pertence ao usuário logado");
     }
 
     @Override
@@ -105,16 +105,16 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public CategoriaDto findOne(Long id) {
-        Categoria categoria = categoriaRepository.findById(id)
+        Category category = categoriaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(NENHUMA_CATEGORIA_ENCONTRADO_NO_ID, null));
 
-        verificaSeCategoriaPertencemAoUsuario(categoria,usuarioService.getCurrentUser());
+        verificaSeCategoriaPertencemAoUsuario(category,usuarioService.getCurrentUser());
 
-        return modelMapper.map(categoria,CategoriaDto.class);
+        return modelMapper.map(category,CategoriaDto.class);
     }
 
     @Override
-    public Categoria findBy(Long id) {
+    public Category findBy(Long id) {
         return categoriaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(NENHUMA_CATEGORIA_ENCONTRADO_NO_ID, null));
     }

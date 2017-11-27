@@ -1,7 +1,7 @@
 package br.com.springboot.controleorcamento.service;
 
-import br.com.springboot.controleorcamento.model.Categoria;
-import br.com.springboot.controleorcamento.model.Conta;
+import br.com.springboot.controleorcamento.model.Category;
+import br.com.springboot.controleorcamento.model.Account;
 import br.com.springboot.controleorcamento.model.Despesa;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.repository.DespesaRepository;
@@ -18,18 +18,18 @@ import java.time.LocalDate;
 public class DespesaServiceImpl implements DespesaService {
 
     private final DespesaRepository despesaRepository;
-    private final CategoriaService categoriaService;
+    private final CategoryService categoryService;
     private final UsuarioService usuarioService;
-    private final ContaService contaService;
+    private final AccountService accountService;
 
     public DespesaServiceImpl(DespesaRepository despesaRepository,
-                              CategoriaService categoriaService,
+                              CategoryService categoryService,
                               UsuarioService usuarioService,
-                              ContaService contaService) {
+                              AccountService accountService) {
         this.despesaRepository = despesaRepository;
-        this.categoriaService = categoriaService;
+        this.categoryService = categoryService;
         this.usuarioService = usuarioService;
-        this.contaService = contaService;
+        this.accountService = accountService;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class DespesaServiceImpl implements DespesaService {
 
         log.debug("Metodo save");
 
-        Conta conta = contaService.findOne(despesa.getConta().getId());
+        Account conta = accountService.findOne(despesa.getConta().getId());
 
         return adicionaDespesa(despesa,conta);
     }
@@ -46,7 +46,7 @@ public class DespesaServiceImpl implements DespesaService {
     public void update(Despesa despesa) {
         verificaSeDespesaExiste(despesa.getId());
 
-        Conta conta = contaService.findOne(despesa.getConta().getId());
+        Account conta = accountService.findOne(despesa.getConta().getId());
 
         conta.getDespesas().stream()
                 .filter(d -> d.getId().equals(despesa.getId()))
@@ -56,8 +56,8 @@ public class DespesaServiceImpl implements DespesaService {
         adicionaDespesa(despesa,conta);
     }
 
-    private Despesa adicionaDespesa(Despesa despesa,Conta conta) {
-        despesa.setCategoria(categoriaService.findBy(despesa.getCategoria().getId()));
+    private Despesa adicionaDespesa(Despesa despesa,Account conta) {
+        despesa.setCategory(categoryService.findBy(despesa.getCategory().getId()));
 
         conta.adicionaDespesa(despesa);
 
@@ -90,8 +90,8 @@ public class DespesaServiceImpl implements DespesaService {
 
     @Override
     public Page<Despesa> findByCategoria(long idCategoria, Pageable pageable) {
-        Categoria categoria = categoriaService.findBy(idCategoria);
-        return despesaRepository.findByCategoria(categoria,pageable);
+        Category category = categoryService.findBy(idCategoria);
+        return despesaRepository.findByCategory(category,pageable);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class DespesaServiceImpl implements DespesaService {
 
     private void verificaCategoria(Despesa despesa, Usuario usuario) {
 
-        categoriaService.verificaSeCategoriaPertencemAoUsuario(despesa.getCategoria(),usuario);
+        categoryService.verificaSeCategoriaPertencemAoUsuario(despesa.getCategory(),usuario);
 
     }
 }

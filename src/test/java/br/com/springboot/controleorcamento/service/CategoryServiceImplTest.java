@@ -1,7 +1,6 @@
 package br.com.springboot.controleorcamento.service;
 
-import br.com.springboot.controleorcamento.dto.CategoriaDto;
-import br.com.springboot.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.model.Category;
 import br.com.springboot.controleorcamento.model.Tipo;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.repository.CategoriaRepository;
@@ -12,7 +11,6 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
@@ -20,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
-public class CategoriaServiceImplTest {
+public class CategoryServiceImplTest {
 
     @Mock
     private CategoriaRepository categoriaRepository;
@@ -32,7 +30,7 @@ public class CategoriaServiceImplTest {
     private ModelMapper modelMapper;
 
 
-    private CategoriaService categoriaService;
+    private CategoryService categoryService;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -42,7 +40,7 @@ public class CategoriaServiceImplTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        categoriaService = new CategoriaServiceImpl(categoriaRepository, usuarioService, modelMapper);
+        categoryService = new CategoryServiceImpl(categoriaRepository, usuarioService, modelMapper);
     }
 
     @Test
@@ -52,7 +50,7 @@ public class CategoriaServiceImplTest {
         luiz.setUsername("luiz.reis");
         luiz.setPassword("123");
 
-        Categoria carro = new Categoria();
+        Category carro = new Category();
         carro.setDescricao("Carro");
         carro.setTipo(Tipo.SAIDA);
         carro.setUsuario(luiz);
@@ -60,7 +58,7 @@ public class CategoriaServiceImplTest {
         when(categoriaRepository.save(carro)).thenReturn(carro);
         when(usuarioService.getCurrentUser()).thenReturn(luiz);
 
-        Categoria categorySaved = categoriaService.save(carro);
+        Category categorySaved = categoryService.save(carro);
 
         assertThat(categorySaved.getDescricao()).isEqualTo(carro.getDescricao());
         assertThat(categorySaved.getTipo()).isEqualTo(carro.getTipo());
@@ -73,12 +71,12 @@ public class CategoriaServiceImplTest {
 //    public void naoDeveSalvarCategoriaSemUsuario() throws Exception {
 //        thrown.expect(ConstraintViolationException.class);
 //
-//        Categoria carro = new Categoria();
+//        Category carro = new Category();
 //        carro.setDescricao("Carro");
 //
 //        when(categoriaRepository.save(carro)).thenThrow(ConstraintViolationException.class);
 //
-//        categoriaService.save(carro,null);
+//        categoryService.save(carro,null);
 //    }
 //
 //    @Test
@@ -108,10 +106,10 @@ public class CategoriaServiceImplTest {
 //
 //        when(categoriaRepository.findByUsuario(luiz,new PageRequest(0,20))).thenReturn(new PageImpl<>(Collections.singletonList(categoriaInfo)));
 //
-//        List<CategoriaInfo> categorias = categoriaService.findByUsuario(luiz, new PageRequest(0,20)).getContent();
+//        List<CategoriaInfo> categories = categoryService.findByUsuario(luiz, new PageRequest(0,20)).getContent();
 //
-//        assertThat(categorias.size()).isEqualTo(1);
-//        assertThat(categorias.get(0)).isEqualTo(categoriaInfo);
+//        assertThat(categories.size()).isEqualTo(1);
+//        assertThat(categories.get(0)).isEqualTo(categoriaInfo);
 //
 //    }
 //

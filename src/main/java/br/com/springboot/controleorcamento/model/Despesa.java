@@ -36,9 +36,9 @@ public class Despesa extends AbstractEntity {
 
     @NotNull
     @ManyToOne
-    private Categoria categoria;
+    private Category category;
 
     @NotNull
     @ManyToOne
-    private Conta conta;
+    private Account conta;
 }

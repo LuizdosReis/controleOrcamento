@@ -1,11 +1,10 @@
 package br.com.springboot.controleorcamento.controllers;
 
-import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
 import br.com.springboot.controleorcamento.dto.CategoriaDto;
-import br.com.springboot.controleorcamento.model.Categoria;
+import br.com.springboot.controleorcamento.model.Category;
 import br.com.springboot.controleorcamento.model.Tipo;
 import br.com.springboot.controleorcamento.model.Usuario;
-import br.com.springboot.controleorcamento.service.CategoriaService;
+import br.com.springboot.controleorcamento.service.CategoryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -22,16 +21,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class CategoriaControllerTest {
+public class CategoryControllerTest {
 
     @Mock
-    CategoriaService categoriaService;
+    CategoryService categoryService;
 
-    CategoriaController categoriaController;
+    CategoriesController categoriesController;
 
     Usuario usuario;
 
-    Categoria categoria;
+    Category category;
 
     MockMvc mockMvc;
 
@@ -39,19 +38,19 @@ public class CategoriaControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        categoriaController = new CategoriaController(categoriaService);
+        categoriesController = new CategoriesController(categoryService);
 
         usuario = new Usuario();
         usuario.setId(1L);
         usuario.setNome("luiz henrique dandolini dos reis");
         usuario.setUsername("luiz.reis");
 
-        categoria = new Categoria();
-        categoria.setDescricao("Carro");
-        categoria.setTipo(Tipo.SAIDA);
-        categoria.setId(1L);
+        category = new Category();
+        category.setDescricao("Carro");
+        category.setTipo(Tipo.SAIDA);
+        category.setId(1L);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(categoriaController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(categoriesController).build();
     }
 
     @Test
@@ -61,43 +60,43 @@ public class CategoriaControllerTest {
         categoriaDto.setTipo(Tipo.SAIDA);
         categoriaDto.setId(1L);
 
-        when(categoriaService.findAll())
+        when(categoryService.findAll())
                 .thenReturn(Arrays.asList(categoriaDto));
 
-        mockMvc.perform(get("/site/categorias"))
+        mockMvc.perform(get("/categories"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("categorias/lista"))
-                .andExpect(model().attributeExists("categorias"));
+                .andExpect(view().name("categories/lista"))
+                .andExpect(model().attributeExists("categories"));
 
-        verify(categoriaService, times(1)).findAll();
+        verify(categoryService, times(1)).findAll();
 
     }
 
     @Test
-    public void deveSalvarNovaCategoria() throws Exception {
-        Categoria categoryParam = new Categoria();
+    public void testSaveNewCategory() throws Exception {
+        Category categoryParam = new Category();
         categoryParam.setDescricao("Carro");
         categoryParam.setTipo(Tipo.SAIDA);
 
 
-        when(categoriaService.save(categoryParam)).thenReturn(this.categoria);
+        when(categoryService.save(categoryParam)).thenReturn(this.category);
 
-        mockMvc.perform(post("/site/categorias")
+        mockMvc.perform(post("/site/categories")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .with(user(usuario))
-                .param("tipo", this.categoria.getTipo().toString())
-                .param("descricao", this.categoria.getDescricao())
+                .param("tipo", this.category.getTipo().toString())
+                .param("descricao", this.category.getDescricao())
                 )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/site/categorias/1"));
+                .andExpect(view().name("redirect:/site/categories/1"));
     }
 
     @Test
     public void testGetNewCategoryForm() throws Exception {
-        mockMvc.perform(get("/site/categorias/new"))
+        mockMvc.perform(get("/site/categories/new"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("categorias/form"))
-                .andExpect(model().attributeExists("categoria"))
+                .andExpect(view().name("categories/form"))
+                .andExpect(model().attributeExists("category"))
                 .andExpect(model().attributeExists("tipos"));
     }
 }

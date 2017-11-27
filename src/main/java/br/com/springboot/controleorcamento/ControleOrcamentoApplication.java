@@ -23,7 +23,6 @@ public class ControleOrcamentoApplication{
 	public static void main(String[] args) {
 	    SpringApplication.run(ControleOrcamentoApplication.class, args);
 	}
-	
 
 	@Bean
     @Primary
@@ -45,4 +44,6 @@ public class ControleOrcamentoApplication{
     public BCryptPasswordEncoder bcyrpt() {
         return new BCryptPasswordEncoder();
     }
+
+
 }

@@ -1,6 +1,6 @@
 //package br.com.springboot.controleorcamento.repository;
 //
-//import br.com.springboot.controleorcamento.model.Categoria;
+//import br.com.springboot.controleorcamento.model.Category;
 //import br.com.springboot.controleorcamento.model.Tipo;
 //import br.com.springboot.controleorcamento.model.Usuario;
 //import br.com.springboot.controleorcamento.projections.CategoriaInfo;
@@ -39,15 +39,15 @@
 //
 //        luiz = usuarioRepository.save(luiz);
 //
-//        Categoria categoria = new Categoria();
-//        categoria.setUsuario(luiz);
-//        categoria.setDescricao("Carro");
+//        Category category = new Category();
+//        category.setUsuario(luiz);
+//        category.setDescricao("Carro");
 //
-//        Categoria categoriaRetornada = categoriaRepository.save(categoria);
+//        Category categoriaRetornada = categoriaRepository.save(category);
 //
 //
-//        assertThat(categoriaRetornada.getDescricao()).isEqualTo(categoria.getDescricao());
-//        assertThat(categoriaRetornada.getUsuario()).isEqualTo(categoria.getUsuario());
+//        assertThat(categoriaRetornada.getDescricao()).isEqualTo(category.getDescricao());
+//        assertThat(categoriaRetornada.getUsuario()).isEqualTo(category.getUsuario());
 //
 //    }
 //
@@ -66,12 +66,12 @@
 //        luiz = usuarioRepository.save(luiz);
 //        jose = usuarioRepository.save(jose);
 //
-//        Categoria carro = new Categoria();
+//        Category carro = new Category();
 //        carro.setUsuario(luiz);
 //        carro.setDescricao("Carro");
 //        carro.setTipo(Tipo.SAIDA);
 //
-//        Categoria moto = new Categoria();
+//        Category moto = new Category();
 //        moto.setUsuario(jose);
 //        moto.setDescricao("Moto");
 //        moto.setTipo(Tipo.SAIDA);
@@ -79,12 +79,12 @@
 //        categoriaRepository.save(moto);
 //        categoriaRepository.save(carro);
 //
-//        List<CategoriaInfo> categorias = categoriaRepository.findByUsuario(luiz,new PageRequest(0, 20)).getContent();
+//        List<CategoriaInfo> categories = categoriaRepository.findByUsuario(luiz,new PageRequest(0, 20)).getContent();
 //
-//        assertThat(categorias.size()).isEqualTo(1);
-//        assertThat(categorias.get(0).getDescricao()).isEqualTo(carro.getDescricao());
-//        assertThat(categorias.get(0).getId()).isEqualTo(carro.getId());
-//        assertThat(categorias.get(0).getTipo()).isEqualTo(carro.getTipo());
+//        assertThat(categories.size()).isEqualTo(1);
+//        assertThat(categories.get(0).getDescricao()).isEqualTo(carro.getDescricao());
+//        assertThat(categories.get(0).getId()).isEqualTo(carro.getId());
+//        assertThat(categories.get(0).getTipo()).isEqualTo(carro.getTipo());
 //    }
 //
 //

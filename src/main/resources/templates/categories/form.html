@@ -8,7 +8,7 @@
 <body>
 
 <div th:replace="header :: header"/>
-<!--/*@thymesVar id="categoria" type="br.com.springboot.controleorcamento.model.Categoria"*/-->
+<!--/*@thymesVar id="category" type="br.com.springboot.controleorcamento.model.Category"*/-->
 <div class="container">
     <div class="row">
         <div class="col-md-2">
@@ -18,7 +18,7 @@
         </div>
         <section class="col-md-5">
             <h1 class="text-center">Cadastro</h1>
-            <form th:object="${categoria}" th:action="@{/site/categorias}" method="post">
+            <form th:object="${category}" th:action="@{/site/categories}" method="post">
                 <input type="hidden" th:field="*{id}">
                 <div class="panel panel-primary">
                     <div class="panel-heading">

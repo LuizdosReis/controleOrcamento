@@ -1,6 +1,6 @@
 package br.com.springboot.controleorcamento.service;
 
-import br.com.springboot.controleorcamento.model.Conta;
+import br.com.springboot.controleorcamento.model.Account;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.repository.ContaRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -13,32 +13,35 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class ContaServiceImpl implements ContaService{
+public class AccountServiceImpl implements AccountService {
 
     private final ContaRepository contaRepository;
+    private final UsuarioService usuarioService;
 
-    public ContaServiceImpl(ContaRepository contaRepository) {
+    public AccountServiceImpl(ContaRepository contaRepository, UsuarioService usuarioService) {
         this.contaRepository = contaRepository;
+        this.usuarioService = usuarioService;
     }
 
     @Override
-    public Page<Conta> findByUsuario(Usuario usuario, Pageable pageable) {
-        return contaRepository.findByUsuario(usuario,pageable);
+    public Page<Account> findAll(Pageable pageable) {
+        log.debug("CategoryService - findAll");
+        return contaRepository.findByUsuario(usuarioService.getCurrentUser(), pageable);
     }
 
     @Override
-    public Conta save(Conta conta, Usuario usuario) {
+    public Account save(Account conta, Usuario usuario) {
         conta.setUsuario(usuario);
         return contaRepository.save(conta);
     }
 
     @Override
-    public Conta findOne(Long id) {
+    public Account findOne(Long id) {
         log.debug("Service - findOne");
 
-        Optional<Conta> contaOptional = contaRepository.findById(id);
+        Optional<Account> contaOptional = contaRepository.findById(id);
 
-        if(!contaOptional.isPresent()){
+        if (!contaOptional.isPresent()) {
             throw new ResourceNotFoundException("Nenhum conta encontrado no id", null);
         }
 
@@ -46,7 +49,7 @@ public class ContaServiceImpl implements ContaService{
     }
 
     @Override
-    public void update(Conta conta) {
+    public void update(Account conta) {
         verificaSeContaExiste(conta.getId());
         contaRepository.save(conta);
     }

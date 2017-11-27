@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @EqualsAndHashCode(callSuper = true,exclude = {"usuario","tipo","descricao"})
 @ToString(callSuper = true)
-public class Categoria extends AbstractEntity {
+public class Category extends AbstractEntity {
 
     @NotEmpty(message = "A descrição não pode estar em branco")
     private String descricao;

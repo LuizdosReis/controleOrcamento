@@ -35,9 +35,9 @@ public class Receita extends AbstractEntity{
     private LocalDate data;
 
     @ManyToOne
-    private Conta conta;
+    private Account conta;
 
     @NotNull
     @ManyToOne
-    private Categoria categoria;
+    private Category category;
 }

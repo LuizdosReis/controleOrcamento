@@ -1,7 +1,7 @@
 package br.com.springboot.controleorcamento.helper;
 
 import br.com.springboot.controleorcamento.model.*;
-import br.com.springboot.controleorcamento.model.Conta;
+import br.com.springboot.controleorcamento.model.Account;
 import br.com.springboot.controleorcamento.model.Despesa;
 import br.com.springboot.controleorcamento.model.Usuario;
 
@@ -18,16 +18,16 @@ public class DespesaHelper {
         luiz.setNome("luiz henrique dandolini dos reis ");
         luiz.setPassword("123");
 
-        Categoria carro = new Categoria();
+        Category carro = new Category();
         carro.setId(1L);
 
-        Conta bancoDoBrasil = new Conta();
+        Account bancoDoBrasil = new Account();
         bancoDoBrasil.setId(1L);
 
 
         Despesa despesa = new Despesa();
         despesa.setDescricao("Gasolina e oleo");
-        despesa.setCategoria(carro);
+        despesa.setCategory(carro);
         despesa.setValor(new BigDecimal("12.50"));
         despesa.setData(LocalDate.parse("15/01/2017", DateTimeFormatter.ofPattern("dd/MM/yyy")));
         despesa.setConta(bancoDoBrasil);
@@ -36,7 +36,7 @@ public class DespesaHelper {
     }
 
     public static Despesa CriaDespesaComValorZerado(){
-        Conta bancoDoBrasil = new Conta();
+        Account bancoDoBrasil = new Account();
         bancoDoBrasil.setDescricao("banco do brasil");
         bancoDoBrasil.setSaldo(new BigDecimal("0.00"));
 

@@ -14,7 +14,7 @@ import java.util.*;
 @Data
 @EqualsAndHashCode(callSuper = true,exclude = {"despesas","receitas","usuario","saldo","descricao"})
 @ToString(callSuper = true,exclude = {"receitas","despesas"})
-public class Conta extends AbstractEntity{
+public class Account extends AbstractEntity{
 
     @NotEmpty(message = "A descrição não pode ser vazia")
     private String descricao;

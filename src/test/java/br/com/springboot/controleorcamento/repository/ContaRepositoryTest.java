@@ -1,7 +1,7 @@
 package br.com.springboot.controleorcamento.repository;
 
 import br.com.springboot.controleorcamento.helper.ContaHelper;
-import br.com.springboot.controleorcamento.model.Conta;
+import br.com.springboot.controleorcamento.model.Account;
 import br.com.springboot.controleorcamento.model.Despesa;
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,7 +30,7 @@ public class ContaRepositoryTest {
     @Autowired
     private DespesaRepository despesaRepository;
 
-    Conta conta;
+    Account conta;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -72,11 +72,11 @@ public class ContaRepositoryTest {
     @Test
     public void deveAtualizarUmaConta(){
 
-        Conta conta = contaRepository.findById(1L).get();
+        Account conta = contaRepository.findById(1L).get();
 
-        conta.setDescricao("Conta Atualizada");
+        conta.setDescricao("Account Atualizada");
 
-        Conta contaRetornada = contaRepository.save(conta);
+        Account contaRetornada = contaRepository.save(conta);
 
         assertThat(contaRetornada.getDescricao()).isEqualTo(conta.getDescricao());
 
@@ -88,7 +88,7 @@ public class ContaRepositoryTest {
 
         contaRepository.deleteById(1L);
 
-        Optional<Conta> conta = contaRepository.findById(1L);
+        Optional<Account> conta = contaRepository.findById(1L);
 
         System.out.println(conta);
 

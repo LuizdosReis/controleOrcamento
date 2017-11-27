@@ -14,7 +14,7 @@ import java.util.*;
 
 @Entity
 @Data
-@ToString(exclude = {"contas","categorias"})
+@ToString(exclude = {"accounts","categories"})
 @EqualsAndHashCode(of = {"id"})
 public class Usuario extends AbstractEntity implements UserDetails{
 
@@ -33,11 +33,11 @@ public class Usuario extends AbstractEntity implements UserDetails{
 
 	@JsonIgnore
     @OneToMany(mappedBy = "usuario")
-	private Set<Conta> contas = new HashSet<>();
+	private Set<Account> contas = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "usuario")
-    private Set<Categoria> categorias = new HashSet<>();
+    private Set<Category> categories = new HashSet<>();
 
     @Override
     public boolean isAccountNonExpired() {
@@ -69,15 +69,15 @@ public class Usuario extends AbstractEntity implements UserDetails{
 		return password;
 	}
 
-    public void setConta(Conta conta) {
+    public void setConta(Account conta) {
 	    contas.add(conta);
     }
 
-    public void setCategoria(Categoria categoria){
-        categorias.add(categoria);
+    public void setCategoria(Category category){
+        categories.add(category);
     }
 
-    public Set<Conta> getContas() {
+    public Set<Account> getContas() {
         return contas;
     }
 
@@ -87,8 +87,8 @@ public class Usuario extends AbstractEntity implements UserDetails{
     }
 
     @Transactional
-    public Set<Categoria> getCategorias() {
-        return categorias;
+    public Set<Category> getCategories() {
+        return categories;
     }
 
 
