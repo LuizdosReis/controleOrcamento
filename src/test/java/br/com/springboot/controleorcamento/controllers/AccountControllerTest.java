@@ -8,32 +8,29 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
-import java.util.Arrays;
+import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class AccountControllerTest {
 
     @Mock
     AccountService accountService;
 
-
     @Mock
     Model model;
 
     AccountController controller;
     Usuario usuario;
-    Account conta;
+    Account account;
 
     @Before
     public void setUp() throws Exception {
@@ -46,21 +43,23 @@ public class AccountControllerTest {
         usuario.setNome("luiz henrique dandolini dos reis");
         usuario.setUsername("luiz.reis");
 
-        conta = new Account();
-        conta.setId(1L);
+        account = new Account();
+        account.setId(1L);
     }
 
     @Test
-    public void deveRetornarViewContas() throws Exception {
+    public void shouldReturnViewAccounts() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-        when(accountService.findAll(null))
-                .thenReturn(new PageImpl<>(Arrays.asList(conta)));
+        when(accountService.findAll(new PageRequest(0, 20)))
+                .thenReturn(new PageImpl<>(Collections.singletonList(account)));
 
         mockMvc.perform(get("/site/accounts"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("accounts/lista"))
-                .andExpect(model().attributeExists("accounts"));
+                .andExpect(view().name("accounts/list"))
+                .andExpect(model().attributeExists("accounts"))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("page"));
     }
 
     @Test
@@ -68,7 +67,7 @@ public class AccountControllerTest {
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-        when(accountService.findOne(anyLong())).thenReturn(conta);
+        when(accountService.findOne(anyLong())).thenReturn(account);
 
         mockMvc.perform(get("/site/accounts/1"))
                 .andExpect(status().isOk())

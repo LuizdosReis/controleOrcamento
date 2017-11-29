@@ -29,7 +29,6 @@ public class AccountController {
     @GetMapping
     public String getall(Model model, Pageable pageable) {
 
-
         Page<Account> accountPage = accountService.findAll(pageable);
 
         PageWrapper<Account> page = new PageWrapper<>(accountPage, "site/accounts");

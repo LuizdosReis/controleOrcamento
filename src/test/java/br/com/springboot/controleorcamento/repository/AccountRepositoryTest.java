@@ -22,22 +22,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class ContaRepositoryTest {
+public class AccountRepositoryTest {
 
     @Autowired
-    private ContaRepository contaRepository;
+    private AccountRepository accountRepository;
 
     @Autowired
     private DespesaRepository despesaRepository;
 
-    Account conta;
+    Account account;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void setUp(){
-        conta = ContaHelper.criaConta();
+        account = ContaHelper.criaConta();
     }
 
     @Test
@@ -45,9 +45,9 @@ public class ContaRepositoryTest {
         thrown.expect(ConstraintViolationException.class);
         thrown.expectMessage("A descrição não pode ser vazia");
 
-        conta.setDescricao("");
+        account.setDescricao("");
 
-        contaRepository.save(conta);
+        accountRepository.save(account);
     }
 
     @Test
@@ -55,28 +55,28 @@ public class ContaRepositoryTest {
         thrown.expect(ConstraintViolationException.class);
         thrown.expectMessage("O valor só pode conter dois digitos após a virgula");
 
-        conta.setSaldo(new BigDecimal("12.000"));
-        contaRepository.save(conta);
+        account.setSaldo(new BigDecimal("12.000"));
+        accountRepository.save(account);
     }
 
     @Test
     public void deveCriarUmaConta(){
 
-        contaRepository.save(conta);
+        accountRepository.save(account);
 
-        assertThat(conta.getId()).isNotNull();
-        assertThat(conta.getDescricao()).isEqualTo("bradesco");
-        assertThat(conta.getSaldo()).isEqualTo(new BigDecimal("12.00"));
+        assertThat(account.getId()).isNotNull();
+        assertThat(account.getDescricao()).isEqualTo("bradesco");
+        assertThat(account.getSaldo()).isEqualTo(new BigDecimal("12.00"));
     }
 
     @Test
     public void deveAtualizarUmaConta(){
 
-        Account conta = contaRepository.findById(1L).get();
+        Account conta = accountRepository.findById(1L).get();
 
         conta.setDescricao("Account Atualizada");
 
-        Account contaRetornada = contaRepository.save(conta);
+        Account contaRetornada = accountRepository.save(conta);
 
         assertThat(contaRetornada.getDescricao()).isEqualTo(conta.getDescricao());
 
@@ -86,9 +86,9 @@ public class ContaRepositoryTest {
     public void deveLancarExcecaoParaExcluirContaComGastosCadastrados(){
 
 
-        contaRepository.deleteById(1L);
+        accountRepository.deleteById(1L);
 
-        Optional<Account> conta = contaRepository.findById(1L);
+        Optional<Account> conta = accountRepository.findById(1L);
 
         System.out.println(conta);
 

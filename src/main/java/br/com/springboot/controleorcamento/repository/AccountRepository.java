@@ -9,7 +9,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ContaRepository extends PagingAndSortingRepository<Account, Long>, JpaSpecificationExecutor<Account> {
+public interface AccountRepository extends PagingAndSortingRepository<Account, Long>, JpaSpecificationExecutor<Account> {
 
     Page<Account> findByUsuario(Usuario usuario, Pageable pageable);
+
 }
