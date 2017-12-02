@@ -1,7 +1,7 @@
 package br.com.springboot.controleorcamento.controllers;
 
 
-import br.com.springboot.controleorcamento.dto.CategoriaDto;
+import br.com.springboot.controleorcamento.dto.CategoryDto;
 import br.com.springboot.controleorcamento.model.Category;
 import br.com.springboot.controleorcamento.model.Tipo;
 import br.com.springboot.controleorcamento.service.CategoryService;
@@ -16,25 +16,25 @@ import org.springframework.data.domain.Pageable;
 @Controller
 @RequestMapping("site/categories")
 @Slf4j
-public class CategoriesController {
+public class CategoryController {
 
     private final CategoryService categoryService;
 
-    public CategoriesController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
     @GetMapping
     public String getAll(Model model, Pageable pageable){
 
-        Page<CategoriaDto> categoryPage = categoryService.findAll(pageable);
+        Page<CategoryDto> categoryPage = categoryService.findAll(pageable);
 
-        PageWrapper<CategoriaDto> page = new PageWrapper<>(categoryPage,"/site/categories");
+        PageWrapper<CategoryDto> page = new PageWrapper<>(categoryPage,"/site/categories");
 
         model.addAttribute("categories", page.getContent());
         model.addAttribute("page", page);
 
-        return "categories/lista";
+        return "categories/list";
     }
 
     @GetMapping("/{id}")
@@ -54,7 +54,7 @@ public class CategoriesController {
 
     @GetMapping("/new")
     public String newCategory(Model model){
-        model.addAttribute("category", new CategoriaDto());
+        model.addAttribute("category", CategoryDto.builder());
 
         model.addAttribute("tipos", Tipo.values());
 

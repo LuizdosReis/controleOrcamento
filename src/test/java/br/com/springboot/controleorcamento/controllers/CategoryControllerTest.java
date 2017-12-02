@@ -1,92 +1,74 @@
 package br.com.springboot.controleorcamento.controllers;
 
-import br.com.springboot.controleorcamento.dto.CategoriaDto;
+import br.com.springboot.controleorcamento.helper.CategoryHelper;
+import br.com.springboot.controleorcamento.helper.PageResquestArgumentResolver;
 import br.com.springboot.controleorcamento.model.Category;
-import br.com.springboot.controleorcamento.model.Tipo;
-import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.service.CategoryService;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 public class CategoryControllerTest {
 
-    @Mock
-    CategoryService categoryService;
-
-    CategoriesController categoriesController;
-
-    Usuario usuario;
-
-    Category category;
-
-    MockMvc mockMvc;
+    @Autowired
+    CategoryController controller;
+    @MockBean
+    private CategoryService categoryService;
+    private MockMvc mockMvc;
 
     @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-
-        categoriesController = new CategoriesController(categoryService);
-
-        usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setNome("luiz henrique dandolini dos reis");
-        usuario.setUsername("luiz.reis");
-
-        category = new Category();
-        category.setDescricao("Carro");
-        category.setTipo(Tipo.SAIDA);
-        category.setId(1L);
-
-        mockMvc = MockMvcBuilders.standaloneSetup(categoriesController).build();
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setCustomArgumentResolvers(PageResquestArgumentResolver.pageRequestArgumentResolver())
+                .build();
     }
 
     @Test
     public void deveRetornaViewLista() throws Exception {
-        CategoriaDto categoriaDto = new CategoriaDto();
-        categoriaDto.setDescricao("Carro");
-        categoriaDto.setTipo(Tipo.SAIDA);
-        categoriaDto.setId(1L);
+        when(categoryService.findAll(PageRequest.of(0, 20)))
+                .thenReturn(new PageImpl<>(Collections.singletonList(CategoryHelper.buildCategoryDto())));
 
-        when(categoryService.findAll())
-                .thenReturn(Arrays.asList(categoriaDto));
-
-        mockMvc.perform(get("/categories"))
+        mockMvc.perform(get("/site/categories"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("categories/lista"))
+                .andExpect(view().name("categories/list"))
                 .andExpect(model().attributeExists("categories"));
 
-        verify(categoryService, times(1)).findAll();
+        verify(categoryService, times(1)).findAll(PageRequest.of(0, 20));
 
     }
 
     @Test
     public void testSaveNewCategory() throws Exception {
-        Category categoryParam = new Category();
-        categoryParam.setDescricao("Carro");
-        categoryParam.setTipo(Tipo.SAIDA);
+        Category categoryParam = CategoryHelper.buildCategory();
+        categoryParam.setId(null);
+        Category categoryReturn = CategoryHelper.buildCategory();
 
-
-        when(categoryService.save(categoryParam)).thenReturn(this.category);
+        when(categoryService.save(categoryParam)).thenReturn(categoryReturn);
 
         mockMvc.perform(post("/site/categories")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .with(user(usuario))
-                .param("tipo", this.category.getTipo().toString())
-                .param("descricao", this.category.getDescricao())
-                )
+                .param("tipo", categoryReturn.getTipo().toString())
+                .param("descricao", categoryReturn.getDescricao()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/site/categories/1"));
     }

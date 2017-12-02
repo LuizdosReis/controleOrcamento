@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("v1/categorias")
+@RequestMapping("v1/categories")
 public class CategoriaEndpoint {
 
     private final CategoryService categoryService;

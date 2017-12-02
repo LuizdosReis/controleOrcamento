@@ -18,12 +18,10 @@ public class DespesaHelper {
         luiz.setNome("luiz henrique dandolini dos reis ");
         luiz.setPassword("123");
 
-        Category carro = new Category();
-        carro.setId(1L);
+        Category carro = CategoryHelper.buildCategory();
 
         Account bancoDoBrasil = new Account();
         bancoDoBrasil.setId(1L);
-
 
         Despesa despesa = new Despesa();
         despesa.setDescricao("Gasolina e oleo");

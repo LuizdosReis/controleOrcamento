@@ -1,17 +1,21 @@
 package br.com.springboot.controleorcamento.controllers;
 
+import br.com.springboot.controleorcamento.helper.ContaHelper;
+import br.com.springboot.controleorcamento.helper.PageResquestArgumentResolver;
 import br.com.springboot.controleorcamento.model.Account;
-import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.service.AccountService;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
 
 import java.util.Collections;
 
@@ -20,41 +24,38 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 public class AccountControllerTest {
 
-    @Mock
+    @MockBean
     AccountService accountService;
 
-    @Mock
-    Model model;
-
+    @Autowired
     AccountController controller;
-    Usuario usuario;
-    Account account;
+
+    private Account account;
+
+    private MockMvc mockMvc;
+
+
 
     @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+    public void setUp(){
+        this.mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setCustomArgumentResolvers(PageResquestArgumentResolver.pageRequestArgumentResolver())
+         .build();
 
-        controller = new AccountController(accountService);
-
-        usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setNome("luiz henrique dandolini dos reis");
-        usuario.setUsername("luiz.reis");
-
-        account = new Account();
-        account.setId(1L);
+        account = ContaHelper.criaConta();
     }
 
     @Test
     public void shouldReturnViewAccounts() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-
-        when(accountService.findAll(new PageRequest(0, 20)))
+        when(accountService.findAll(PageRequest.of(0,20)))
                 .thenReturn(new PageImpl<>(Collections.singletonList(account)));
 
-        mockMvc.perform(get("/site/accounts"))
+        mockMvc.perform(get("/site/accounts").param("page","0"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("accounts/list"))
                 .andExpect(model().attributeExists("accounts"))
@@ -64,9 +65,6 @@ public class AccountControllerTest {
 
     @Test
     public void deveRetornaViewById() throws Exception {
-
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-
         when(accountService.findOne(anyLong())).thenReturn(account);
 
         mockMvc.perform(get("/site/accounts/1"))

@@ -1,12 +1,14 @@
 package br.com.springboot.controleorcamento.dto;
 
 import br.com.springboot.controleorcamento.model.Tipo;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-public class CategoriaDto {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class CategoryDto {
 
     private Long id;
     private String descricao;

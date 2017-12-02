@@ -1,5 +1,6 @@
 package br.com.springboot.controleorcamento.service;
 
+import br.com.springboot.controleorcamento.helper.CategoryHelper;
 import br.com.springboot.controleorcamento.model.Category;
 import br.com.springboot.controleorcamento.model.Tipo;
 import br.com.springboot.controleorcamento.model.Usuario;
@@ -50,9 +51,7 @@ public class CategoryServiceImplTest {
         luiz.setUsername("luiz.reis");
         luiz.setPassword("123");
 
-        Category carro = new Category();
-        carro.setDescricao("Carro");
-        carro.setTipo(Tipo.SAIDA);
+        Category carro = CategoryHelper.buildCategory();
         carro.setUsuario(luiz);
 
         when(categoriaRepository.save(carro)).thenReturn(carro);

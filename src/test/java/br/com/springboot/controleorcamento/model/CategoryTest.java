@@ -1,5 +1,6 @@
 package br.com.springboot.controleorcamento.model;
 
+import br.com.springboot.controleorcamento.helper.CategoryHelper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,25 +12,19 @@ public class CategoryTest {
 
     @Before
     public void setUp(){
-        category = new Category();
-        category.setDescricao("Saúde");
-        category.setTipo(Tipo.SAIDA);
-        category.setId(1L);
+        category = CategoryHelper.buildCategory();
     }
 
     @Test
     public void deveCompararDuasCategoriasComIdsIguaisEDizerQueSaoIguais(){
-        Category categoryComparacao = new Category();
-        categoryComparacao.setId(1L);
+        Category categoryComparacao = CategoryHelper.buildCategory();
 
         assertEquals(categoryComparacao, category);
     }
 
     @Test
     public void deveCompararDuasCategoriasComIdsDiferentesEDizerQueSaoDiferentes(){
-        Category categoryComparacao = new Category();
-        categoryComparacao.setDescricao("Saúde");
-        categoryComparacao.setTipo(Tipo.SAIDA);
+        Category categoryComparacao = CategoryHelper.buildCategory();
         categoryComparacao.setId(2L);
 
         assertNotEquals(categoryComparacao, category);

@@ -2,8 +2,7 @@ package br.com.springboot.controleorcamento.model;
 
 import br.com.springboot.controleorcamento.converter.LocalDateAttributeConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Convert;
@@ -17,7 +16,8 @@ import java.time.LocalDate;
 
 @Entity
 @Data
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(callSuper = true,exclude = {"usuario","tipo","descricao"})
+@ToString(callSuper = true)
 public class Receita extends AbstractEntity{
 
     @NotEmpty(message = "A descrição não pode ser vazia")

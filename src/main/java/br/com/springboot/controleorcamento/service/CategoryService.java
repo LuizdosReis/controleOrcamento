@@ -1,7 +1,7 @@
 package br.com.springboot.controleorcamento.service;
 
 import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
-import br.com.springboot.controleorcamento.dto.CategoriaDto;
+import br.com.springboot.controleorcamento.dto.CategoryDto;
 import br.com.springboot.controleorcamento.dto.CategoriaUpdateDto;
 import br.com.springboot.controleorcamento.model.Category;
 import br.com.springboot.controleorcamento.model.Usuario;
@@ -11,13 +11,13 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface CategoryService {
-    CategoriaDto save(CategoriaCreateDto categoriaDto);
+    CategoryDto save(CategoriaCreateDto categoriaDto);
 
     Category save(Category category);
 
-    Page<CategoriaDto> findAll(Pageable pageable);
+    Page<CategoryDto> findAll(Pageable pageable);
 
-    List<CategoriaDto> findAll();
+    List<CategoryDto> findAll();
 
     void update(CategoriaUpdateDto categoriaDto);
 
@@ -25,7 +25,7 @@ public interface CategoryService {
 
     void delete(Long id);
 
-    CategoriaDto findOne(Long id);
+    CategoryDto findOne(Long id);
 
     Category findBy(Long id);
 }

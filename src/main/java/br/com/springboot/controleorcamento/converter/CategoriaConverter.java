@@ -1,6 +1,6 @@
 package br.com.springboot.controleorcamento.converter;
 
-import br.com.springboot.controleorcamento.dto.CategoriaDto;
+import br.com.springboot.controleorcamento.dto.CategoryDto;
 import br.com.springboot.controleorcamento.model.Category;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +21,11 @@ public class CategoriaConverter {
         this.modelMapper = iModelMapper;
     }
 
-    public static CategoriaDto convertToDto(Category category) {
-        return modelMapper.map(category, CategoriaDto.class);
+    public static CategoryDto convertToDto(Category category) {
+        return modelMapper.map(category, CategoryDto.class);
     }
 
-    public static Category convertToEntity(CategoriaDto categoriaDto) {
-         return modelMapper.map(categoriaDto,Category.class);
+    public static Category convertToEntity(CategoryDto categoryDto) {
+         return modelMapper.map(categoryDto,Category.class);
     }
 }

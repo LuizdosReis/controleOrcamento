@@ -1,7 +1,10 @@
 package br.com.springboot.controleorcamento.endpoint;
 
+import br.com.springboot.controleorcamento.helper.CategoryHelper;
 import br.com.springboot.controleorcamento.model.Category;
 import br.com.springboot.controleorcamento.repository.CategoriaRepository;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -39,29 +44,27 @@ public class CategoryEndpointTest {
 
     @Before
     public void setUp(){
-        Category category = new Category();
-        category.setId(1L);
-        category.setDescricao("Carro");
+        Category category = CategoryHelper.buildCategory();
 
         given(categoriaRepository.save(category)).willReturn(category);
     }
 
-//    @Test
-//    @WithMockUser
-//    public void deveRetornaStatusCriadoECategoriaCriada() throws Exception {
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-//
-//
-//        mockMvc.perform(post("/v1/categories/protected")
-//                .contentType(APPLICATION_JSON_UTF8)
-//                .content(mapper.writeValueAsBytes(category)))
-//
-//                .andDo(print())
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.id",is(1)))
-//                .andExpect(jsonPath("$.descricao",is("Carro")));
-//    }
+    @Test
+    @WithMockUser
+    public void deveRetornaStatusCriadoECategoriaCriada() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+
+        mockMvc.perform(post("/v1/categories")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(mapper.writeValueAsBytes(category)))
+
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id",is(1)))
+                .andExpect(jsonPath("$.descricao",is("Carro")));
+    }
 //
 //    @Test
 //    @WithMockUser

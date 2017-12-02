@@ -1,7 +1,7 @@
 package br.com.springboot.controleorcamento.service;
 
 import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
-import br.com.springboot.controleorcamento.dto.CategoriaDto;
+import br.com.springboot.controleorcamento.dto.CategoryDto;
 import br.com.springboot.controleorcamento.dto.CategoriaUpdateDto;
 import br.com.springboot.controleorcamento.model.Category;
 import br.com.springboot.controleorcamento.model.Usuario;
@@ -34,14 +34,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoriaDto save(CategoriaCreateDto categoriaDto) {
+    public CategoryDto save(CategoriaCreateDto categoriaDto) {
         log.debug("CategoryService - save");
 
         Category category = modelMapper.map(categoriaDto,Category.class);
 
         category.setUsuario(usuarioService.getCurrentUser());
         category = categoriaRepository.save(category);
-        return modelMapper.map(category,CategoriaDto.class);
+        return modelMapper.map(category,CategoryDto.class);
     }
 
     @Override
@@ -54,24 +54,24 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Page<CategoriaDto> findAll(Pageable pageable) {
+    public Page<CategoryDto> findAll(Pageable pageable) {
         log.debug("CategoryService - findAll");
         Page<Category> page = categoriaRepository.findByUsuario(usuarioService.getCurrentUser(), pageable);
 
-        List<CategoriaDto> categoriasDtos = page.getContent()
+        List<CategoryDto> categoriasDtos = page.getContent()
                 .stream()
-                .map(categoria -> modelMapper.map(categoria,CategoriaDto.class))
+                .map(categoria -> modelMapper.map(categoria,CategoryDto.class))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(categoriasDtos, pageable, page.getTotalElements());
     }
 
     @Override
-    public List<CategoriaDto> findAll() {
+    public List<CategoryDto> findAll() {
         List<Category> categories = categoriaRepository.findByUsuario(usuarioService.getCurrentUser());
 
         return categories.stream()
-                .map(categoria -> modelMapper.map(categoria,CategoriaDto.class))
+                .map(categoria -> modelMapper.map(categoria,CategoryDto.class))
                 .collect(Collectors.toList());
     }
 
@@ -104,13 +104,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoriaDto findOne(Long id) {
+    public CategoryDto findOne(Long id) {
         Category category = categoriaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(NENHUMA_CATEGORIA_ENCONTRADO_NO_ID, null));
 
         verificaSeCategoriaPertencemAoUsuario(category,usuarioService.getCurrentUser());
 
-        return modelMapper.map(category,CategoriaDto.class);
+        return modelMapper.map(category,CategoryDto.class);
     }
 
     @Override
