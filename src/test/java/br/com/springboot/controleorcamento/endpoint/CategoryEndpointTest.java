@@ -1,129 +1,213 @@
 package br.com.springboot.controleorcamento.endpoint;
 
+import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
+import br.com.springboot.controleorcamento.dto.CategoryDto;
 import br.com.springboot.controleorcamento.helper.CategoryHelper;
 import br.com.springboot.controleorcamento.model.Category;
-import br.com.springboot.controleorcamento.repository.CategoriaRepository;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.charset.Charset;
-
-import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.*;
+import static org.springframework.http.HttpMethod.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 public class CategoryEndpointTest {
 
-    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
-
     @Autowired
-    private MockMvc mockMvc;
+    private TestRestTemplate restTemplate;
 
-    @MockBean
-    private CategoriaRepository categoriaRepository;
-
-    private Category category;
+    private HttpEntity<Void> header;
+    private HttpEntity<Void> wrongHeader;
 
     @Before
-    public void setUp(){
+    public void configHeaders() {
+        String str = "{\"username\":\"luiz.reis\",\"password\":123}";
+        HttpHeaders headers = restTemplate.postForEntity("/login", str, String.class).getHeaders();
+        this.header = new HttpEntity<>(headers);
+    }
+
+    @Before
+    public void configWrongHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "123");
+        this.wrongHeader = new HttpEntity<>(headers);
+    }
+
+    @Test
+    public void listCategoriesWhenTokenIsIncorretShouldReturnStatusCode403() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories/", GET, wrongHeader, String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(403);
+
+    }
+
+    @Test
+    public void listCategoriesWhenTokenCorretShouldReturnStatusCode200() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories/", GET, header, String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+        assertThat(response.getBody()).contains("totalElements","3");
+        assertThat(response.getBody()).contains("id","1");
+    }
+
+    @Test
+    public void getCategoryWhenTokenIsIncorretShouldReturnStatusCode403() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories/1", GET, wrongHeader, String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(403);
+
+    }
+
+    @Test
+    public void getCategoryWhenTokenIsCorretShouldReturnStatusCode200() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories/1", GET, header, String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+
+    }
+
+    @Test
+    public void getCategorieWhenTokenIsCorretAndCategoryDoesNotExistShouldReturnStatusCode404() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories/-1", GET, header, String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(404);
+
+    }
+
+    @Test
+    public void deleteCategorieWhenTokenIsIncorretShouldReturnStatusCode403() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories/1", DELETE, wrongHeader, String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(403);
+    }
+
+    @Test
+    public void deleteCategorieWhenTokenIscorretAndCategoryDoesNotExistShouldReturnStatusCode404() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories/-1", DELETE, header, String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(404);
+    }
+
+    @Test
+    public void deleteCategorieWhenTokenIscorretShouldReturnStatusCode200() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories/3", DELETE, header, String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+    }
+
+    @Test
+    public void deleteCategorieWhenTokenIscorretAndCategoryContainsRelacitionShouldReturnStatusCode500() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories/1", DELETE, header, String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(500);
+    }
+
+    @Test
+    public void saveCategoryWhenTokenIscorretShouldReturnStatusCode201() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories", POST, new HttpEntity<>(CategoryHelper.builderCreateCategoryDto(),header.getHeaders()), String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(201);
+    }
+
+    @Test
+    public void saveCategoryWhenTokenIsIncorretShouldReturnStatusCode403() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories", POST,
+                        new HttpEntity<>(CategoryHelper.builderCreateCategoryDto(),wrongHeader.getHeaders()), String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(403);
+    }
+
+    @Test
+    public void saveCategoryWithIdWhenTokenIsCorretShouldReturnStatusCode400() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories", POST,
+                        new HttpEntity<>(CategoryHelper.buildCategory(),header.getHeaders()), String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(400);
+    }
+
+    @Test
+    public void saveCategoryInvalidWhenTokenIsCorretShouldReturnStatusCode400() {
+        CategoriaCreateDto category = CategoryHelper.builderCreateCategoryDto();
+        category.setDescricao("");
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories", POST,
+                        new HttpEntity<>(category,header.getHeaders()), String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(400);
+    }
+
+    @Test
+    public void updateCategoryTokenIsCorrectShouldReturnStatusCode200() {
+        CategoryDto category = CategoryHelper.buildCategoryDto();
+        category.setDescricao("change description");
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories", PUT,
+                        new HttpEntity<>(category,header.getHeaders()), String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+
+        ResponseEntity<Category> responseCategory = restTemplate
+                .exchange("/v1/categories/"+category.getId(), GET, header, Category.class);
+
+        assertThat(responseCategory.getBody().getDescricao()).isEqualTo(category.getDescricao());
+    }
+
+    @Test
+    public void updateCategoryTokenIsIncorrectShouldReturnStatusCode403() {
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories", PUT,
+                        new HttpEntity<>(CategoryHelper.buildCategoryDto(),wrongHeader.getHeaders()), String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    }
+
+    @Test
+    public void updateCategoryDoesNotExistTokenIsCorrectShouldReturnStatusCode404() {
+        CategoryDto category = CategoryHelper.buildCategoryDto();
+        category.setId(9999L);
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories", PUT,
+                        new HttpEntity<>(category,header.getHeaders()), String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void updateCategoryWithDescriptionInvalidWhenTokenIsCorrectShouldReturnStatusCode400() {
         Category category = CategoryHelper.buildCategory();
+        category.setDescricao("");
+        ResponseEntity<String> response = restTemplate
+                .exchange("/v1/categories", POST,
+                        new HttpEntity<>(category,header.getHeaders()), String.class);
 
-        given(categoriaRepository.save(category)).willReturn(category);
+        assertThat(response.getStatusCodeValue()).isEqualTo(400);
     }
 
-    @Test
-    @WithMockUser
-    public void deveRetornaStatusCriadoECategoriaCriada() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-
-        mockMvc.perform(post("/v1/categories")
-                .contentType(APPLICATION_JSON_UTF8)
-                .content(mapper.writeValueAsBytes(category)))
-
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id",is(1)))
-                .andExpect(jsonPath("$.descricao",is("Carro")));
-    }
-//
-//    @Test
-//    @WithMockUser
-//    public void deveLancarExecaoDeValidacaoDaDescricao() throws Exception {
-//        category.setDescricao("");
-//
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-//
-//
-//        mockMvc.perform(post("/v1/categories/protected")
-//                .contentType(APPLICATION_JSON_UTF8)
-//                .content(mapper.writeValueAsBytes(category)))
-//
-//                .andDo(print())
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$.fieldMessage",is("A descrição não pode estar em branco")));
-//    }
-//
-//    @Test
-//    public void NaoDevePermitirCriacaoDeCategoriaDeUsuarioNaoAutenticado() throws Exception {
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-//
-//        mockMvc.perform(post("/v1/categories/protected")
-//                .contentType(APPLICATION_JSON_UTF8)
-//                .content(mapper.writeValueAsBytes(category)))
-//
-//                .andDo(print())
-//                .andExpect(status().isUnauthorized());
-//    }
-//
-//
-//    @Test
-//    @WithMockUser
-//    public void listaTodos() throws Exception {
-//        given(categoriaRepository.findAll(new PageRequest(0,20)))
-//                .willReturn(new PageImpl<Category>(Collections.singletonList(category)));
-//
-//        mockMvc.perform(get("/v1/categories/protected").param("page","0"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.content[0].descricao", is("Carro")))
-//                .andExpect(jsonPath("$.content[0].id",is(1)));
-//    }
-//
-//    @Test
-//    @WithMockUser
-//    public void listaTodosComPaginaInexistente() throws Exception {
-//        given(categoriaRepository.findAll(new PageRequest(6,20)))
-//                .willReturn(new PageImpl<Category>(Collections.singletonList(null)));
-//
-//        mockMvc.perform(get("/v1/categories/protected").param("page","6"))
-//                .andDo(print())
-//                .andExpect(status().isOk());
-//    }
-
-    @Test
-    public void update() throws Exception {
-    }
 
 }
