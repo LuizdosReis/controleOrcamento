@@ -1,6 +1,6 @@
 package br.com.springboot.controleorcamento.service;
 
-import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
+import br.com.springboot.controleorcamento.dto.CategoryCreateDto;
 import br.com.springboot.controleorcamento.dto.CategoryDto;
 import br.com.springboot.controleorcamento.dto.CategoriaUpdateDto;
 import br.com.springboot.controleorcamento.model.Category;
@@ -34,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto save(CategoriaCreateDto categoriaDto) {
+    public CategoryDto save(CategoryCreateDto categoriaDto) {
         log.debug("CategoryService - save");
 
         Category category = modelMapper.map(categoriaDto,Category.class);

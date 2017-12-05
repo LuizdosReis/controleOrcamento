@@ -1,10 +1,9 @@
 package br.com.springboot.controleorcamento.endpoint;
 
-import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
+import br.com.springboot.controleorcamento.dto.CategoryCreateDto;
 import br.com.springboot.controleorcamento.dto.CategoryDto;
 import br.com.springboot.controleorcamento.helper.CategoryHelper;
 import br.com.springboot.controleorcamento.model.Category;
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.*;
 
 @RunWith(SpringRunner.class)
@@ -47,7 +46,7 @@ public class CategoryEndpointTest {
     }
 
     @Test
-    public void listCategoriesWhenTokenIsIncorretShouldReturnStatusCode403() {
+    public void listCategoriesWhenTokenIsIncorrectShouldReturnStatusCode403() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories/", GET, wrongHeader, String.class);
 
@@ -56,17 +55,17 @@ public class CategoryEndpointTest {
     }
 
     @Test
-    public void listCategoriesWhenTokenCorretShouldReturnStatusCode200() {
+    public void listCategoriesWhenTokenCorrectShouldReturnStatusCode200() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories/", GET, header, String.class);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        assertThat(response.getBody()).contains("totalElements","3");
-        assertThat(response.getBody()).contains("id","1");
+        assertThat(response.getBody()).contains("totalElements", "3");
+        assertThat(response.getBody()).contains("id", "1");
     }
 
     @Test
-    public void getCategoryWhenTokenIsIncorretShouldReturnStatusCode403() {
+    public void getCategoryWhenTokenIsIncorrectShouldReturnStatusCode403() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories/1", GET, wrongHeader, String.class);
 
@@ -75,7 +74,7 @@ public class CategoryEndpointTest {
     }
 
     @Test
-    public void getCategoryWhenTokenIsCorretShouldReturnStatusCode200() {
+    public void getCategoryWhenTokenIsCorrectShouldReturnStatusCode200() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories/1", GET, header, String.class);
 
@@ -84,7 +83,7 @@ public class CategoryEndpointTest {
     }
 
     @Test
-    public void getCategorieWhenTokenIsCorretAndCategoryDoesNotExistShouldReturnStatusCode404() {
+    public void getCategoryWhenTokenIsCorrectAndCategoryDoesNotExistShouldReturnStatusCode404() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories/-1", GET, header, String.class);
 
@@ -93,7 +92,7 @@ public class CategoryEndpointTest {
     }
 
     @Test
-    public void deleteCategorieWhenTokenIsIncorretShouldReturnStatusCode403() {
+    public void deleteCategoryWhenTokenIsIncorrectShouldReturnStatusCode403() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories/1", DELETE, wrongHeader, String.class);
 
@@ -101,7 +100,7 @@ public class CategoryEndpointTest {
     }
 
     @Test
-    public void deleteCategorieWhenTokenIscorretAndCategoryDoesNotExistShouldReturnStatusCode404() {
+    public void deleteCategoryWhenTokenIsCorrectAndCategoryDoesNotExistShouldReturnStatusCode404() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories/-1", DELETE, header, String.class);
 
@@ -109,7 +108,7 @@ public class CategoryEndpointTest {
     }
 
     @Test
-    public void deleteCategorieWhenTokenIscorretShouldReturnStatusCode200() {
+    public void deleteCategoryWhenTokenIsCorrectShouldReturnStatusCode200() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories/3", DELETE, header, String.class);
 
@@ -117,7 +116,7 @@ public class CategoryEndpointTest {
     }
 
     @Test
-    public void deleteCategorieWhenTokenIscorretAndCategoryContainsRelacitionShouldReturnStatusCode500() {
+    public void deleteCategoryWhenTokenIsCorrectAndCategoryContainsRelationShouldReturnStatusCode500() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories/1", DELETE, header, String.class);
 
@@ -125,38 +124,38 @@ public class CategoryEndpointTest {
     }
 
     @Test
-    public void saveCategoryWhenTokenIscorretShouldReturnStatusCode201() {
+    public void saveCategoryWhenTokenIsCorrectShouldReturnStatusCode201() {
         ResponseEntity<String> response = restTemplate
-                .exchange("/v1/categories", POST, new HttpEntity<>(CategoryHelper.builderCreateCategoryDto(),header.getHeaders()), String.class);
+                .exchange("/v1/categories", POST, new HttpEntity<>(CategoryHelper.builderCreateCategoryDto(), header.getHeaders()), String.class);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(201);
     }
 
     @Test
-    public void saveCategoryWhenTokenIsIncorretShouldReturnStatusCode403() {
+    public void saveCategoryWhenTokenIsIncorrectShouldReturnStatusCode403() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories", POST,
-                        new HttpEntity<>(CategoryHelper.builderCreateCategoryDto(),wrongHeader.getHeaders()), String.class);
+                        new HttpEntity<>(CategoryHelper.builderCreateCategoryDto(), wrongHeader.getHeaders()), String.class);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(403);
     }
 
     @Test
-    public void saveCategoryWithIdWhenTokenIsCorretShouldReturnStatusCode400() {
+    public void saveCategoryWithIdWhenTokenIsCorrectShouldReturnStatusCode400() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories", POST,
-                        new HttpEntity<>(CategoryHelper.buildCategory(),header.getHeaders()), String.class);
+                        new HttpEntity<>(CategoryHelper.buildCategory(), header.getHeaders()), String.class);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(400);
     }
 
     @Test
-    public void saveCategoryInvalidWhenTokenIsCorretShouldReturnStatusCode400() {
-        CategoriaCreateDto category = CategoryHelper.builderCreateCategoryDto();
+    public void saveCategoryInvalidWhenTokenIsCorrectShouldReturnStatusCode400() {
+        CategoryCreateDto category = CategoryHelper.builderCreateCategoryDto();
         category.setDescricao("");
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories", POST,
-                        new HttpEntity<>(category,header.getHeaders()), String.class);
+                        new HttpEntity<>(category, header.getHeaders()), String.class);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(400);
     }
@@ -167,12 +166,12 @@ public class CategoryEndpointTest {
         category.setDescricao("change description");
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories", PUT,
-                        new HttpEntity<>(category,header.getHeaders()), String.class);
+                        new HttpEntity<>(category, header.getHeaders()), String.class);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
 
         ResponseEntity<Category> responseCategory = restTemplate
-                .exchange("/v1/categories/"+category.getId(), GET, header, Category.class);
+                .exchange("/v1/categories/" + category.getId(), GET, header, Category.class);
 
         assertThat(responseCategory.getBody().getDescricao()).isEqualTo(category.getDescricao());
     }
@@ -181,7 +180,7 @@ public class CategoryEndpointTest {
     public void updateCategoryTokenIsIncorrectShouldReturnStatusCode403() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories", PUT,
-                        new HttpEntity<>(CategoryHelper.buildCategoryDto(),wrongHeader.getHeaders()), String.class);
+                        new HttpEntity<>(CategoryHelper.buildCategoryDto(), wrongHeader.getHeaders()), String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     }
@@ -192,7 +191,7 @@ public class CategoryEndpointTest {
         category.setId(9999L);
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories", PUT,
-                        new HttpEntity<>(category,header.getHeaders()), String.class);
+                        new HttpEntity<>(category, header.getHeaders()), String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
@@ -203,11 +202,10 @@ public class CategoryEndpointTest {
         category.setDescricao("");
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories", POST,
-                        new HttpEntity<>(category,header.getHeaders()), String.class);
+                        new HttpEntity<>(category, header.getHeaders()), String.class);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(400);
     }
-
 
 
 }

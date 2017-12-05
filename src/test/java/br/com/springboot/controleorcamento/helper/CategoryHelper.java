@@ -1,6 +1,6 @@
 package br.com.springboot.controleorcamento.helper;
 
-import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
+import br.com.springboot.controleorcamento.dto.CategoryCreateDto;
 import br.com.springboot.controleorcamento.dto.CategoryDto;
 import br.com.springboot.controleorcamento.model.Category;
 import br.com.springboot.controleorcamento.model.Tipo;
@@ -23,8 +23,8 @@ public class CategoryHelper {
                 .build();
     }
 
-    public static CategoriaCreateDto builderCreateCategoryDto(){
-        return CategoriaCreateDto.builder()
+    public static CategoryCreateDto builderCreateCategoryDto(){
+        return CategoryCreateDto.builder()
                 .descricao("Carro")
                 .tipo(Tipo.SAIDA)
                 .build();

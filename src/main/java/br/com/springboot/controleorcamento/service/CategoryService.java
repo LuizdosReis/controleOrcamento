@@ -1,6 +1,6 @@
 package br.com.springboot.controleorcamento.service;
 
-import br.com.springboot.controleorcamento.dto.CategoriaCreateDto;
+import br.com.springboot.controleorcamento.dto.CategoryCreateDto;
 import br.com.springboot.controleorcamento.dto.CategoryDto;
 import br.com.springboot.controleorcamento.dto.CategoriaUpdateDto;
 import br.com.springboot.controleorcamento.model.Category;
@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface CategoryService {
-    CategoryDto save(CategoriaCreateDto categoriaDto);
+    CategoryDto save(CategoryCreateDto categoriaDto);
 
     Category save(Category category);
 

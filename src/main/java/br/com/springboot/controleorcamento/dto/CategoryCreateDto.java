@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoriaCreateDto {
+public class CategoryCreateDto {
 
     @NotEmpty
     private String descricao;
