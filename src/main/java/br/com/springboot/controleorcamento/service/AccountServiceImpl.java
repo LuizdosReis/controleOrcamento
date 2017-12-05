@@ -1,15 +1,21 @@
 package br.com.springboot.controleorcamento.service;
 
+import br.com.springboot.controleorcamento.dto.AccountCreateDto;
+import br.com.springboot.controleorcamento.dto.AccountDto;
+import br.com.springboot.controleorcamento.dto.AccountUpdateDto;
 import br.com.springboot.controleorcamento.model.Account;
-import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.repository.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -17,46 +23,74 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final UsuarioService usuarioService;
+    private final ModelMapper modelMapper;
 
-    public AccountServiceImpl(AccountRepository accountRepository, UsuarioService usuarioService) {
+    public AccountServiceImpl(AccountRepository accountRepository, UsuarioService usuarioService, ModelMapper modelMapper) {
         this.accountRepository = accountRepository;
         this.usuarioService = usuarioService;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public Page<Account> findAll(Pageable pageable) {
+    public Page<AccountDto> findAll(Pageable pageable) {
         log.debug("CategoryService - findAll");
-        return accountRepository.findByUsuario(usuarioService.getCurrentUser(), pageable);
+
+        Page<Account> page = accountRepository.findByUsuario(usuarioService.getCurrentUser(), pageable);
+
+        List<AccountDto> accountDtos = page.getContent().stream()
+                .map(a -> modelMapper.map(a, AccountDto.class)).collect(Collectors.toList());
+
+        return new PageImpl<>(accountDtos, pageable, page.getTotalElements());
     }
 
     @Override
-    public Account save(Account conta, Usuario usuario) {
-        conta.setUsuario(usuario);
-        return accountRepository.save(conta);
+    public AccountDto save(AccountCreateDto accountCreateDto) {
+        log.debug("CategoryService - save");
+
+        Account account = modelMapper.map(accountCreateDto, Account.class);
+
+        account.setUsuario(usuarioService.getCurrentUser());
+        return modelMapper.map(accountRepository.save(account), AccountDto.class);
+    }
+
+    @Override
+    public AccountDto findOneDto(Long id) {
+        log.debug("Service - findOneDto");
+        return modelMapper.map(getAccount(id), AccountDto.class);
     }
 
     @Override
     public Account findOne(Long id) {
         log.debug("Service - findOne");
+        return getAccount(id);
+    }
 
+    private Account getAccount(Long id) {
         Optional<Account> accountOptional = accountRepository.findById(id);
 
         if (!accountOptional.isPresent()) {
             log.error("Service - no account found with id");
-            throw new ResourceNotFoundException("Nenhuma conta encontrado no id", null);
+            throw new ResourceNotFoundException("no account found with id", null);
         }
 
         return accountOptional.get();
     }
 
+
     @Override
-    public void update(Account conta) {
-        verificaSeContaExiste(conta.getId());
-        accountRepository.save(conta);
+    public void update(AccountUpdateDto account) {
+        checkIfAccountExists(account.getId());
+        accountRepository.save(modelMapper.map(account, Account.class));
     }
 
-    private void verificaSeContaExiste(Long id) {
+    @Override
+    public void delete(long id) {
+        checkIfAccountExists(id);
+        accountRepository.deleteById(id);
+    }
+
+    private void checkIfAccountExists(Long id) {
         if (!accountRepository.existsById(id))
-            throw new ResourceNotFoundException("Nenhum conta encontrado no id", null);
+            throw new ResourceNotFoundException("no account found with id", null);
     }
 }

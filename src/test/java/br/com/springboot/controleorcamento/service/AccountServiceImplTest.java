@@ -68,30 +68,6 @@ public class AccountServiceImplTest {
         Account accountFind = accountService.findOne(1L);
 
         Assertions.assertThat(accountFind).isEqualTo(account);
-        verify(accountRepository,times(1)).findById(1L);
-    }
-
-    @Test
-    public void testFindAll() throws Exception {
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setNome("luiz henrique dandolini dos reis");
-        usuario.setUsername("luiz.reis");
-
-        Account account = new Account();
-        account.setId(1L);
-
-        Pageable pageable = Mockito.mock(Pageable.class);
-
-        when(usuarioService.getCurrentUser()).thenReturn(usuario);
-
-        when(accountRepository.findByUsuario(usuario,pageable)).thenReturn(new PageImpl<>(Collections.singletonList(account)));
-
-        Page<AccountDto> page = accountService.findAll(pageable);
-
-        System.out.println(page.getContent());
-
-        Assertions.assertThat(page.getContent().get(0)).isEqualTo(account);
-        verify(accountRepository,times(1)).findByUsuario(usuario,pageable);
+        verify(accountRepository, times(1)).findById(1L);
     }
 }
