@@ -5,5 +5,6 @@ INSERT INTO category (descricao,tipo,usuario_id) VALUES ('Carro','SAIDA',1);
 INSERT INTO category (descricao,tipo,usuario_id) VALUES ('Salario','ENTRADA',1);
 INSERT INTO category (descricao,tipo,usuario_id) VALUES ('Moto','SAIDA',1);
 INSERT INTO account (descricao,saldo,usuario_id) values ('banco do brasil',12.50,1);
+INSERT INTO account (descricao,saldo,usuario_id) values ('bradesco',12.50,1);
 INSERT INTO despesa (descricao,data,valor,category_id,conta_id,efetivada) values ('troca de oleo','2017-10-14', 32.50,1,1,true);
 INSERT INTO receita (descricao,data,valor,category_id,conta_id,efetivada) values ('salario','2017-10-05',1500.00,2,1,true);

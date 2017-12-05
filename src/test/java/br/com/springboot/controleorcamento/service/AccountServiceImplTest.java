@@ -1,5 +1,6 @@
 package br.com.springboot.controleorcamento.service;
 
+import br.com.springboot.controleorcamento.dto.AccountDto;
 import br.com.springboot.controleorcamento.model.Account;
 import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.repository.AccountRepository;
@@ -11,10 +12,10 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
@@ -37,11 +38,14 @@ public class AccountServiceImplTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
+    @Mock
+    private ModelMapper modelMapper;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        accountService = new AccountServiceImpl(accountRepository, usuarioService);
+        accountService = new AccountServiceImpl(accountRepository, usuarioService, modelMapper);
     }
 
     @Test
@@ -83,7 +87,7 @@ public class AccountServiceImplTest {
 
         when(accountRepository.findByUsuario(usuario,pageable)).thenReturn(new PageImpl<>(Collections.singletonList(account)));
 
-        Page<Account> page = accountService.findAll(pageable);
+        Page<AccountDto> page = accountService.findAll(pageable);
 
         System.out.println(page.getContent());
 

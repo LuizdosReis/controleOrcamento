@@ -81,21 +81,4 @@ public class AccountRepositoryTest {
         assertThat(contaRetornada.getDescricao()).isEqualTo(conta.getDescricao());
 
     }
-
-    @Test
-    public void deveLancarExcecaoParaExcluirContaComGastosCadastrados(){
-
-
-        accountRepository.deleteById(1L);
-
-        Optional<Account> conta = accountRepository.findById(1L);
-
-        System.out.println(conta);
-
-        Optional<Despesa> despesa = despesaRepository.findById(1L);
-
-        System.out.println(despesa);
-
-
-    }
 }

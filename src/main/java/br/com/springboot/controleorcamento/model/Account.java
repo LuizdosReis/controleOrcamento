@@ -12,16 +12,27 @@ import java.util.*;
 
 @Entity
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true,exclude = {"despesas","receitas","usuario","saldo","descricao"})
 @ToString(callSuper = true,exclude = {"receitas","despesas"})
 public class Account extends AbstractEntity{
+
+    @Builder
+    private Account(long id, String descricao,Usuario usuario, Set<Despesa> despesas,Set<Receita> receitas, BigDecimal saldo){
+        super(id);
+        this.descricao = descricao;
+        this.usuario = usuario;
+        this.despesas = despesas;
+        this.receitas = receitas;
+        this.saldo = saldo;
+    }
 
     @NotEmpty(message = "A descrição não pode ser vazia")
     private String descricao;
 
     @NotNull
     @Digits(fraction=2,message="O valor só pode conter dois digitos após a virgula",integer = 9)
-    private BigDecimal saldo = new BigDecimal("0.00");
+    private BigDecimal saldo;
 
     @JsonIgnore
     @ManyToOne
@@ -30,12 +41,12 @@ public class Account extends AbstractEntity{
     @JsonIgnore
     @OneToMany(mappedBy = "conta")
     @Setter(AccessLevel.NONE)
-    private Set<Despesa> despesas = new HashSet<>();
+    private Set<Despesa> despesas;
 
     @JsonIgnore
     @OneToMany(mappedBy = "conta")
     @Setter(AccessLevel.NONE)
-    private Set<Receita> receitas = new HashSet<>();
+    private Set<Receita> receitas;
 
     public void adicionaDespesa(Despesa despesa){
         if(despesa.isEfetivada())
@@ -57,7 +68,7 @@ public class Account extends AbstractEntity{
     public void removeReceita(Receita receita){
         this.saldo = this.saldo.subtract(receita.getValor());
         receita.setConta(null);
-        this.despesas.remove(receita);
+        this.receitas.remove(receita);
     }
 
     public Set<Despesa> getDespesas() {
