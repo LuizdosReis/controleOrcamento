@@ -1,6 +1,5 @@
 package br.com.springboot.controleorcamento.model;
 
-import br.com.springboot.controleorcamento.converter.LocalDateAttributeConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +24,6 @@ public class Despesa extends AbstractEntity {
 
     @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
-    @Convert(converter = LocalDateAttributeConverter.class)
     private LocalDate data;
 
     private boolean efetivada;

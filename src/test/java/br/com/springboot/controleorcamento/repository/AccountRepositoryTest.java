@@ -1,8 +1,7 @@
 package br.com.springboot.controleorcamento.repository;
 
-import br.com.springboot.controleorcamento.helper.ContaHelper;
+import br.com.springboot.controleorcamento.helper.AccountHelper;
 import br.com.springboot.controleorcamento.model.Account;
-import br.com.springboot.controleorcamento.model.Despesa;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.validation.ConstraintViolationException;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,9 +25,6 @@ public class AccountRepositoryTest {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private DespesaRepository despesaRepository;
-
     Account account;
 
     @Rule
@@ -37,7 +32,7 @@ public class AccountRepositoryTest {
 
     @Before
     public void setUp(){
-        account = ContaHelper.criaConta();
+        account = AccountHelper.buildAccount();
     }
 
     @Test

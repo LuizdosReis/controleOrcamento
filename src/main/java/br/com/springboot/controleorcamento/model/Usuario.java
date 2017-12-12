@@ -14,7 +14,7 @@ import java.util.*;
 
 @Entity
 @Data
-@ToString(exclude = {"accounts","categories"})
+@ToString(exclude = {"contas","categories"})
 @EqualsAndHashCode(of = {"id"})
 public class Usuario extends AbstractEntity implements UserDetails{
 

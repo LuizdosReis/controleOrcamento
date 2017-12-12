@@ -15,9 +15,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -29,6 +32,9 @@ public class AccountEndpointTest {
 
     private HttpEntity<Void> header;
     private HttpEntity<Void> wrongHeader;
+
+    @Autowired
+    private MockMvc mvc;
 
     @Before
     public void configHeaders() {
@@ -165,6 +171,28 @@ public class AccountEndpointTest {
                 .exchange("/v1/accounts/" + account.getId(), GET, header, Account.class);
 
         assertThat(responseAccount.getBody().getDescricao()).isEqualTo(account.getDescricao());
+    }
+
+    @Test
+    public void updateAccountTokenIsCorrectShouldReturnStatusCode2002() throws Exception {
+        AccountDto account = AccountHelper.buildAccountDto();
+        account.setDescricao("change description");
+
+        String authorization = header.getHeaders().get("Authorization").get(0);
+
+        mvc.perform(put("/v1/accounts").header("Authorization",authorization))
+                .andExpect(status().isOk());
+
+//        ResponseEntity<String> response = restTemplate
+//                .exchange("/v1/accounts", PUT,
+//                        new HttpEntity<>(account, header.getHeaders()), String.class);
+//
+//        assertThat(response.getStatusCodeValue()).isEqualTo(201);
+//
+//        ResponseEntity<Account> responseAccount = restTemplate
+//                .exchange("/v1/accounts/" + account.getId(), GET, header, Account.class);
+//
+//        assertThat(responseAccount.getBody().getDescricao()).isEqualTo(account.getDescricao());
     }
 
 
