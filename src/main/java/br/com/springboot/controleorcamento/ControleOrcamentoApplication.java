@@ -1,6 +1,7 @@
 package br.com.springboot.controleorcamento;
 
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -11,11 +12,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import javax.persistence.EntityManagerFactory;
 import java.time.LocalDate;
 
 @SpringBootApplication
@@ -32,6 +36,7 @@ public class ControleOrcamentoApplication{
             javaTimeModule.addSerializer(LocalDate.class, LocalDateSerializer.INSTANCE);
             javaTimeModule.addDeserializer(LocalDate.class, LocalDateDeserializer.INSTANCE);
         objectMapper.registerModule(javaTimeModule);
+        objectMapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
         return objectMapper;
     }
 
@@ -44,6 +49,4 @@ public class ControleOrcamentoApplication{
     public BCryptPasswordEncoder bcyrpt() {
         return new BCryptPasswordEncoder();
     }
-
-
 }
