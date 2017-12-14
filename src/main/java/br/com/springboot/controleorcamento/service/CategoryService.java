@@ -21,8 +21,6 @@ public interface CategoryService {
 
     void update(CategoriaUpdateDto categoriaDto);
 
-    void verificaSeCategoriaPertencemAoUsuario(Category category, Usuario usuario);
-
     void delete(Long id);
 
     CategoryDto findOne(Long id);

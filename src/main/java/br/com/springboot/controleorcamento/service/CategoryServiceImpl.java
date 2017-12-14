@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
-    private static final String NENHUMA_CATEGORIA_ENCONTRADO_NO_ID = "Nenhuma category encontrado no id";
+    private static final String NO_CATEGORY_FOUND_IN_ID = "No categories found in id";
     private final CategoriaRepository categoriaRepository;
     private final UsuarioService usuarioService;
 
@@ -83,18 +83,16 @@ public class CategoryServiceImpl implements CategoryService {
 
         Usuario usuario = usuarioService.getCurrentUser();
 
-        verificaSeCategoriaPertencemAoUsuario(category,usuario);
+        checkIfCategoryBelongsToUser(category,usuario);
 
         category.setUsuario(usuario);
 
         categoriaRepository.save(category);
     }
 
-
-    @Override
-    public void verificaSeCategoriaPertencemAoUsuario(Category category, Usuario usuario) {
+    private void checkIfCategoryBelongsToUser(Category category, Usuario usuario) {
        if(!categoriaRepository.findByUsuario(usuario).contains(category))
-           throw new IllegalArgumentException("Category não pertence ao usuário logado");
+           throw new IllegalArgumentException("Category not belongs to user");
     }
 
     @Override
@@ -106,21 +104,21 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto findOne(Long id) {
         Category category = categoriaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(NENHUMA_CATEGORIA_ENCONTRADO_NO_ID, null));
+                .orElseThrow(() -> new ResourceNotFoundException(NO_CATEGORY_FOUND_IN_ID, null));
 
-        verificaSeCategoriaPertencemAoUsuario(category,usuarioService.getCurrentUser());
+        checkIfCategoryBelongsToUser(category,usuarioService.getCurrentUser());
 
         return modelMapper.map(category,CategoryDto.class);
     }
 
     @Override
     public Category findBy(Long id) {
-        return categoriaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(NENHUMA_CATEGORIA_ENCONTRADO_NO_ID, null));
+        return categoriaRepository.findByIdAndUsuario(id,usuarioService.getCurrentUser())
+                .orElseThrow(() -> new ResourceNotFoundException(NO_CATEGORY_FOUND_IN_ID, null));
     }
 
     private void verificaSeGastoExiste(Long id) {
         if (!categoriaRepository.existsById(id))
-            throw new ResourceNotFoundException(NENHUMA_CATEGORIA_ENCONTRADO_NO_ID, null);
+            throw new ResourceNotFoundException(NO_CATEGORY_FOUND_IN_ID, null);
     }
 }
