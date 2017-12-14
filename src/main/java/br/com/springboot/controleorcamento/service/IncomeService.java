@@ -7,4 +7,7 @@ import br.com.springboot.controleorcamento.model.Income;
 
 public interface IncomeService {
     IncomeReturnDto save(IncomeCreateDto incomeCreateDto);
+
+    IncomeReturnDto findOne(Long id);
+
 }

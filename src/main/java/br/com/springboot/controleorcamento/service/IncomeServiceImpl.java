@@ -1,12 +1,12 @@
 package br.com.springboot.controleorcamento.service;
 
 import br.com.springboot.controleorcamento.dto.IncomeCreateDto;
-import br.com.springboot.controleorcamento.dto.IncomeDto;
 import br.com.springboot.controleorcamento.dto.IncomeReturnDto;
 import br.com.springboot.controleorcamento.model.Income;
 import br.com.springboot.controleorcamento.repository.IncomeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -19,12 +19,16 @@ public class IncomeServiceImpl implements IncomeService {
 
     private final CategoryService categoryService;
 
-    private final ModelMapper modelMapper;
+    private final UsuarioService usuarioService;
 
-    public IncomeServiceImpl(IncomeRepository repository, AccountService accountService, CategoryService categoryService, ModelMapper modelMapper) {
+    private final ModelMapper modelMapper;
+    private String NO_INCOME_FOUND_BY_ID = "No Income Found by id";
+
+    public IncomeServiceImpl(IncomeRepository repository, AccountService accountService, CategoryService categoryService, UsuarioService usuarioService, ModelMapper modelMapper) {
         this.repository = repository;
         this.accountService = accountService;
         this.categoryService = categoryService;
+        this.usuarioService = usuarioService;
         this.modelMapper = modelMapper;
     }
 
@@ -38,5 +42,13 @@ public class IncomeServiceImpl implements IncomeService {
         income.setCategory(categoryService.findBy(incomeCreateDto.getCategoryId()));
 
         return modelMapper.map(repository.save(income), IncomeReturnDto.class);
+    }
+
+    @Override
+    public IncomeReturnDto findOne(Long id) {
+        Income income = repository.findByIdAndAccount_Usuario(id, usuarioService.getCurrentUser())
+                .orElseThrow(() -> new ResourceNotFoundException(NO_INCOME_FOUND_BY_ID, null));
+
+        return modelMapper.map(income,IncomeReturnDto.class);
     }
 }

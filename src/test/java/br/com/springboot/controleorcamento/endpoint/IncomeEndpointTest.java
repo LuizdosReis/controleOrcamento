@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -59,6 +60,22 @@ public class IncomeEndpointTest extends AbstractControllerRest {
                 .andExpect(jsonPath("$.value").value("32.5"))
                 .andExpect(jsonPath("$.received").value(Boolean.TRUE))
                 .andExpect(jsonPath("$.date").value("05/12/2017"));
+
+    }
+
+    @Test
+    public void shouldFindIncomeWithCorrectToken() throws Exception {
+
+        mvc.perform(get("/v1/incomes/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", correctToken))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.description").value("salary"))
+                .andExpect(jsonPath("$.value").value("1500.0"))
+                .andExpect(jsonPath("$.received").value(Boolean.TRUE))
+                .andExpect(jsonPath("$.date").value("05/10/2017"));
 
     }
 }
