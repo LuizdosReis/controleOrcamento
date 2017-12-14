@@ -62,9 +62,6 @@ public class DespesaServiceImpl implements DespesaService {
         conta.adicionaDespesa(despesa);
 
         despesa.setConta(conta);
-
-        verificaCategoria(despesa, conta.getUsuario());
-
         return despesaRepository.save(despesa);
     }
 
@@ -102,11 +99,5 @@ public class DespesaServiceImpl implements DespesaService {
     private void verificaSeDespesaExiste(Long id) {
         if (despesaRepository.existsById(id))
             throw new ResourceNotFoundException("Nenhum gasto encontrado no id", null);
-    }
-
-    private void verificaCategoria(Despesa despesa, Usuario usuario) {
-
-        categoryService.verificaSeCategoriaPertencemAoUsuario(despesa.getCategory(),usuario);
-
     }
 }
