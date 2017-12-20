@@ -174,29 +174,6 @@ public class AccountEndpointTest {
     }
 
     @Test
-    public void updateAccountTokenIsCorrectShouldReturnStatusCode2002() throws Exception {
-        AccountDto account = AccountHelper.buildAccountDto();
-        account.setDescricao("change description");
-
-        String authorization = header.getHeaders().get("Authorization").get(0);
-
-        mvc.perform(put("/v1/accounts").header("Authorization",authorization))
-                .andExpect(status().isOk());
-
-//        ResponseEntity<String> response = restTemplate
-//                .exchange("/v1/accounts", PUT,
-//                        new HttpEntity<>(account, header.getHeaders()), String.class);
-//
-//        assertThat(response.getStatusCodeValue()).isEqualTo(201);
-//
-//        ResponseEntity<Account> responseAccount = restTemplate
-//                .exchange("/v1/accounts/" + account.getId(), GET, header, Account.class);
-//
-//        assertThat(responseAccount.getBody().getDescricao()).isEqualTo(account.getDescricao());
-    }
-
-
-    @Test
     public void updateAccountTokenIsIncorrectShouldReturnStatusCode403() {
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/accounts", PUT,

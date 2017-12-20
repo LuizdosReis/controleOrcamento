@@ -23,7 +23,7 @@ public class Account extends AbstractEntity {
     @NotEmpty(message = "A descrição não pode ser vazia")
     private String descricao;
     @NotNull
-    @Digits(fraction = 2, message = "O valor só pode conter dois digitos após a virgula", integer = 9)
+    @Digits(fraction = 2, integer = 9)
     private BigDecimal saldo;
     @JsonIgnore
     @ManyToOne

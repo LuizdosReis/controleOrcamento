@@ -46,9 +46,8 @@ public class AccountRepositoryTest {
     }
 
     @Test
-    public void deveLancarExcecaoDeCriacaoDeContaComValorDeDigitosDepoisDaVirgulaInvalidos(){
+    public void mustPostAccountCreationExceptionWithMoreThanTwoDigitsAfterComma(){
         thrown.expect(ConstraintViolationException.class);
-        thrown.expectMessage("O valor só pode conter dois digitos após a virgula");
 
         account.setSaldo(new BigDecimal("12.000"));
         accountRepository.save(account);
@@ -60,8 +59,8 @@ public class AccountRepositoryTest {
         accountRepository.save(account);
 
         assertThat(account.getId()).isNotNull();
-        assertThat(account.getDescricao()).isEqualTo("bradesco");
-        assertThat(account.getSaldo()).isEqualTo(new BigDecimal("12.00"));
+        assertThat(account.getDescricao()).isEqualTo("Banco do Brasil");
+        assertThat(account.getSaldo()).isEqualTo(new BigDecimal("12.50"));
     }
 
     @Test

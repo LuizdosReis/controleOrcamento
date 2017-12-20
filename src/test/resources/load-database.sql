@@ -1,0 +1,15 @@
+INSERT INTO usuario (nome,password,username) values ('luiz henrique', '$2a$10$QhAxvOfeaN1/mSDbpcl6UehmgcccUk5n.3wGW.ZOydz1l0Pq2jIdy','luiz.reis');
+INSERT INTO usuario (nome,password,username) values ('pedro', '$2a$10$QhAxvOfeaN1/mSDbpcl6UehmgcccUk5n.3wGW.ZOydz1l0Pq2jIdy','pedro.silva');
+INSERT INTO role (nome) values ('USER');
+INSERT INTO usuario_roles(usuario_id,roles_id) values (1,1);
+INSERT INTO usuario_roles(usuario_id,roles_id) values (2,1);
+INSERT INTO category (descricao,tipo,usuario_id) VALUES ('Carro','SAIDA',1);
+INSERT INTO category (descricao,tipo,usuario_id) VALUES ('Salario','ENTRADA',1);
+INSERT INTO category (descricao,tipo,usuario_id) VALUES ('Salario','ENTRADA',2);
+INSERT INTO category (descricao,tipo,usuario_id) VALUES ('Moto','SAIDA',1);
+INSERT INTO category (descricao,tipo,usuario_id) VALUES ('Moto','SAIDA',2);
+INSERT INTO account (descricao,saldo,usuario_id) values ('banco do brasil',12.50,1);
+INSERT INTO account (descricao,saldo,usuario_id) values ('banco do brasil',23.50,2);
+INSERT INTO despesa (descricao,data,valor,category_id,conta_id,efetivada) values ('oil change','2017-10-14', 32.50,1,1,true);
+INSERT INTO income (description,date,value,category_id,account_id,received) values ('salary','2017-10-05',1500.00,2,1,true);
+INSERT INTO income (description,date,value,category_id,account_id,received) values ('salary','2017-10-05',1500.00,3,2,true);
