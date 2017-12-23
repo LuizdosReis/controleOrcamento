@@ -2,7 +2,6 @@ package br.com.springboot.controleorcamento.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -37,7 +37,7 @@ public class Income extends AbstractEntity{
         this.category = category;
     }
 
-    @NotEmpty(message = "The description can not be empty")
+    @NotBlank(message = "The description can not be empty")
     private String description;
 
     @Digits(fraction=2,message="The value can only contain two digits after the comma",integer = 14)

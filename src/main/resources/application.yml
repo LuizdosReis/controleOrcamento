@@ -1,22 +1,29 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://ec2-54-163-254-143.compute-1.amazonaws.com:5432/deq6f7804skrik?sslmode=require
-    tomcat:
-      test-while-idle: true
-      validation-query: SELECT 1
-      max-active: 5
+    url: postgresql://ec2-54-163-254-143.compute-1.amazonaws.com:5432/deq6f7804skrik?sslmode=require
     username: udpqyywbwqrnsx
     password: 1607f59fef207fbd2b0ea4c3ac567461162cbfd0a2b578c527b74b719c2a0e7c
-    initialize: true
+    tomcat:
+      max-active: 5
 
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    generate-ddl: true
     show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL9Dialect
+        temp:
+          use_jdbc_metadata_defaults: false
     hibernate:
       ddl-auto: create-drop
-      dialect: org.hibernate.dialect.PostgreSQLDialect
 
   jackson:
     serialization.WRITE_DATES_AS_TIMESTAMPS: false
+
 server:
   port: 8080
+
+
+

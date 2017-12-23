@@ -3,7 +3,6 @@ package br.com.springboot.controleorcamento.helper;
 import br.com.springboot.controleorcamento.dto.AccountCreateDto;
 import br.com.springboot.controleorcamento.dto.AccountDto;
 import br.com.springboot.controleorcamento.model.Account;
-import br.com.springboot.controleorcamento.model.Usuario;
 
 import java.math.BigDecimal;
 
@@ -13,7 +12,6 @@ public class AccountHelper {
         return Account.builder()
                 .descricao("Banco do Brasil")
                 .saldo(new BigDecimal("12.50"))
-                .id(1L)
                 .build();
     }
 

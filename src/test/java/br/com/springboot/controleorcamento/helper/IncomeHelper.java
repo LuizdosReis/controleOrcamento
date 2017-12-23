@@ -17,7 +17,7 @@ public class IncomeHelper {
                 .description("Some description")
                 .date(LocalDate.of(2017, Month.DECEMBER,5))
                 .category(Category.builder().id(1L).build())
-                .account(AccountHelper.buildAccount())
+                .account(Account.builder().id(1L).build())
                 .received(Boolean.FALSE)
                 .value(BigDecimal.valueOf(32.50))
                 .build();

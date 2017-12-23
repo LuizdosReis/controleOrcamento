@@ -160,6 +160,7 @@ public class AccountEndpointTest {
     @Test
     public void updateAccountTokenIsCorrectShouldReturnStatusCode200() {
         AccountDto account = AccountHelper.buildAccountDto();
+        account.setId(1L);
         account.setDescricao("change description");
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/accounts", PUT,

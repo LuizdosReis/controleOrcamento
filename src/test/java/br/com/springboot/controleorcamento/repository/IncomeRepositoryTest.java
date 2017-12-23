@@ -89,6 +89,7 @@ public class IncomeRepositoryTest {
         thrown.expectMessage("The date can not be null");
 
         income.setDate(null);
+
         incomeRepository.save(income);
     }
 

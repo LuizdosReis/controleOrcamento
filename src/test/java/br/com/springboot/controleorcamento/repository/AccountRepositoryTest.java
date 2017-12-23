@@ -25,10 +25,10 @@ public class AccountRepositoryTest {
     @Autowired
     private AccountRepository accountRepository;
 
-    Account account;
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    private Account account;
 
     @Before
     public void setUp(){
