@@ -78,4 +78,14 @@ public class IncomeEndpointTest extends AbstractControllerRest {
                 .andExpect(jsonPath("$.date").value("05/10/2017"));
 
     }
+
+    @Test
+    public void shouldGetIncomeNotFoundWithCorrectToken() throws Exception {
+
+        mvc.perform(get("/v1/incomes/999999")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", correctToken))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 }

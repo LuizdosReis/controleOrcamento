@@ -47,8 +47,11 @@ public class IncomeServiceImpl implements IncomeService {
     @Override
     public IncomeReturnDto findOne(Long id) {
         Income income = repository.findByIdAndAccount_Usuario(id, usuarioService.getCurrentUser())
-                .orElseThrow(() -> new ResourceNotFoundException(NO_INCOME_FOUND_BY_ID, null));
+                .orElseThrow(() -> {
+                    log.error(NO_INCOME_FOUND_BY_ID);
+                    return new ResourceNotFoundException(NO_INCOME_FOUND_BY_ID, null);
+                });
 
-        return modelMapper.map(income,IncomeReturnDto.class);
+        return modelMapper.map(income, IncomeReturnDto.class);
     }
 }

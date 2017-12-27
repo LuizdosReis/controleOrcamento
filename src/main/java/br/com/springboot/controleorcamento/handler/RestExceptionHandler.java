@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ import br.com.springboot.controleorcamento.error.ValidationErrorDetails;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 
 	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<?> handleResourceNotFoundExecption(ResourceNotFoundException resourceNotFoundException){
+	public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException){
 		ResourceNotFoundDetails details = ResourceNotFoundDetails.Builder
 			.newBuilder()
 			.timestamp(new Date().getTime())
