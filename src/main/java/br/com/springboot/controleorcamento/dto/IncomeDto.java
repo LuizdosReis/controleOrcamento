@@ -2,26 +2,22 @@ package br.com.springboot.controleorcamento.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class IncomeDto {
 
-    @NotEmpty(message = "A descrição não pode ser vazia")
+    @NotBlank(message = "The description not be blank")
     private String description;
 
-    @Digits(fraction=2,message="O valor só pode conter dois digitos após a virgula",integer = 9)
-    @DecimalMin(message = "O Valor não pode ser negativo", value = "0.00", inclusive = false)
+    @NotNull(message = "The value can not be null")
+    @Digits(fraction=2,integer = 9,message="The value can only contain two digits after the comma")
+    @Min(value = 0, message = "The value should be greater then zero")
     private BigDecimal value;
 
     private boolean received;

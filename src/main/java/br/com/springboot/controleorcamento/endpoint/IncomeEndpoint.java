@@ -20,12 +20,14 @@ public class IncomeEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<IncomeReturnDto> save(@Valid @RequestBody IncomeCreateDto income) {
-        return new ResponseEntity<>(service.save(income), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public IncomeReturnDto save(@Valid @RequestBody IncomeCreateDto income) {
+        return service.save(income);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<IncomeReturnDto> findById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(service.findOne(id), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public IncomeReturnDto findById(@PathVariable("id") Long id) {
+        return service.findOne(id);
     }
 }

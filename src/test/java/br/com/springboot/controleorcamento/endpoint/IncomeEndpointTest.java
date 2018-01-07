@@ -1,7 +1,9 @@
 package br.com.springboot.controleorcamento.endpoint;
 
 import br.com.springboot.controleorcamento.dto.IncomeCreateDto;
+import br.com.springboot.controleorcamento.dto.IncomeDto;
 import br.com.springboot.controleorcamento.helper.IncomeHelper;
+import br.com.springboot.controleorcamento.model.Income;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,12 +16,15 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -87,5 +92,39 @@ public class IncomeEndpointTest extends AbstractControllerRest {
                 .header("Authorization", correctToken))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldGetErrorsWithIncorrectIncome() throws Exception {
+
+        mvc.perform(post("/v1/incomes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(IncomeCreateDto.builder().build()))
+                .header("Authorization", correctToken))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fieldErrors", hasSize(3)))
+                .andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder(
+                        "categoryId", "accountId","income")))
+                .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder(
+                        "CategoryId not be null", "Income not be null","AccountId not be null")));
+    }
+
+    @Test
+    public void shouldGetErrorsWithIncorrectIncomeNotNull() throws Exception {
+
+        mvc.perform(post("/v1/incomes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(IncomeCreateDto.builder()
+                        .income(IncomeDto.builder().build()).build()))
+                .header("Authorization", correctToken))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fieldErrors", hasSize(5)))
+                .andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder(
+                        "categoryId", "accountId","income.description","income.date","income.value")))
+                .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder(
+                        "CategoryId not be null","AccountId not be null","The date can not be null",
+                        "The value can not be null","The description not be blank")));
     }
 }

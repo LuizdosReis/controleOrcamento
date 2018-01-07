@@ -22,7 +22,7 @@ public class IncomeServiceImpl implements IncomeService {
     private final UsuarioService usuarioService;
 
     private final ModelMapper modelMapper;
-    private String NO_INCOME_FOUND_BY_ID = "No Income Found by id";
+    private String NO_INCOME_FOUND_BY_ID = "No Income Found by ID ";
 
     public IncomeServiceImpl(IncomeRepository repository, AccountService accountService, CategoryService categoryService, UsuarioService usuarioService, ModelMapper modelMapper) {
         this.repository = repository;
@@ -49,7 +49,7 @@ public class IncomeServiceImpl implements IncomeService {
         Income income = repository.findByIdAndAccount_Usuario(id, usuarioService.getCurrentUser())
                 .orElseThrow(() -> {
                     log.error(NO_INCOME_FOUND_BY_ID);
-                    return new ResourceNotFoundException(NO_INCOME_FOUND_BY_ID, null);
+                    return new ResourceNotFoundException(NO_INCOME_FOUND_BY_ID + id.toString(), null);
                 });
 
         return modelMapper.map(income, IncomeReturnDto.class);

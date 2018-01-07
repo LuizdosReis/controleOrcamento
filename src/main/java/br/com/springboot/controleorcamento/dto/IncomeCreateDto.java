@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
@@ -18,13 +19,14 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class IncomeCreateDto {
 
-    @NotNull
+    @NotNull(message = "Income not be null")
+    @Valid
     private IncomeDto income;
 
-    @NotNull
+    @NotNull(message = "AccountId not be null")
     private Long accountId;
 
-    @NotNull
+    @NotNull(message = "CategoryId not be null")
     private Long categoryId;
 
 
