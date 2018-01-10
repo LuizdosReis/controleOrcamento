@@ -1,7 +1,7 @@
 package br.com.springboot.controleorcamento.repository;
 
-import br.com.springboot.controleorcamento.model.Category;
 import br.com.springboot.controleorcamento.model.Account;
+import br.com.springboot.controleorcamento.model.Category;
 import br.com.springboot.controleorcamento.model.Despesa;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

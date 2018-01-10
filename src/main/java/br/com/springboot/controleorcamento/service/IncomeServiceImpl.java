@@ -48,7 +48,7 @@ public class IncomeServiceImpl implements IncomeService {
     public IncomeReturnDto findOne(Long id) {
         Income income = repository.findByIdAndAccount_Usuario(id, usuarioService.getCurrentUser())
                 .orElseThrow(() -> {
-                    log.error(NO_INCOME_FOUND_BY_ID);
+                    log.error(NO_INCOME_FOUND_BY_ID + id.toString());
                     return new ResourceNotFoundException(NO_INCOME_FOUND_BY_ID + id.toString(), null);
                 });
 

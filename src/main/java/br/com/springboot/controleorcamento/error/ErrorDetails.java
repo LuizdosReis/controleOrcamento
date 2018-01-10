@@ -1,6 +1,7 @@
 package br.com.springboot.controleorcamento.error;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 

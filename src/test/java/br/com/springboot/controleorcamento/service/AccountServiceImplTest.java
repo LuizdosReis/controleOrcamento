@@ -1,8 +1,6 @@
 package br.com.springboot.controleorcamento.service;
 
-import br.com.springboot.controleorcamento.dto.AccountDto;
 import br.com.springboot.controleorcamento.model.Account;
-import br.com.springboot.controleorcamento.model.Usuario;
 import br.com.springboot.controleorcamento.repository.AccountRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -10,15 +8,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.context.config.ResourceNotFoundException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyLong;

@@ -4,7 +4,6 @@ import br.com.springboot.controleorcamento.dto.IncomeCreateDto;
 import br.com.springboot.controleorcamento.dto.IncomeReturnDto;
 import br.com.springboot.controleorcamento.service.IncomeService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
