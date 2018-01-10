@@ -6,13 +6,14 @@ import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
@@ -25,20 +26,37 @@ import static java.util.stream.Collectors.toList;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Object handleResourceNotFoundException(ResourceNotFoundException ex) {
         log.error(ex.getMessage());
 
-        ResourceNotFoundDetails details = ResourceNotFoundDetails.builder()
+        return ResourceNotFoundDetails.builder()
                 .date(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
                 .title("Resource not found")
                 .detail(ex.getMessage())
                 .developerMessage(ex.getClass().getName())
                 .build();
-
-        return new ResponseEntity<>(details, HttpStatus.NOT_FOUND);
-
     }
+
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+        log.error(ex.getMessage());
+
+        MethodArgumentTypeMismatchError details = MethodArgumentTypeMismatchError.builder()
+                .date(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .title("Method Argument Type Mismatch")
+                .detail(ex.getMessage())
+                .developerMessage(ex.getClass().getName())
+                .fieldError(new FieldError(ex.getName(), ex.getLocalizedMessage(), ex.getRequiredType().getName(), ex.getValue()))
+                .build();
+
+        return new ResponseEntity<>(details,HttpStatus.BAD_REQUEST);
+    }
+
 
 
     @Override
@@ -48,7 +66,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   WebRequest request) {
 
         log.error(ex.getMessage());
-
         BindingResult result = ex.getBindingResult();
 
         List<FieldError> fieldErrors = result.getFieldErrors()

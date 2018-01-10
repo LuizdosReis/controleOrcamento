@@ -3,7 +3,6 @@ package br.com.springboot.controleorcamento.endpoint;
 import br.com.springboot.controleorcamento.dto.IncomeCreateDto;
 import br.com.springboot.controleorcamento.dto.IncomeDto;
 import br.com.springboot.controleorcamento.helper.IncomeHelper;
-import br.com.springboot.controleorcamento.model.Income;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,13 +17,13 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.hasValue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -85,6 +84,19 @@ public class IncomeEndpointTest extends AbstractControllerRest {
     }
 
     @Test
+    public void shouldGetErrorsFindIncomeWithParameterFormatIncorrect() throws Exception {
+
+        mvc.perform(get("/v1/incomes/a")
+                .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", correctToken))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fieldError.field").value("id"))
+                .andExpect(jsonPath("$.fieldError.rejectedValue").value("a"))
+                .andExpect(jsonPath("$.fieldError.code").value("java.lang.Long"));
+    }
+
+    @Test
     public void shouldGetIncomeNotFoundWithCorrectToken() throws Exception {
 
         mvc.perform(get("/v1/incomes/999999")
@@ -109,6 +121,7 @@ public class IncomeEndpointTest extends AbstractControllerRest {
                 .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder(
                         "CategoryId not be null", "Income not be null","AccountId not be null")));
     }
+
 
     @Test
     public void shouldGetErrorsWithIncorrectIncomeNotNull() throws Exception {
