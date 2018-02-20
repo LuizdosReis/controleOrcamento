@@ -1,8 +1,18 @@
-db:
+postgres:
   image: postgres
   ports:
     - "5432:5432"
   environment:
+    - POSTGRES_USER=postgres
     - POSTGRES_PASSWORD=postgres
+    - POSTGRES_DB=controle_orcamento
+  volumes:
+    -  /home/luizdosreis/IdeaProjects/data:/var/lib/postgresql/data
   expose:
     - "5432"
+
+service-config:
+  image: configserver
+  ports:
+    - "8888:8888"
+
