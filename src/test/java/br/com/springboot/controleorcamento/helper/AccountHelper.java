@@ -10,23 +10,23 @@ public class AccountHelper {
 
     public static Account buildAccount(){
         return Account.builder()
-                .descricao("Banco do Brasil")
-                .saldo(new BigDecimal("12.50"))
+                .description("Banco do Brasil")
+                .balance(new BigDecimal("12.50"))
                 .build();
     }
 
     public static AccountDto buildAccountDto(){
         return AccountDto.builder()
-                .descricao("Sandanter")
-                .saldo(new BigDecimal("0.00"))
+                .description("Sandanter")
+                .balance(new BigDecimal("0.00"))
                 .id(1L)
                 .build();
     }
 
     public static AccountCreateDto buildCreateAccountDto(){
         return AccountCreateDto.builder()
-                .descricao("Sandanter")
-                .saldo(new BigDecimal("0.00"))
+                .description("Sandanter")
+                .balance(new BigDecimal("0.00"))
                 .build();
     }
 

@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("v1/accounts")
 public class AccountEndpoint {
@@ -24,12 +22,12 @@ public class AccountEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<AccountDto> save(@Valid @RequestBody AccountCreateDto accountCreateDto) {
+    public ResponseEntity<AccountDto> save(@RequestBody AccountCreateDto accountCreateDto) {
         return new ResponseEntity<>(accountService.save(accountCreateDto), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<HttpStatus> update(@Valid @RequestBody AccountUpdateDto accountCreateDto) {
+    public ResponseEntity<HttpStatus> update(@RequestBody AccountUpdateDto accountCreateDto) {
         accountService.update(accountCreateDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

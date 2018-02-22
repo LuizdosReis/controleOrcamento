@@ -23,7 +23,7 @@ public class AccountServiceImplTest {
     private AccountRepository accountRepository;
 
     @Mock
-    private UsuarioService usuarioService;
+    private UserService userService;
 
     @Mock
     private AccountService accountService;
@@ -38,7 +38,7 @@ public class AccountServiceImplTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        accountService = new AccountServiceImpl(accountRepository, usuarioService, modelMapper);
+        accountService = new AccountServiceImpl(accountRepository, userService, modelMapper);
     }
 
     @Test

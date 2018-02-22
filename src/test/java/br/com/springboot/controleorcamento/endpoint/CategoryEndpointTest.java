@@ -152,7 +152,7 @@ public class CategoryEndpointTest {
     @Test
     public void saveCategoryInvalidWhenTokenIsCorrectShouldReturnStatusCode400() {
         CategoryCreateDto category = CategoryHelper.builderCreateCategoryDto();
-        category.setDescricao("");
+        category.setDescription("");
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories", POST,
                         new HttpEntity<>(category, header.getHeaders()), String.class);
@@ -163,7 +163,7 @@ public class CategoryEndpointTest {
     @Test
     public void updateCategoryTokenIsCorrectShouldReturnStatusCode200() {
         CategoryDto category = CategoryHelper.buildCategoryDto();
-        category.setDescricao("change description");
+        category.setDescription("change description");
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories", PUT,
                         new HttpEntity<>(category, header.getHeaders()), String.class);
@@ -173,7 +173,7 @@ public class CategoryEndpointTest {
         ResponseEntity<Category> responseCategory = restTemplate
                 .exchange("/v1/categories/" + category.getId(), GET, header, Category.class);
 
-        assertThat(responseCategory.getBody().getDescricao()).isEqualTo(category.getDescricao());
+        assertThat(responseCategory.getBody().getDescription()).isEqualTo(category.getDescription());
     }
 
     @Test
@@ -199,7 +199,7 @@ public class CategoryEndpointTest {
     @Test
     public void updateCategoryWithDescriptionInvalidWhenTokenIsCorrectShouldReturnStatusCode400() {
         Category category = CategoryHelper.buildCategory();
-        category.setDescricao("");
+        category.setDescription("");
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/categories", POST,
                         new HttpEntity<>(category, header.getHeaders()), String.class);

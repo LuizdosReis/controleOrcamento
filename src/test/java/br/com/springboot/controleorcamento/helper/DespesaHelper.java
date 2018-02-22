@@ -2,8 +2,8 @@ package br.com.springboot.controleorcamento.helper;
 
 import br.com.springboot.controleorcamento.model.Account;
 import br.com.springboot.controleorcamento.model.Category;
-import br.com.springboot.controleorcamento.model.Despesa;
-import br.com.springboot.controleorcamento.model.Usuario;
+import br.com.springboot.controleorcamento.model.Expense;
+import br.com.springboot.controleorcamento.model.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,11 +11,11 @@ import java.time.format.DateTimeFormatter;
 
 public class DespesaHelper {
 
-    public static Despesa criaDespesa(){
+    public static Expense criaDespesa(){
 
-        Usuario luiz = new Usuario();
+        User luiz = new User();
         luiz.setUsername("luiz.reis");
-        luiz.setNome("luiz henrique dandolini dos reis ");
+        luiz.setName("luiz henrique dandolini dos reis ");
         luiz.setPassword("123");
 
         Category carro = CategoryHelper.buildCategory();
@@ -23,26 +23,26 @@ public class DespesaHelper {
         Account bancoDoBrasil = new Account();
         bancoDoBrasil.setId(1L);
 
-        Despesa despesa = new Despesa();
-        despesa.setDescricao("Gasolina e oleo");
-        despesa.setCategory(carro);
-        despesa.setValor(new BigDecimal("12.50"));
-        despesa.setData(LocalDate.parse("15/01/2017", DateTimeFormatter.ofPattern("dd/MM/yyy")));
-        despesa.setConta(bancoDoBrasil);
+        Expense expense = new Expense();
+        expense.setDescription("Gasolina e oleo");
+        expense.setCategory(carro);
+        expense.setValue(new BigDecimal("12.50"));
+        expense.setDate(LocalDate.parse("15/01/2017", DateTimeFormatter.ofPattern("dd/MM/yyy")));
+        expense.setAccount(bancoDoBrasil);
 
-        return despesa;
+        return expense;
     }
 
-    public static Despesa CriaDespesaComValorZerado(){
+    public static Expense CreateExpenseWithValueZero(){
         Account bancoDoBrasil = new Account();
-        bancoDoBrasil.setDescricao("banco do brasil");
-        bancoDoBrasil.setSaldo(new BigDecimal("0.00"));
+        bancoDoBrasil.setDescription("banco do brasil");
+        bancoDoBrasil.setBalance(new BigDecimal("0.00"));
 
-        Despesa despesa = new Despesa();
-        despesa.setDescricao("Gasolina e oleo");
-        despesa.setConta(bancoDoBrasil);
-        despesa.setData(LocalDate.parse("15/01/2017", DateTimeFormatter.ofPattern("dd/MM/yyy")));
+        Expense expense = new Expense();
+        expense.setDescription("Gasolina e oleo");
+        expense.setAccount(bancoDoBrasil);
+        expense.setDate(LocalDate.parse("15/01/2017", DateTimeFormatter.ofPattern("dd/MM/yyy")));
 
-        return despesa;
+        return expense;
     }
 }

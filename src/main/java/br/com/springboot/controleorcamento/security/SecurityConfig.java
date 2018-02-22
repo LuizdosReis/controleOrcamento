@@ -1,6 +1,6 @@
 package br.com.springboot.controleorcamento.security;
 
-import br.com.springboot.controleorcamento.service.UsuarioService;
+import br.com.springboot.controleorcamento.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -18,13 +18,13 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig{
 
-	private UsuarioService usuarioService;
+	private UserService userService;
 
 	private AccessDeniedHandler accessDeniedHandler;
 
 	@Autowired
-	public SecurityConfig(UsuarioService usuarioService, AccessDeniedHandler accessDeniedHandler) {
-		this.usuarioService = usuarioService;
+	public SecurityConfig(UserService userService, AccessDeniedHandler accessDeniedHandler) {
+		this.userService = userService;
 		this.accessDeniedHandler = accessDeniedHandler;
 	}
 
@@ -37,12 +37,12 @@ public class SecurityConfig{
 					.anyRequest().authenticated()
 					.and()
 					.addFilter(new JWTAuthenticationFilter(authenticationManager()))
-					.addFilter(new JWTAuthorizationFilter(authenticationManager(),usuarioService));
+					.addFilter(new JWTAuthorizationFilter(authenticationManager(), userService));
 		}
 
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.userDetailsService(usuarioService).passwordEncoder(new BCryptPasswordEncoder());
+			auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
 		}
 
 		@Override
@@ -73,7 +73,7 @@ public class SecurityConfig{
 
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.userDetailsService(usuarioService).passwordEncoder(new BCryptPasswordEncoder());
+			auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
 		}
 
 		@Override

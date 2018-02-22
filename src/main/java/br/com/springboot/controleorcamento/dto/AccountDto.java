@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 public class AccountDto {
 
     private Long id;
-    private String descricao;
-    private BigDecimal saldo;
+    private String description;
+    private BigDecimal balance;
 
 }

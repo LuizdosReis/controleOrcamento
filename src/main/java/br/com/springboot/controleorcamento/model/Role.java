@@ -12,15 +12,11 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(of = {"id"})
 public class Role extends AbstractEntity implements GrantedAuthority {
 
-    private String nome;
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    private String name;
 
     @Override
     public String getAuthority() {
-        return nome;
+        return name;
     }
 }
 

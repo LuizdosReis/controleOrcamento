@@ -42,7 +42,7 @@ public class IncomeRepositoryTest {
 
         assertNotNull(incomeSaved);
         assertThat(incomeSaved.getCategory()).isEqualTo(Category.builder().id(1L).build());
-        assertThat(incomeSaved.getAccount().getSaldo()).isEqualTo(new BigDecimal("12.50"));
+        assertThat(incomeSaved.getAccount().getBalance()).isEqualTo(new BigDecimal("12.50"));
         assertThat(incomeSaved.getDescription()).isEqualTo("Some description");
 
     }

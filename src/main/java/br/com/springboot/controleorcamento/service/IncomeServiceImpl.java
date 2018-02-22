@@ -19,16 +19,16 @@ public class IncomeServiceImpl implements IncomeService {
 
     private final CategoryService categoryService;
 
-    private final UsuarioService usuarioService;
+    private final UserService userService;
 
     private final ModelMapper modelMapper;
     private String NO_INCOME_FOUND_BY_ID = "No Income Found by ID ";
 
-    public IncomeServiceImpl(IncomeRepository repository, AccountService accountService, CategoryService categoryService, UsuarioService usuarioService, ModelMapper modelMapper) {
+    public IncomeServiceImpl(IncomeRepository repository, AccountService accountService, CategoryService categoryService, UserService userService, ModelMapper modelMapper) {
         this.repository = repository;
         this.accountService = accountService;
         this.categoryService = categoryService;
-        this.usuarioService = usuarioService;
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
@@ -46,7 +46,7 @@ public class IncomeServiceImpl implements IncomeService {
 
     @Override
     public IncomeReturnDto findOne(Long id) {
-        Income income = repository.findByIdAndAccount_Usuario(id, usuarioService.getCurrentUser())
+        Income income = repository.findByIdAndAccount_User(id, userService.getCurrentUser())
                 .orElseThrow(() -> {
                     log.error(NO_INCOME_FOUND_BY_ID + id.toString());
                     return new ResourceNotFoundException(NO_INCOME_FOUND_BY_ID + id.toString(), null);

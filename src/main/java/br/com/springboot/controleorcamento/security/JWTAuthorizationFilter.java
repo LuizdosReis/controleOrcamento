@@ -1,7 +1,7 @@
 package br.com.springboot.controleorcamento.security;
 
-import br.com.springboot.controleorcamento.model.Usuario;
-import br.com.springboot.controleorcamento.service.UsuarioService;
+import br.com.springboot.controleorcamento.model.User;
+import br.com.springboot.controleorcamento.service.UserService;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,11 +16,11 @@ import java.io.IOException;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter  {
 
-    private final UsuarioService usuarioService;
+    private final UserService userService;
 
-    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, UsuarioService usuarioService) {
+    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, UserService userService) {
         super(authenticationManager);
-        this.usuarioService = usuarioService;
+        this.userService = userService;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter  {
                 .getBody()
                 .getSubject();
 
-        Usuario usuario = usuarioService.loadUserByUsername(user);
+        User usuario = userService.loadUserByUsername(user);
 
         return user != null ?
                 new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities()) : null;

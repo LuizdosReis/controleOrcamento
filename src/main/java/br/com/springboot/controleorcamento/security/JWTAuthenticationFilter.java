@@ -1,6 +1,6 @@
 package br.com.springboot.controleorcamento.security;
 
-import br.com.springboot.controleorcamento.model.Usuario;
+import br.com.springboot.controleorcamento.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -31,7 +31,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-            Usuario usuario = new ObjectMapper().readValue(request.getInputStream(),Usuario.class);
+            User usuario = new ObjectMapper().readValue(request.getInputStream(),User.class);
             return this.authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(usuario.getUsername(),usuario.getPassword()));
         } catch (IOException e) {
@@ -44,7 +44,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-        String username = ((Usuario) authResult.getPrincipal()).getUsername();
+        String username = ((User) authResult.getPrincipal()).getUsername();
 
         String token = Jwts.builder()
                 .setSubject(username)

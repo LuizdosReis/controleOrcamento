@@ -16,11 +16,6 @@ public class AccountUpdateDto {
 
     @NotNull
     private Long id;
-
-    @NotEmpty(message = "A descrição não pode ser vazia")
-    private String descricao;
-
-    @NotNull
-    @Digits(fraction=2,message="O valor só pode conter dois digitos após a virgula",integer = 9)
-    private BigDecimal saldo;
+    private String description;
+    private BigDecimal balance;
 }

@@ -2,8 +2,8 @@ package br.com.springboot.controleorcamento.service;
 
 import br.com.springboot.controleorcamento.helper.CategoryHelper;
 import br.com.springboot.controleorcamento.model.Category;
-import br.com.springboot.controleorcamento.model.Usuario;
-import br.com.springboot.controleorcamento.repository.CategoriaRepository;
+import br.com.springboot.controleorcamento.model.User;
+import br.com.springboot.controleorcamento.repository.CategoryRepository;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,10 +19,10 @@ import static org.mockito.Mockito.*;
 public class CategoryServiceImplTest {
 
     @Mock
-    private CategoriaRepository categoriaRepository;
+    private CategoryRepository categoryRepository;
 
     @Mock
-    private UsuarioService usuarioService;
+    private UserService userService;
 
     @Mock
     private ModelMapper modelMapper;
@@ -38,29 +38,29 @@ public class CategoryServiceImplTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        categoryService = new CategoryServiceImpl(categoriaRepository, usuarioService, modelMapper);
+        categoryService = new CategoryServiceImpl(categoryRepository, userService, modelMapper);
     }
 
     @Test
     public void deveSalvarCategoria() throws Exception {
-        Usuario luiz = new Usuario();
-        luiz.setNome("Luiz Henrique");
+        User luiz = new User();
+        luiz.setName("Luiz Henrique");
         luiz.setUsername("luiz.reis");
         luiz.setPassword("123");
 
         Category carro = CategoryHelper.buildCategory();
-        carro.setUsuario(luiz);
+        carro.setUser(luiz);
 
-        when(categoriaRepository.save(carro)).thenReturn(carro);
-        when(usuarioService.getCurrentUser()).thenReturn(luiz);
+        when(categoryRepository.save(carro)).thenReturn(carro);
+        when(userService.getCurrentUser()).thenReturn(luiz);
 
         Category categorySaved = categoryService.save(carro);
 
-        assertThat(categorySaved.getDescricao()).isEqualTo(carro.getDescricao());
-        assertThat(categorySaved.getTipo()).isEqualTo(carro.getTipo());
-        assertThat(categorySaved.getUsuario()).isEqualTo(luiz);
-        verify(categoriaRepository,times(1)).save(carro);
-        verify(usuarioService,times(1)).getCurrentUser();
+        assertThat(categorySaved.getDescription()).isEqualTo(carro.getDescription());
+        assertThat(categorySaved.getType()).isEqualTo(carro.getType());
+        assertThat(categorySaved.getUser()).isEqualTo(luiz);
+        verify(categoryRepository,times(1)).save(carro);
+        verify(userService,times(1)).getCurrentUser();
     }
 
 //    @Test
@@ -76,9 +76,9 @@ public class CategoryServiceImplTest {
 //    }
 //
 //    @Test
-//    public void findByUsuario() throws Exception {
-//        Usuario luiz = new Usuario();
-//        luiz.setNome("Luiz Henrique");
+//    public void findByUser() throws Exception {
+//        User luiz = new User();
+//        luiz.setName("Luiz Henrique");
 //        luiz.setUsername("luiz.reis");
 //        luiz.setPassword("123");
 //
@@ -94,15 +94,15 @@ public class CategoryServiceImplTest {
 //            }
 //
 //            @Override
-//            public Tipo getTipo() {
-//                return Tipo.SAIDA;
+//            public Type getType() {
+//                return Type.SAIDA;
 //            }
 //        };
 //
 //
-//        when(categoriaRepository.findByUsuario(luiz,new PageRequest(0,20))).thenReturn(new PageImpl<>(Collections.singletonList(categoriaInfo)));
+//        when(categoriaRepository.findByUser(luiz,new PageRequest(0,20))).thenReturn(new PageImpl<>(Collections.singletonList(categoriaInfo)));
 //
-//        List<CategoriaInfo> categories = categoryService.findByUsuario(luiz, new PageRequest(0,20)).getContent();
+//        List<CategoriaInfo> categories = categoryService.findByUser(luiz, new PageRequest(0,20)).getContent();
 //
 //        assertThat(categories.size()).isEqualTo(1);
 //        assertThat(categories.get(0)).isEqualTo(categoriaInfo);

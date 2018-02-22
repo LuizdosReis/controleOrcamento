@@ -15,58 +15,59 @@ import java.util.Set;
 @Entity
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"despesas", "incomes", "usuario", "saldo", "descricao"})
-@ToString(callSuper = true, exclude = {"incomes", "despesas"})
+@EqualsAndHashCode(callSuper = true, exclude = {"expenses", "incomes", "user", "balance", "description"})
+@ToString(callSuper = true, exclude = {"incomes", "expenses"})
 public class Account extends AbstractEntity {
 
-    @NotBlank(message = "A descrição não pode ser vazia")
-    private String descricao;
+    @NotBlank(message = "the description not be empty")
+    private String description;
     @NotNull
     @Digits(fraction = 2, integer = 9)
-    private BigDecimal saldo;
+    private BigDecimal balance;
     @JsonIgnore
     @ManyToOne
-    private Usuario usuario;
+    private User user;
     @JsonIgnore
-    @OneToMany(mappedBy = "conta")
+    @OneToMany(mappedBy = "account")
     @Setter(AccessLevel.NONE)
-    private Set<Despesa> despesas;
+    private Set<Expense> expenses;
     @JsonIgnore
     @OneToMany(mappedBy = "account")
     @Setter(AccessLevel.NONE)
     private Set<Income> incomes;
 
     @Builder
-    private Account(long id, String descricao, Usuario usuario, Set<Despesa> despesas, Set<Income> incomes, BigDecimal saldo) {
+    public Account(Long id,String description, BigDecimal balance, User user, Set<Expense> expenses, Set<Income> incomes) {
         super(id);
-        this.descricao = descricao;
-        this.usuario = usuario;
-        this.despesas = despesas;
+        this.description = description;
+        this.balance = balance;
+        this.user = user;
+        this.expenses = expenses;
         this.incomes = incomes;
-        this.saldo = saldo;
     }
 
-    public void adicionaDespesa(Despesa despesa) {
-        if (despesa.isEfetivada())
-            this.saldo = this.saldo.subtract(despesa.getValor());
-        this.despesas.add(despesa);
+    public void add(Expense expense) {
+        if (expense.isEffected())
+            this.balance = this.balance.subtract(expense.getValue());
+        this.expenses.add(expense);
     }
 
-    public void removeDespesa(Despesa despesa) {
-        this.saldo = this.saldo.add(despesa.getValor());
-        this.despesas.remove(despesa);
+    public void remove(Expense expense) {
+        if (expense.isEffected())
+            this.balance = this.balance.add(expense.getValue());
+        this.expenses.remove(expense);
     }
 
     public void addIncome(Income income) {
         if (income.isReceived())
-            this.saldo = this.saldo.add(income.getValue());
+            this.balance = this.balance.add(income.getValue());
         income.setAccount(this);
         this.incomes.add(income);
     }
 
     public void removeIncome(Income income) {
         if (income.isReceived())
-            this.saldo = this.saldo.subtract(income.getValue());
+            this.balance = this.balance.subtract(income.getValue());
         income.setAccount(null);
         this.incomes.remove(income);
     }

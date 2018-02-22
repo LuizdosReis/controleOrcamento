@@ -1,7 +1,7 @@
 package br.com.springboot.controleorcamento.service;
 
-import br.com.springboot.controleorcamento.model.Usuario;
-import br.com.springboot.controleorcamento.repository.UsuarioRepository;
+import br.com.springboot.controleorcamento.model.User;
+import br.com.springboot.controleorcamento.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,31 +12,31 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UsuarioService implements UserDetailsService{
+public class UserService implements UserDetailsService{
 
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.usuarioRepository = usuarioRepository;
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public Usuario save(Usuario usuario){
+    public User save(User usuario){
         usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));
-        return usuarioRepository.save(usuario);
+        return userRepository.save(usuario);
     }
 
     @Override
-    public Usuario loadUserByUsername(String username) throws UsernameNotFoundException {
-        return Optional.ofNullable(usuarioRepository.findByUsername(username))
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        return Optional.ofNullable(userRepository.findByUsername(username))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    public Usuario getCurrentUser(){
-        return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public User getCurrentUser(){
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }

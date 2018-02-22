@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final UsuarioService usuarioService;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
-    public AccountServiceImpl(AccountRepository accountRepository, UsuarioService usuarioService, ModelMapper modelMapper) {
+    public AccountServiceImpl(AccountRepository accountRepository, UserService userService, ModelMapper modelMapper) {
         this.accountRepository = accountRepository;
-        this.usuarioService = usuarioService;
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
     public Page<AccountDto> findAll(Pageable pageable) {
         log.debug("CategoryService - findAll");
 
-        Page<Account> page = accountRepository.findByUsuario(usuarioService.getCurrentUser(), pageable);
+        Page<Account> page = accountRepository.findByUser(userService.getCurrentUser(), pageable);
 
         List<AccountDto> accountDtos = page.getContent().stream()
                 .map(a -> modelMapper.map(a, AccountDto.class)).collect(Collectors.toList());
@@ -49,7 +49,7 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = modelMapper.map(accountCreateDto, Account.class);
 
-        account.setUsuario(usuarioService.getCurrentUser());
+        account.setUser(userService.getCurrentUser());
         return modelMapper.map(accountRepository.save(account), AccountDto.class);
     }
 

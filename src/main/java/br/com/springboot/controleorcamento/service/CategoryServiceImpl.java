@@ -1,11 +1,11 @@
 package br.com.springboot.controleorcamento.service;
 
-import br.com.springboot.controleorcamento.dto.CategoriaUpdateDto;
+import br.com.springboot.controleorcamento.dto.CategoryUpdateDto;
 import br.com.springboot.controleorcamento.dto.CategoryCreateDto;
 import br.com.springboot.controleorcamento.dto.CategoryDto;
 import br.com.springboot.controleorcamento.model.Category;
-import br.com.springboot.controleorcamento.model.Usuario;
-import br.com.springboot.controleorcamento.repository.CategoriaRepository;
+import br.com.springboot.controleorcamento.model.User;
+import br.com.springboot.controleorcamento.repository.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.context.config.ResourceNotFoundException;
@@ -22,14 +22,14 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private static final String NO_CATEGORY_FOUND_IN_ID = "No categories found in id";
-    private final CategoriaRepository categoriaRepository;
-    private final UsuarioService usuarioService;
+    private final CategoryRepository categoryRepository;
+    private final UserService userService;
 
     private final ModelMapper modelMapper;
 
-    public CategoryServiceImpl(CategoriaRepository categoriaRepository, UsuarioService usuarioService, ModelMapper modelMapper) {
-        this.categoriaRepository = categoriaRepository;
-        this.usuarioService = usuarioService;
+    public CategoryServiceImpl(CategoryRepository categoryRepository, UserService userService, ModelMapper modelMapper) {
+        this.categoryRepository = categoryRepository;
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
@@ -39,8 +39,8 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = modelMapper.map(categoriaDto,Category.class);
 
-        category.setUsuario(usuarioService.getCurrentUser());
-        category = categoriaRepository.save(category);
+        category.setUser(userService.getCurrentUser());
+        category = categoryRepository.save(category);
         return modelMapper.map(category,CategoryDto.class);
     }
 
@@ -48,27 +48,27 @@ public class CategoryServiceImpl implements CategoryService {
     public Category save(Category category) {
         log.debug("CategoryService - save");
 
-        category.setUsuario(usuarioService.getCurrentUser());
+        category.setUser(userService.getCurrentUser());
 
-        return categoriaRepository.save(category);
+        return categoryRepository.save(category);
     }
 
     @Override
     public Page<CategoryDto> findAll(Pageable pageable) {
         log.debug("CategoryService - findAll");
-        Page<Category> page = categoriaRepository.findByUsuario(usuarioService.getCurrentUser(), pageable);
+        Page<Category> page = categoryRepository.findByUser(userService.getCurrentUser(), pageable);
 
-        List<CategoryDto> categoriasDtos = page.getContent()
+        List<CategoryDto> categoryDtos = page.getContent()
                 .stream()
-                .map(categoria -> modelMapper.map(categoria,CategoryDto.class))
+                .map(c -> modelMapper.map(c,CategoryDto.class))
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(categoriasDtos, pageable, page.getTotalElements());
+        return new PageImpl<>(categoryDtos, pageable, page.getTotalElements());
     }
 
     @Override
     public List<CategoryDto> findAll() {
-        List<Category> categories = categoriaRepository.findByUsuario(usuarioService.getCurrentUser());
+        List<Category> categories = categoryRepository.findByUser(userService.getCurrentUser());
 
         return categories.stream()
                 .map(categoria -> modelMapper.map(categoria,CategoryDto.class))
@@ -76,49 +76,49 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void update(CategoriaUpdateDto categoriaDto) {
+    public void update(CategoryUpdateDto categoriaDto) {
         Category category = modelMapper.map(categoriaDto, Category.class);
 
         verificaSeGastoExiste(category.getId());
 
-        Usuario usuario = usuarioService.getCurrentUser();
+        User usuario = userService.getCurrentUser();
 
         checkIfCategoryBelongsToUser(category,usuario);
 
-        category.setUsuario(usuario);
+        category.setUser(usuario);
 
-        categoriaRepository.save(category);
+        categoryRepository.save(category);
     }
 
-    private void checkIfCategoryBelongsToUser(Category category, Usuario usuario) {
-       if(!categoriaRepository.findByUsuario(usuario).contains(category))
+    private void checkIfCategoryBelongsToUser(Category category, User usuario) {
+       if(!categoryRepository.findByUser(usuario).contains(category))
            throw new IllegalArgumentException("Category not belongs to user");
     }
 
     @Override
     public void delete(Long id) {
         verificaSeGastoExiste(id);
-        categoriaRepository.deleteById(id);
+        categoryRepository.deleteById(id);
     }
 
     @Override
     public CategoryDto findOne(Long id) {
-        Category category = categoriaRepository.findById(id)
+        Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(NO_CATEGORY_FOUND_IN_ID, null));
 
-        checkIfCategoryBelongsToUser(category,usuarioService.getCurrentUser());
+        checkIfCategoryBelongsToUser(category, userService.getCurrentUser());
 
         return modelMapper.map(category,CategoryDto.class);
     }
 
     @Override
     public Category findBy(Long id) {
-        return categoriaRepository.findByIdAndUsuario(id,usuarioService.getCurrentUser())
+        return categoryRepository.findByIdAndUser(id, userService.getCurrentUser())
                 .orElseThrow(() -> new ResourceNotFoundException(NO_CATEGORY_FOUND_IN_ID, null));
     }
 
     private void verificaSeGastoExiste(Long id) {
-        if (!categoriaRepository.existsById(id))
+        if (!categoryRepository.existsById(id))
             throw new ResourceNotFoundException(NO_CATEGORY_FOUND_IN_ID, null);
     }
 }

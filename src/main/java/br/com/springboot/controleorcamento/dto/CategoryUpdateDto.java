@@ -2,9 +2,7 @@ package br.com.springboot.controleorcamento.dto;
 
 import br.com.springboot.controleorcamento.model.Type;
 import lombok.*;
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -12,9 +10,10 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryCreateDto {
-
+public class CategoryUpdateDto {
+    
+    @NotNull
+    private Long id;
     private String description;
     private Type type;
-
 }

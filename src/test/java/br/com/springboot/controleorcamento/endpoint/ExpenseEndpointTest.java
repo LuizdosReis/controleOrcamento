@@ -1,17 +1,17 @@
 package br.com.springboot.controleorcamento.endpoint;
 
 
-import br.com.springboot.controleorcamento.repository.DespesaRepository;
+import br.com.springboot.controleorcamento.repository.ExpenseRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-public class DespesaEndpointTest {
+public class ExpenseEndpointTest {
 
     @MockBean
-    private DespesaRepository despesaRepository;
+    private ExpenseRepository expenseRepository;
 
     @Autowired
     private MockMvc mockMvc;

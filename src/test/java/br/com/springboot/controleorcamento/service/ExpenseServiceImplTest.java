@@ -9,10 +9,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ControleOrcamentoApplication.class)
-public class DespesaServiceImplTest {
+public class ExpenseServiceImplTest {
 
     @Autowired
-    private DespesaService despesaService;
+    private ExpenseService expenseService;
 
     @Autowired
     private AccountService accountService;
@@ -20,11 +20,11 @@ public class DespesaServiceImplTest {
 
 //    @Test
 //    public void save() throws Exception {
-//        Despesa despesa = DespesaHelper.criaDespesa();
+//        Expense despesa = DespesaHelper.criaDespesa();
 //
 //        when(accountService.findOne(despesa.getConta().getId())).thenReturn(despesa.getConta());
 //
-//        despesaService.save(despesa);
+//        expenseService.save(despesa);
 //    }
 
     @Test

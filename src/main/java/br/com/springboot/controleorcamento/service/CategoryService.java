@@ -1,6 +1,6 @@
 package br.com.springboot.controleorcamento.service;
 
-import br.com.springboot.controleorcamento.dto.CategoriaUpdateDto;
+import br.com.springboot.controleorcamento.dto.CategoryUpdateDto;
 import br.com.springboot.controleorcamento.dto.CategoryCreateDto;
 import br.com.springboot.controleorcamento.dto.CategoryDto;
 import br.com.springboot.controleorcamento.model.Category;
@@ -18,7 +18,7 @@ public interface CategoryService {
 
     List<CategoryDto> findAll();
 
-    void update(CategoriaUpdateDto categoriaDto);
+    void update(CategoryUpdateDto categoriaDto);
 
     void delete(Long id);
 

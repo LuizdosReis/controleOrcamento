@@ -159,7 +159,7 @@ public class AccountEndpointTest {
     public void updateAccountTokenIsCorrectShouldReturnStatusCode200() {
         AccountDto account = AccountHelper.buildAccountDto();
         account.setId(1L);
-        account.setDescricao("change description");
+        account.setDescription("change description");
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/accounts", PUT,
                         new HttpEntity<>(account, header.getHeaders()), String.class);
@@ -169,7 +169,7 @@ public class AccountEndpointTest {
         ResponseEntity<Account> responseAccount = restTemplate
                 .exchange("/v1/accounts/" + account.getId(), GET, header, Account.class);
 
-        assertThat(responseAccount.getBody().getDescricao()).isEqualTo(account.getDescricao());
+        assertThat(responseAccount.getBody().getDescription()).isEqualTo(account.getDescription());
     }
 
     @Test
@@ -195,7 +195,7 @@ public class AccountEndpointTest {
     @Test
     public void updateAccountWithDescriptionInvalidWhenTokenIsCorrectShouldReturnStatusCode400() {
         AccountDto account = AccountHelper.buildAccountDto();
-        account.setDescricao("");
+        account.setDescription("");
         ResponseEntity<String> response = restTemplate
                 .exchange("/v1/accounts", POST,
                         new HttpEntity<>(account, header.getHeaders()), String.class);

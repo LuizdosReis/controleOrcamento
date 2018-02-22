@@ -1,7 +1,9 @@
 package br.com.springboot.controleorcamento.dto;
 
-import br.com.springboot.controleorcamento.model.Tipo;
+import br.com.springboot.controleorcamento.model.Type;
 import lombok.*;
+
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -10,7 +12,8 @@ import lombok.*;
 @NoArgsConstructor
 public class CategoryDto {
 
+    @NotNull
     private Long id;
-    private String descricao;
-    private Tipo tipo;
+    private String description;
+    private Type type;
 }

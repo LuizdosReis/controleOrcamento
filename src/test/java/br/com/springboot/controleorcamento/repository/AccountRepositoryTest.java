@@ -35,11 +35,11 @@ public class AccountRepositoryTest {
     }
 
     @Test
-    public void deveLancarExcecaoDeCriacaoDeContaSemDescricao(){
+    public void deveLancarExcecaoDeCriacaoDeContaSemDescription(){
         thrown.expect(ConstraintViolationException.class);
         thrown.expectMessage("A descrição não pode ser vazia");
 
-        account.setDescricao("");
+        account.setDescription("");
 
         accountRepository.save(account);
     }
@@ -48,7 +48,7 @@ public class AccountRepositoryTest {
     public void mustPostAccountCreationExceptionWithMoreThanTwoDigitsAfterComma(){
         thrown.expect(ConstraintViolationException.class);
 
-        account.setSaldo(new BigDecimal("12.000"));
+        account.setBalance(new BigDecimal("12.000"));
         accountRepository.save(account);
     }
 
@@ -58,8 +58,8 @@ public class AccountRepositoryTest {
         accountRepository.save(account);
 
         assertThat(account.getId()).isNotNull();
-        assertThat(account.getDescricao()).isEqualTo("Banco do Brasil");
-        assertThat(account.getSaldo()).isEqualTo(new BigDecimal("12.50"));
+        assertThat(account.getDescription()).isEqualTo("Banco do Brasil");
+        assertThat(account.getBalance()).isEqualTo(new BigDecimal("12.50"));
     }
 
     @Test
@@ -67,11 +67,11 @@ public class AccountRepositoryTest {
 
         Account conta = accountRepository.findById(1L).get();
 
-        conta.setDescricao("Account Atualizada");
+        conta.setDescription("Account Atualizada");
 
         Account contaRetornada = accountRepository.save(conta);
 
-        assertThat(contaRetornada.getDescricao()).isEqualTo(conta.getDescricao());
+        assertThat(contaRetornada.getDescription()).isEqualTo(conta.getDescription());
 
     }
 }

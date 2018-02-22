@@ -1,7 +1,7 @@
 package br.com.springboot.controleorcamento.repository;
 
 import br.com.springboot.controleorcamento.model.Category;
-import br.com.springboot.controleorcamento.model.Usuario;
+import br.com.springboot.controleorcamento.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CategoriaRepository extends PagingAndSortingRepository<Category, Long> {
+public interface CategoryRepository extends PagingAndSortingRepository<Category, Long> {
 
-    Page<Category> findByUsuario(Usuario usuario, Pageable pageable);
+    Page<Category> findByUser(User user, Pageable pageable);
 
-    List<Category> findByUsuario(Usuario usuario);
+    List<Category> findByUser(User user);
 
-    Optional<Category> findByIdAndUsuario(Long id, Usuario usuario);
+    Optional<Category> findByIdAndUser(Long id, User user);
 }

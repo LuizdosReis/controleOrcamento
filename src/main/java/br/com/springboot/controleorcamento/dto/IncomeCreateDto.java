@@ -13,14 +13,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class IncomeCreateDto {
 
-    @NotNull(message = "Income not be null")
-    @Valid
     private IncomeDto income;
-
-    @NotNull(message = "AccountId not be null")
     private Long accountId;
-
-    @NotNull(message = "CategoryId not be null")
     private Long categoryId;
 
 
